@@ -4,8 +4,11 @@
  */
 
 export const cvGenerator = {
-  generate: async (data: any) => {
+  generate: async (_data: any) => {
     // Stub implementation
     return { success: false, error: 'Not implemented in core module' };
   }
 };
+
+// Export with capitalized name for compatibility
+export const CVGenerator = cvGenerator;

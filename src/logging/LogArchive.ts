@@ -7,7 +7,6 @@
 
 import { EventEmitter } from 'events';
 import { createGzip, createGunzip } from 'zlib';
-import { promisify } from 'util';
 import { LogEntry, LogLevel, LogDomain } from './types';
 
 /**
@@ -377,7 +376,7 @@ export class LogArchive extends EventEmitter {
         return false;
       }
 
-      if (policy.domains && !policy.domains.includes(entry.domain)) {
+      if (policy.domains && !policy.domains.includes(entry.domain as LogDomain)) {
         return false;
       }
 
@@ -415,8 +414,12 @@ export class LogArchive extends EventEmitter {
     // Sort entries by timestamp
     entries.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
-    const startTime = new Date(entries[0].timestamp);
-    const endTime = new Date(entries[entries.length - 1].timestamp);
+    if (entries.length === 0) {
+      throw new Error('Cannot archive empty entries array');
+    }
+
+    const startTime = new Date(entries[0]!.timestamp);
+    const endTime = new Date(entries[entries.length - 1]!.timestamp);
 
     // Deduplicate if enabled
     const processedEntries = policy.deduplicate
@@ -447,9 +450,9 @@ export class LogArchive extends EventEmitter {
     const checksum = this.generateChecksum(compressedData);
 
     // Extract metadata
-    const levels = [...new Set(processedEntries.map(e => e.level))];
-    const domains = [...new Set(processedEntries.map(e => e.domain))];
-    const packages = [...new Set(processedEntries.map(e => e.package))];
+    const levels = Array.from(new Set(processedEntries.map(e => e.level)));
+    const domains = Array.from(new Set(processedEntries.map(e => e.domain))) as LogDomain[];
+    const packages = Array.from(new Set(processedEntries.map(e => e.package)));
 
     const metadata: ArchiveMetadata = {
       id: archiveId,
@@ -507,7 +510,6 @@ export class LogArchive extends EventEmitter {
         };
 
       case CompressionType.GZIP: {
-        const gzip = promisify(createGzip());
         const compressedData = await new Promise<Buffer>((resolve, reject) => {
           const chunks: Buffer[] = [];
           const gzipStream = createGzip();
@@ -534,7 +536,7 @@ export class LogArchive extends EventEmitter {
    * Store archive data
    */
   private async storeArchive(
-    data: Buffer,
+    _data: Buffer,
     archiveId: string,
     storageType: ArchiveStorageType,
     storageConfig: Record<string, any>
@@ -615,7 +617,7 @@ export class LogArchive extends EventEmitter {
    * Retrieve archive data from storage
    */
   private async retrieveArchiveData(
-    storagePath: string,
+    _storagePath: string,
     storageType: ArchiveStorageType
   ): Promise<Buffer> {
     switch (storageType) {
@@ -684,7 +686,7 @@ export class LogArchive extends EventEmitter {
     }
 
     if (query.domains) {
-      filtered = filtered.filter(entry => query.domains!.includes(entry.domain));
+      filtered = filtered.filter(entry => query.domains!.includes(entry.domain as LogDomain));
     }
 
     if (query.packages) {
@@ -790,7 +792,7 @@ export class LogArchive extends EventEmitter {
     const deletedArchives: string[] = [];
     let freedSpaceBytes = 0;
 
-    for (const [archiveId, metadata] of this.archives.entries()) {
+    for (const [archiveId, metadata] of Array.from(this.archives.entries())) {
       const policy = this.policies.get(metadata.policyId);
       if (!policy || policy.deleteAfterDays === 0) continue;
 
@@ -847,8 +849,8 @@ export class LogArchive extends EventEmitter {
    * Delete archive from storage
    */
   private async deleteArchiveFromStorage(
-    storagePath: string,
-    storageType: ArchiveStorageType
+    _storagePath: string,
+    _storageType: ArchiveStorageType
   ): Promise<void> {
     // Implementation would delete from actual storage
     // For now, we just simulate the deletion

@@ -6,8 +6,8 @@
  */
 
 import { EventEmitter } from 'events';
-import { createHash, createHmac } from 'crypto';
-import { LogEntry, AuditTrail as IAuditTrail, AuditAction, AuditSeverity } from './types';
+import { createHmac } from 'crypto';
+import { LogEntry, AuditAction, AuditSeverity } from './types';
 
 /**
  * Audit event types based on common compliance frameworks
@@ -272,7 +272,7 @@ export interface AuditTrailStats {
 /**
  * Audit trail implementation
  */
-export class AuditTrail extends EventEmitter implements IAuditTrail {
+export class AuditTrail extends EventEmitter {
   private readonly config: AuditTrailConfig;
   private readonly entries: AuditEntry[] = [];
   private readonly stats: AuditTrailStats;
@@ -385,7 +385,11 @@ export class AuditTrail extends EventEmitter implements IAuditTrail {
       sessionId: logEntry.sessionId,
       description: logEntry.message,
       context: logEntry.context,
-      error: logEntry.error,
+      error: logEntry.error ? {
+        code: String(logEntry.error.code || 'UNKNOWN'),
+        message: logEntry.error.message,
+        stack: logEntry.error.stack
+      } : undefined,
       complianceTags: auditMapping?.complianceTags || []
     });
   }

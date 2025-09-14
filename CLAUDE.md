@@ -15,28 +15,36 @@
 
 ## Dependency Resolution Strategy
 
-### Layer Position: Layer 0 (Foundation)
-**Core is the foundation module with NO dependencies on other CVPlus modules.**
+### Layer Position: Layer 1 (Foundation Services)
+**Core is a foundation service module that depends on Layer 0 infrastructure modules.**
 
-### Allowed Dependencies
+### Layer 0 Dependencies (ALLOWED)
 ```typescript
-// ✅ ALLOWED: External libraries only
+// ✅ ALLOWED: Layer 0 infrastructure modules
+import { LoggerFactory, logger } from '@cvplus/logging/backend';
+import { CorrelationService } from '@cvplus/logging/backend';
+```
+
+### External Dependencies (ALLOWED)
+```typescript
+// ✅ ALLOWED: External libraries
 import { firestore } from 'firebase-admin';
 import * as crypto from 'crypto';
 import { z } from 'zod';
 ```
 
-### Forbidden Dependencies  
+### Forbidden Dependencies
 ```typescript
-// ❌ FORBIDDEN: ANY CVPlus module
-import { AuthService } from '@cvplus/auth'; // NEVER
-import { CVProcessor } from '@cvplus/cv-processing'; // NEVER  
-import { AdminService } from '@cvplus/admin'; // NEVER
+// ❌ FORBIDDEN: Layer 1+ CVPlus modules
+import { AuthService } from '@cvplus/auth'; // NEVER (same layer)
+import { CVProcessor } from '@cvplus/cv-processing'; // NEVER (layer 2)
+import { AdminService } from '@cvplus/admin'; // NEVER (layer 2)
 ```
 
 ### Dependency Rules for Core
-1. **Zero CVPlus Dependencies**: Core NEVER imports from other CVPlus modules
-2. **External Only**: Only external npm packages and Node.js built-ins
+1. **Layer 0 Dependencies Only**: Core imports ONLY from Layer 0 modules (@cvplus/logging)
+2. **External Libraries**: Only external npm packages and Node.js built-ins
+3. **No Peer Dependencies**: Core cannot depend on same-layer or higher-layer modules
 3. **Interface Provider**: Defines interfaces that other modules implement
 4. **Type Foundation**: Provides base types used across the ecosystem
 5. **Utility Foundation**: Provides utilities used by all other modules
@@ -54,13 +62,30 @@ export const validateEmail = (email: string): boolean => { /* */ }
 ```
 
 ### Build Dependencies
-- **Builds First**: Core must build before any other module
-- **No Build Dependencies**: Core build process depends on no other CVPlus modules
-- **Foundation for All**: Other modules depend on Core's build output
+- **Layer 0 First**: @cvplus/logging must build before Core
+- **Core Builds Second**: Core builds after logging, before Layer 2+ modules
+- **Foundation for Layer 2+**: Other domain modules depend on Core's build output
+
+### CVPlus Architecture Layers
+```
+Layer 0 (Infrastructure):
+└── @cvplus/logging - Universal logging system
+
+Layer 1 (Foundation Services):
+├── @cvplus/core - Shared types, utilities, configuration
+└── @cvplus/shell - Main orchestrator application
+
+Layer 2 (Domain Services):
+├── @cvplus/auth - Authentication and session management
+├── @cvplus/cv-processing - CV analysis and enhancement
+├── @cvplus/multimedia - Media generation and processing
+├── @cvplus/analytics - Business intelligence and tracking
+└── [other domain modules...]
+```
 
 ## Submodule Overview
 
-The Core module serves as the foundational infrastructure for the entire CVPlus ecosystem. It provides essential types, constants, utilities, and shared configurations that other submodules depend on. This module must maintain strict backward compatibility and high stability as it forms the backbone of the entire platform.
+The Core module serves as the foundational service layer for the entire CVPlus ecosystem. It provides essential types, constants, utilities, and shared configurations that domain modules depend on. Core also re-exports the logging system from @cvplus/logging for convenient access. This module must maintain strict backward compatibility and high stability as it forms the backbone of the entire platform.
 
 ## Domain Expertise
 
@@ -79,6 +104,7 @@ The Core module serves as the foundational infrastructure for the entire CVPlus 
 - **Error Handling**: Standardized error types and handling mechanisms
 - **Firebase Integration**: Firebase authentication, Firestore utilities, and response formatting
 - **Validation Framework**: Input validation and sanitization utilities
+- **Logging Re-Export**: Convenient re-export of @cvplus/logging system for domain modules
 
 ### Integration Points
 - **All Submodules**: Provides foundational types and utilities

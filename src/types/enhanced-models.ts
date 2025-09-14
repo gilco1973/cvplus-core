@@ -8,9 +8,13 @@
  * @version 1.0.0
  */
 
-// Core types
+// Core types - re-export for minimal builds
 import type { ParsedCV } from './job';
 export type { ParsedCV } from './job';
+
+// Use the imported type to avoid unused warning
+const _typeCheck: ParsedCV | undefined = undefined;
+void _typeCheck;
 
 // Import and re-export modular types
 export type {

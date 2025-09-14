@@ -65,7 +65,44 @@ export type { PricingConfig } from './config';
 // UTILITIES
 // ============================================================================
 
-export * from './utils';
+// Export utils but exclude logging items that conflict with logging module
+export * from './utils/validation';
+export * from './utils/formatting';
+export * from './utils/date';
+export * from './utils/string';
+export * from './utils/object';
+export * from './utils/array';
+export * from './utils/type-guards';
+export * from './utils/async';
+export * from './utils/crypto';
+export * from './utils/error-helpers';
+export * from './utils/error-handling';
+export * from './utils/classnames';
+export * from './utils/firebase-error-handler';
+export * from './utils/firebase-response-formatter';
+export * from './utils/firebase-auth-validator';
+export * from './utils/auth';
+export * from './utils/firestore-sanitizer';
+export * from './utils/firestore-validation.service';
+export * from './utils/safe-firestore.service';
+export * from './utils/privacy';
+export * from './utils/slug';
+export {
+  EnhancedErrorHandler,
+  handleFunctionError,
+  withErrorHandling
+} from './utils/enhanced-error-handler';
+
+// Export firebase-logger items with aliases to avoid conflicts
+export type {
+  LogLevel as UtilsLogLevel,
+  LogEntry as UtilsLogEntry,
+  LoggerConfig as UtilsLoggerConfig
+} from './utils/firebase-logger';
+export {
+  createLogger as createUtilsLogger,
+  logger as utilsLogger
+} from './utils/firebase-logger';
 
 // Re-export ValidationResult from utils explicitly to avoid conflict
 export type { ValidationResult } from './utils/firestore-validation.service';
@@ -74,7 +111,7 @@ export type { ValidationResult } from './utils/firestore-validation.service';
 // MIDDLEWARE FACTORY (ZERO DEPENDENCIES)
 // ============================================================================
 
-export { 
+export {
   middlewareFactory,
   requireAuth,
   requirePremiumFeature,
@@ -84,7 +121,7 @@ export {
   CoreMiddlewareFactory
 } from './middleware/middleware-factory';
 
-export type { 
+export type {
   IMiddlewareFactory,
   MiddlewareFactoryConfig,
   PremiumGuardOptions,
@@ -151,7 +188,8 @@ export type {
 // LOGGING SYSTEM
 // ============================================================================
 
-export * from './logging';
+// Re-export logging from dedicated logging submodule
+export * from '@cvplus/logging/backend';
 
 // ============================================================================
 // VERSION INFO

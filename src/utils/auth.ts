@@ -44,7 +44,7 @@ export async function requireGoogleAuth(request: CallableRequest): Promise<Authe
       email: `dev-user-${uid}@localhost.test`, // Synthetic email for development
       emailVerified: true, // Assume verified in development
       name: 'Development User',
-      picture: null,
+      picture: undefined,
       hasCalendarPermissions: false // No calendar permissions for anonymous users
     };
   }

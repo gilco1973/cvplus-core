@@ -168,7 +168,7 @@ export interface PersonalityProfile {
     creative?: number;
     decisive?: number;
     empathetic?: number;
-    [key: string]: number;
+    [key: string]: number | undefined;
   };
   
   /** Primary working style descriptions */

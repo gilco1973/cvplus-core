@@ -5,25 +5,14 @@
  * Provides structured logging compatible with Google Cloud Logging standards
  */
 
-import winston from 'winston';
+const Transport = require('winston-transport');
 import { LogEntry, LogLevel, FirebaseLogEntry, LogDomain } from './types';
 import { LogFormatter } from './LogFormatter';
 
 /**
- * Firebase Cloud Logging severity mapping
- */
-const FIREBASE_SEVERITY_MAP: Record<LogLevel, string> = {
-  [LogLevel.DEBUG]: 'DEBUG',
-  [LogLevel.INFO]: 'INFO',
-  [LogLevel.WARN]: 'WARNING',
-  [LogLevel.ERROR]: 'ERROR',
-  [LogLevel.FATAL]: 'CRITICAL'
-};
-
-/**
  * Firebase Transport configuration options
  */
-export interface FirebaseTransportOptions extends winston.TransportOptions {
+export interface FirebaseTransportOptions {
   /**
    * Google Cloud Project ID
    */
@@ -68,13 +57,19 @@ export interface FirebaseTransportOptions extends winston.TransportOptions {
 /**
  * Firebase Cloud Logging transport for Winston
  */
-export class FirebaseTransport extends winston.Transport {
+export class FirebaseTransport extends Transport {
   private readonly options: FirebaseTransportOptions;
   private readonly logBatch: FirebaseLogEntry[] = [];
   private batchTimeout?: NodeJS.Timeout;
 
   constructor(options: FirebaseTransportOptions = {}) {
-    super(options);
+    // Pass winston transport options to parent
+    super({
+      level: 'info',
+      handleExceptions: false,
+      handleRejections: false,
+      format: undefined
+    });
 
     this.options = {
       projectId: process.env.GCP_PROJECT || process.env.GOOGLE_CLOUD_PROJECT,
@@ -87,8 +82,7 @@ export class FirebaseTransport extends winston.Transport {
       ...options
     };
 
-    // Set transport name for Winston
-    this.name = 'firebase';
+    // Transport name is set via super() options
 
     // Bind methods to preserve context
     this.log = this.log.bind(this);
@@ -234,7 +228,8 @@ export class FirebaseTransport extends winston.Transport {
         });
       }
     } catch (error) {
-      throw new Error(`Failed to write logs to Firebase: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to write logs to Firebase: ${errorMessage}`);
     }
   }
 
@@ -258,7 +253,9 @@ export class FirebaseTransport extends winston.Transport {
     // Flush any remaining entries
     this.flush();
 
-    super.close();
+    if (super.close) {
+      super.close();
+    }
   }
 
   /**
@@ -304,11 +301,9 @@ export class FirebaseTransport extends winston.Transport {
     const isDevelopment = environment === 'development';
 
     return new FirebaseTransport({
-      level: isDevelopment ? 'debug' : 'info',
       batchSize: isDevelopment ? 10 : 100,
       flushInterval: isDevelopment ? 1000 : 5000,
-      structured: true,
-      silent: process.env.NODE_ENV === 'test'
+      structured: true
     });
   }
 

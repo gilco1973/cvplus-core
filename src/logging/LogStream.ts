@@ -95,8 +95,14 @@ export interface LogStreamEvents {
  * Real-time log stream manager
  */
 export class LogStream extends EventEmitter implements ILogStream {
-  private readonly id: string;
-  private readonly name: string;
+  public readonly id: string;
+  public readonly name: string;
+  public readonly package: string;
+  public readonly domain: LogDomain;
+  public readonly level: LogLevel;
+  public readonly enabled: boolean;
+  public readonly retention?: number;
+  public readonly tags?: string[];
   private readonly filter: LogStreamFilter;
   private readonly buffer: LogEntry[] = [];
   private readonly stats: LogStreamStats;
@@ -107,6 +113,13 @@ export class LogStream extends EventEmitter implements ILogStream {
 
     this.id = id;
     this.name = name;
+    this.package = '@cvplus/core';
+    this.domain = LogDomain.SYSTEM;
+    this.level = LogLevel.INFO;
+    this.enabled = true;
+    this.retention = undefined;
+    this.tags = undefined;
+
     this.filter = {
       maxBufferSize: 1000,
       redactPii: true,
@@ -239,7 +252,7 @@ export class LogStream extends EventEmitter implements ILogStream {
     }
 
     // Domain filter
-    if (this.filter.domains && !this.filter.domains.includes(entry.domain)) {
+    if (this.filter.domains && !this.filter.domains.includes(entry.domain as LogDomain)) {
       return false;
     }
 

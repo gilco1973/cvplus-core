@@ -6,7 +6,7 @@
  */
 
 import winston from 'winston';
-import { LogLevel, LoggerConfig, Logger as ILogger } from './types';
+import { LogLevel, LogDomain, LoggerConfig, Logger as ILogger } from './types';
 import { CorrelationService } from './CorrelationService';
 import { PiiRedaction } from './PiiRedaction';
 import { LogFormatter } from './LogFormatter';
@@ -15,9 +15,9 @@ import { LogFormatter } from './LogFormatter';
  * Logger wrapper that implements our Logger interface
  */
 class CVPlusLogger implements ILogger {
-  private winstonLogger: winston.Logger;
-  private serviceName: string;
-  private contextData: Record<string, unknown> = {};
+  protected winstonLogger: winston.Logger;
+  protected serviceName: string;
+  protected contextData: Record<string, unknown> = {};
 
   constructor(winstonLogger: winston.Logger, serviceName: string) {
     this.winstonLogger = winstonLogger;
@@ -94,7 +94,7 @@ class CVPlusLogger implements ILogger {
     this.contextData = {};
   }
 
-  private log(level: LogLevel, message: string, context: Record<string, unknown> = {}): void {
+  protected log(level: LogLevel, message: string, context: Record<string, unknown> = {}): void {
     const correlationId = CorrelationService.getCurrentId() || CorrelationService.generateId();
 
     const logEntry = {
@@ -102,7 +102,7 @@ class CVPlusLogger implements ILogger {
       level,
       message,
       correlationId,
-      domain: context.domain || 'system',
+      domain: (context.domain as LogDomain) || LogDomain.SYSTEM,
       package: this.serviceName,
       context: { ...this.contextData, ...context }
     };

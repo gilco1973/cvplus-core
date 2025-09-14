@@ -312,6 +312,7 @@ class UsageBatchCacheService {
   async getPendingUsage(userId: string): Promise<Record<string, BatchedUsageData>> {
     try {
       // Build pattern for user's batches  
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _pattern = `${userId}:*`; // TODO: Use with Redis SCAN in production
       
       // Note: This is simplified - in production, you'd use Redis SCAN

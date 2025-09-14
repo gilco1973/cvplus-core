@@ -10,7 +10,6 @@
  */
 
 import * as admin from 'firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
 import { sanitizeErrorContext } from './firestore-sanitizer';
 
 export interface ErrorContext {
@@ -255,16 +254,16 @@ export class EnhancedErrorHandler {
     }
 
     // Rate limit notifications
-    const lastTime = this.lastErrorTime.get(errorKey) || 0;
-    const count = this.errorCounts.get(errorKey) || 0;
+    const lastTime = this.lastErrorTime.get(errorKey!) || 0;
+    const count = this.errorCounts.get(errorKey!) || 0;
 
     if (now - lastTime < this.ERROR_COOLDOWN_MS) {
-      this.errorCounts.set(errorKey, count + 1);
+      this.errorCounts.set(errorKey!, count + 1);
       return count < this.MAX_ERRORS_PER_MINUTE && severity === ErrorSeverity.HIGH;
     } else {
       // Reset counter after cooldown
-      this.errorCounts.set(errorKey, 1);
-      this.lastErrorTime.set(errorKey, now);
+      this.errorCounts.set(errorKey!, 1);
+      this.lastErrorTime.set(errorKey!, now);
       return severity !== ErrorSeverity.LOW;
     }
   }
@@ -309,7 +308,7 @@ export class EnhancedErrorHandler {
    */
   private static async logError(processedError: ProcessedError): Promise<void> {
     const logLevel = this.getLogLevel(processedError.metadata.severity);
-    const logData = {
+    const _logData = {
       errorId: processedError.errorId,
       function: processedError.context.functionName,
       category: processedError.metadata.category,
@@ -349,16 +348,16 @@ export class EnhancedErrorHandler {
   /**
    * Update error metrics
    */
-  private static updateErrorMetrics(processedError: ProcessedError): void {
+  private static updateErrorMetrics(_processedError: ProcessedError): void {
     // This could be expanded to update monitoring dashboards
   }
 
   /**
    * Send error notifications
    */
-  private static async notifyOnError(processedError: ProcessedError): Promise<void> {
+  private static async notifyOnError(_processedError: ProcessedError): Promise<void> {
     // This could be expanded to integrate with alerting systems
-    if (processedError.metadata.severity === ErrorSeverity.CRITICAL) {
+    if (_processedError.metadata.severity === ErrorSeverity.CRITICAL) {
     }
   }
 
@@ -440,6 +439,7 @@ export function withErrorHandling<T extends any[], R>(
         userId: (args[0] as any)?.auth?.uid,
         requestData: (args[0] as any)?.data
       });
+      throw error; // Re-throw after handling
     }
   };
 }

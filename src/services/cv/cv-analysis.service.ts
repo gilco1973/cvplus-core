@@ -58,10 +58,8 @@ export interface CVParsingResult {
 
 export class CVAnalysisService extends BaseService {
   constructor() {
-    super({
-      name: 'cv-analysis',
-      version: '1.0.0'
-    });
+    super();
+    // Configuration: name: 'cv-analysis', version: '1.0.0'
   }
 
   protected async onInitialize(): Promise<void> {
@@ -539,7 +537,8 @@ export class CVAnalysisService extends BaseService {
   }
 
   private extractKeywords(cvData: any): string[] {
-    const keywords: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _keywords: string[] = [];
     const text = JSON.stringify(cvData).toLowerCase();
     
     // Common industry keywords
@@ -551,7 +550,7 @@ export class CVAnalysisService extends BaseService {
     return commonKeywords.filter(keyword => text.includes(keyword));
   }
 
-  private suggestKeywords(cvData: any, targetIndustry?: string): string[] {
+  private suggestKeywords(_cvData: any, targetIndustry?: string): string[] {
     // Based on existing data, suggest additional keywords
     const suggestions = ['teamwork', 'problem-solving', 'results-driven', 'analytical'];
     
@@ -634,7 +633,7 @@ export class CVAnalysisService extends BaseService {
 
     // Analyze progression patterns
     const positions = sortedExperience.map((exp: any) => exp.position?.toLowerCase() || '');
-    const hasProgression = positions.some(pos => 
+    const hasProgression = positions.some((pos: string) =>
       pos.includes('senior') || pos.includes('lead') || pos.includes('manager')
     );
 

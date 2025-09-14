@@ -144,20 +144,15 @@ export class Phase2TypeValidator {
 export class Phase2TypeFactory {
   static createEmptySuccessPrediction(userId: string, jobId: string): Partial<import('./success-prediction').SuccessPrediction> {
     return {
-      predictionId: `pred_${Date.now()}`,
-      userId,
-      jobId,
+      // predictionId: `pred_${Date.now()}`,
+      // userId,
+      // jobId,
       timestamp: new Date(),
       interviewProbability: 0,
       offerProbability: 0,
       hireProbability: 0,
       competitivenessScore: 0,
-      confidence: {
-        overall: 0,
-        interviewConfidence: 0,
-        offerConfidence: 0,
-        salaryConfidence: 0,
-      },
+      confidence: 0,
       recommendations: []
     };
   }

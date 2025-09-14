@@ -37,6 +37,17 @@ export enum AlertSeverity {
 }
 
 /**
+ * Audit severity levels
+ */
+export enum AuditSeverity {
+  LOW = 'low',
+  INFO = 'info',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  CRITICAL = 'critical'
+}
+
+/**
  * Audit actions
  */
 export enum AuditAction {
@@ -146,7 +157,7 @@ export interface AlertAction {
 /**
  * Audit trail entry
  */
-export interface AuditTrail {
+export interface AuditEntry {
   id: string;
   timestamp: string;
   userId: string;

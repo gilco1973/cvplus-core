@@ -12,7 +12,6 @@ import { BaseService, ServiceConfig, ServiceHealth } from './base-service';
 import { CacheableMixin, CacheOptions, CacheResult } from './cache-mixin';
 import { DatabaseMixin, DatabaseOptions, QueryResult, QueryFilter } from './database-mixin';
 import { ApiClientMixin, ApiClientOptions, ApiResponse } from './api-client-mixin';
-import { Logger } from './logger';
 
 export interface EnhancedServiceConfig extends ServiceConfig {
   cache?: CacheOptions;

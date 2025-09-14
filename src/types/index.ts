@@ -65,10 +65,15 @@ export * from './middleware';
 // ============================================================================
 
 export * from './api';
-export * from './cv';
+export type {
+  PersonalInfo,
+  Language
+} from './cv';
 export * from './cv-template';
 export * from './error';
-export * from './enhanced-models';
+export type {
+  ParsedCV
+} from './enhanced-models';
 export * from './firebase';
 export * from './industry-specialization';
 export * from './status';

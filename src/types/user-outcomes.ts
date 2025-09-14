@@ -9,3 +9,12 @@ export interface UserOutcome {
   timestamp: Date;
   metrics?: Record<string, any>;
 }
+
+// Additional exports required by phase2 types
+export interface OutcomeEvent {
+  eventType: string;
+  userId: string;
+  timestamp: Date;
+  outcome: UserOutcome;
+  metadata?: Record<string, any>;
+}

@@ -217,7 +217,7 @@ Format as structured analysis for script generation.`;
     cv: ParsedCV,
     personality: PersonalityProfile,
     industryTemplate: any,
-    options: PromptEngineOptions
+    _options: PromptEngineOptions
   ): Promise<string> {
     const optimizationPrompt = `Create industry-optimized messaging strategy:
 
@@ -458,7 +458,7 @@ Create the final script that integrates all layers seamlessly.`;
     return 'executive';
   }
 
-  protected selectIndustryTemplate(cv: ParsedCV, targetIndustry?: string): IndustryTemplate {
+  protected selectIndustryTemplate(_cv: ParsedCV, targetIndustry?: string): IndustryTemplate {
     // Default template for now - would normally use industry-specific templates
     const defaultTemplate: IndustryTemplate = {
       name: targetIndustry || 'General Business',
@@ -854,7 +854,7 @@ Provide only a JSON response with:
     return `Professional with expertise in ${this.getTechnicalSkills(cv).slice(0, 3).join(', ')}`;
   }
 
-  private generateFallbackOptimization(cv: ParsedCV, personality: PersonalityProfile, template: any): string {
+  private generateFallbackOptimization(_cv: ParsedCV, personality: PersonalityProfile, _template: any): string {
     return `Focus on ${personality.industryFocus} sector positioning with ${personality.communicationStyle} approach`;
   }
 

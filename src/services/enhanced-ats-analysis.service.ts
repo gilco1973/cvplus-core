@@ -488,7 +488,7 @@ Return recommendations in this JSON format:
   }
 
   // Helper methods
-  private async generateProfessionalSummary(parsedCV: ParsedCV, jobDescription?: string): Promise<string> {
+  private async generateProfessionalSummary(parsedCV: ParsedCV, _jobDescription?: string): Promise<string> {
     const role = this.inferRoleFromExperience(parsedCV.experience);
     const skills = this.getTopSkills(parsedCV.skills, 5);
     const experience = parsedCV.experience?.[0];
@@ -496,7 +496,7 @@ Return recommendations in this JSON format:
     return `Results-driven ${role} with ${this.calculateYearsOfExperience(parsedCV.experience)}+ years of experience in ${skills.slice(0, 3).join(', ')}. Proven track record of ${experience?.company ? `delivering exceptional results at ${experience.company}` : 'delivering high-impact projects'}. Expertise in ${skills.join(', ')} with demonstrated ability to drive innovation and efficiency. Seeking to leverage technical excellence and leadership skills in a challenging ${role} position.`;
   }
 
-  private async enhanceExperienceDescription(exp: any, jobDescription?: string): Promise<string> {
+  private async enhanceExperienceDescription(exp: any, _jobDescription?: string): Promise<string> {
     const actionVerbs = ['Led', 'Developed', 'Implemented', 'Managed', 'Delivered', 'Optimized', 'Increased', 'Reduced'];
     const randomVerb = actionVerbs[Math.floor(Math.random() * actionVerbs.length)];
     

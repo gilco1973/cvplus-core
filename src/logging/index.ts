@@ -21,18 +21,27 @@ export { CorrelationService } from './CorrelationService';
 export { PiiRedaction } from './PiiRedaction';
 export { LogFormatter } from './LogFormatter';
 
+// Import for internal use in this file
+import { LoggerFactory } from './LoggerFactory';
+import { CorrelationService } from './CorrelationService';
+
 // Firebase integration
 export { FirebaseTransport } from './FirebaseTransport';
 export type { FirebaseTransportOptions } from './FirebaseTransport';
 
-// Data models and systems
-export { LogStream, LogStreamManager, globalStreamManager } from './LogStream';
-export { AlertRule, AlertRuleManager, globalAlertManager } from './AlertRule';
-export { AuditTrail, globalAuditTrail } from './AuditTrail';
+// Data models and systems (classes only, not conflicting with interface names)
+export { LogStreamManager, globalStreamManager } from './LogStream';
+export { AlertRuleManager, globalAlertManager } from './AlertRule';
+export { globalAuditTrail } from './AuditTrail';
 export { LogArchive, globalLogArchive } from './LogArchive';
 
-// Types and interfaces
+// Types and interfaces (includes LogStream, AlertRule, AuditTrail interfaces)
 export * from './types';
+
+// Re-export classes with different names to avoid conflicts
+export { LogStream as LogStreamClass } from './LogStream';
+export { AlertRule as AlertRuleClass } from './AlertRule';
+export { AuditTrail as AuditTrailClass } from './AuditTrail';
 
 // Enums for data models
 export { AlertConditionType } from './AlertRule';
@@ -40,8 +49,8 @@ export { AuditEventType } from './AuditTrail';
 export { ArchiveStorageType, CompressionType } from './LogArchive';
 
 // Package logger factory and implementations
+export { default as PackageLoggerFactory } from './PackageLoggerFactory';
 export {
-  PackageLoggerFactory,
   BasePackageLogger,
   AnalyticsLogger,
   PremiumLogger,
@@ -68,7 +77,7 @@ export type {
   LogEntry,
   LogStream,
   AlertRule,
-  AuditTrail,
+  AuditEntry,
   PiiRedactionConfig,
   TransportConfig
 } from './types';
@@ -78,10 +87,13 @@ export {
   LogDomain
 } from './types';
 
+// Import LogLevel and Logger for internal use in this file
+import { LogLevel, Logger } from './types';
+
 /**
  * Quick start utility for creating a logger with sensible defaults
  */
-export function createLogger(serviceName: string, level: LogLevel = LogLevel.INFO) {
+export function createLogger(serviceName: string, level: LogLevel = LogLevel.INFO): Logger {
   return LoggerFactory.createLogger(serviceName, { level });
 }
 
@@ -93,7 +105,7 @@ export const correlationMiddleware = CorrelationService.middleware();
 /**
  * Default logger instance for immediate use
  */
-export const logger = LoggerFactory.createLogger('@cvplus/core');
+export const logger: Logger = LoggerFactory.createLogger('@cvplus/core');
 
 /**
  * Version information

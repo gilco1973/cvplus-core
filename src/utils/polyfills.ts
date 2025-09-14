@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Add File polyfill if not present
 if (typeof global !== 'undefined' && typeof global.File === 'undefined') {
   (global as any).File = class File {
-    constructor(bits: any[], name: string, options?: any) {
+    constructor(_bits: any[], _name: string, _options?: any) {
       // Basic File implementation for compatibility
     }
   };

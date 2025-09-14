@@ -59,16 +59,14 @@
     "validate-dependencies": "./scripts/validate-dependencies.sh"
   },
   "dependencies": {
+    "@cvplus/logging": "file:../logging",
     "@types/node": "^22.9.1",
     "@types/redis": "^4.0.10",
     "clsx": "^2.1.1",
     "googleapis": "^159.0.0",
     "ical-generator": "^9.0.0",
     "tailwind-merge": "^3.3.1",
-    "winston": "^3.11.0",
-    "winston-transport": "^4.6.0",
-    "nanoid": "^5.0.4",
-    "cls-hooked": "^4.2.2"
+    "nanoid": "^5.0.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",

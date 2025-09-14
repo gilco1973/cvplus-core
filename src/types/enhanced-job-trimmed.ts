@@ -54,7 +54,7 @@ export interface EnhancedJob extends Job {
     testimonials?: Testimonial[];
     personalityProfile?: PersonalityProfile;
     skillsVisualization?: SkillsVisualization;
-    certifications?: Certification[];
+    certifications?: JobCertification[];
   };
   
   /** Privacy and sharing settings */
@@ -173,7 +173,7 @@ export interface LanguageSkill {
   certificationName?: string;
 }
 
-export interface Certification {
+export interface JobCertification {
   id: string;
   name: string;
   issuer: string;

@@ -90,7 +90,13 @@ export class CorrelationService {
    * Clear the current correlation context
    */
   static clear(): void {
-    this.asyncLocalStorage.exitWith(undefined);
+    // Note: AsyncLocalStorage doesn't have a direct clear method
+    // We create a new empty context to effectively "clear" the current one
+    const emptyContext: CorrelationContext = {
+      correlationId: '',
+      startTime: Date.now()
+    };
+    this.asyncLocalStorage.enterWith(emptyContext);
   }
 
   /**

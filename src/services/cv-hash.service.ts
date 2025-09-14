@@ -21,7 +21,7 @@ export class CVHashService {
   /**
    * Generate content hash for CV
    */
-  generateContentHash(cvData: any): string {
+  generateContentHash(_cvData: any): string {
     // TODO: Implement proper content hashing
     return 'placeholder-content-hash';
   }
@@ -29,7 +29,7 @@ export class CVHashService {
   /**
    * Generate structure hash for CV
    */
-  generateStructureHash(cvData: any): string {
+  generateStructureHash(_cvData: any): string {
     // TODO: Implement proper structure hashing
     return 'placeholder-structure-hash';
   }
@@ -37,7 +37,7 @@ export class CVHashService {
   /**
    * Check for duplicate CVs
    */
-  async checkForDuplicates(cvData: any, userId: string): Promise<DuplicateCheckResult> {
+  async checkForDuplicates(_cvData: any, _userId: string): Promise<DuplicateCheckResult> {
     // TODO: Implement proper duplicate detection
     return {
       isDuplicate: false,

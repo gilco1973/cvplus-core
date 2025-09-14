@@ -131,7 +131,9 @@ export class PiiRedaction {
     // Apply custom patterns from class
     Object.entries(this.customPatterns).forEach(([name, pattern]) => {
       const replacement = this.customReplacements[name];
-      redactedText = redactedText.replace(pattern, replacement);
+      if (replacement) {
+        redactedText = redactedText.replace(pattern, replacement);
+      }
     });
 
     // Apply custom patterns from parameter

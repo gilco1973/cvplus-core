@@ -9,7 +9,6 @@ import {
   LoggerFactory,
   CorrelationService,
   LogLevel,
-  LogDomain,
   type Logger
 } from './index';
 
@@ -43,17 +42,17 @@ export abstract class BasePackageLogger implements PackageLogger {
   }
 
   info(message: string, context?: Record<string, any>): void {
-    const correlationId = CorrelationService.getCurrentCorrelationId();
+    const correlationId = CorrelationService.getCurrentId();
     this.logger.info(message, { ...context, correlationId, package: this.packageName });
   }
 
   warn(message: string, context?: Record<string, any>): void {
-    const correlationId = CorrelationService.getCurrentCorrelationId();
+    const correlationId = CorrelationService.getCurrentId();
     this.logger.warn(message, { ...context, correlationId, package: this.packageName });
   }
 
   error(message: string, error?: Error, context?: Record<string, any>): void {
-    const correlationId = CorrelationService.getCurrentCorrelationId();
+    const correlationId = CorrelationService.getCurrentId();
     this.logger.error(message, {
       ...context,
       correlationId,
@@ -67,12 +66,12 @@ export abstract class BasePackageLogger implements PackageLogger {
   }
 
   debug(message: string, context?: Record<string, any>): void {
-    const correlationId = CorrelationService.getCurrentCorrelationId();
+    const correlationId = CorrelationService.getCurrentId();
     this.logger.debug(message, { ...context, correlationId, package: this.packageName });
   }
 
   withCorrelation<T>(correlationId: string, callback: () => T): T {
-    return CorrelationService.withCorrelationId(correlationId, callback);
+    return CorrelationService.withCorrelationId(correlationId, callback) as T;
   }
 
   abstract getStats(): Record<string, any>;
@@ -439,6 +438,20 @@ export const paymentsLogger = new PaymentsLogger();
  * Consolidated logging utilities
  */
 export const packageLogging = {
+  analytics: analyticsLogger,
+  premium: premiumLogger,
+  recommendations: recommendationsLogger,
+  profiles: profilesLogger,
+  admin: adminLogger,
+  workflow: workflowLogger,
+  payments: paymentsLogger
+};
+
+/**
+ * Package logger factory object with convenience methods
+ */
+const PackageLoggerFactory = {
+  createPackageLogger,
   analytics: analyticsLogger,
   premium: premiumLogger,
   recommendations: recommendationsLogger,

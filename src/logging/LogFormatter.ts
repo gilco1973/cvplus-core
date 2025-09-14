@@ -246,7 +246,7 @@ export class LogFormatter {
   /**
    * Format performance metrics for console display
    */
-  private static formatPerformanceForConsole(performance: Record<string, number>): string {
+  private static formatPerformanceForConsole(performance: Record<string, number | undefined>): string {
     const parts: string[] = [];
 
     if (performance.duration !== undefined) {

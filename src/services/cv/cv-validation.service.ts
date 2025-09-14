@@ -27,10 +27,8 @@ export interface CVDataValidationResult {
 
 export class CVValidationService extends BaseService {
   constructor() {
-    super({
-      name: 'cv-validation',
-      version: '1.0.0'
-    });
+    super();
+    // Configuration: name: 'cv-validation', version: '1.0.0'
   }
 
   protected async onInitialize(): Promise<void> {
@@ -212,11 +210,7 @@ export class CVValidationService extends BaseService {
         if (!this.checkRequirement(cvData, requirement)) {
           return {
             success: false,
-            error: {
-              name: 'TemplateCompatibilityError',
-              message: `CV data is not compatible with template ${templateId}: Missing ${requirement.field}`,
-              code: 'TEMPLATE_INCOMPATIBLE'
-            }
+            error: `CV data is not compatible with template ${templateId}: Missing ${requirement.field}`
           };
         }
       }
@@ -226,11 +220,7 @@ export class CVValidationService extends BaseService {
     } catch (error) {
       return {
         success: false,
-        error: {
-          name: 'ValidationError',
-          message: error instanceof Error ? error.message : 'Template compatibility check failed',
-          code: 'VALIDATION_FAILED'
-        }
+        error: error instanceof Error ? error.message : 'Template compatibility check failed'
       };
     }
   }
@@ -254,11 +244,7 @@ export class CVValidationService extends BaseService {
     } catch (error) {
       return {
         success: false,
-        error: {
-          name: 'FeatureValidationError',
-          message: error instanceof Error ? error.message : 'Feature validation failed',
-          code: 'FEATURE_VALIDATION_FAILED'
-        }
+        error: error instanceof Error ? error.message : 'Feature validation failed'
       };
     }
   }
@@ -330,7 +316,7 @@ export class CVValidationService extends BaseService {
       ]
     };
 
-    return requirements[templateId] || requirements['modern'];
+    return requirements[templateId] || requirements['modern'] || [];
   }
 
   private checkRequirement(cvData: any, requirement: { field: string, required: boolean }): boolean {

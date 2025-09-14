@@ -205,6 +205,16 @@ interface LogEntryWindow {
  * Alert rule implementation
  */
 export class AlertRule extends EventEmitter implements IAlertRule {
+  // Interface properties
+  public readonly id: string;
+  public readonly name: string;
+  public readonly description: string;
+  public readonly condition: IAlertRule['condition'];
+  public readonly actions: IAlertRule['actions'];
+  public enabled: boolean;
+  public readonly cooldownMinutes?: number;
+
+  // Implementation-specific properties
   private readonly config: AlertRuleConfig;
   private readonly logWindows: Map<string, LogEntryWindow> = new Map();
   private readonly stats: AlertRuleStats;
@@ -215,6 +225,28 @@ export class AlertRule extends EventEmitter implements IAlertRule {
     super();
 
     this.config = { ...config };
+
+    // Implement interface properties
+    this.id = config.id;
+    this.name = config.name;
+    this.description = config.description;
+    this.enabled = config.enabled;
+    this.cooldownMinutes = config.cooldownMs ? Math.ceil(config.cooldownMs / 60000) : undefined;
+
+    // Convert first condition to interface format (simplified)
+    const firstCondition = config.conditions[0];
+    if (firstCondition) {
+      this.condition = this.convertToInterfaceCondition(firstCondition);
+    } else {
+      this.condition = {}; // Empty condition as fallback
+    }
+
+    // Convert actions to interface format
+    this.actions = config.actions.map(action => ({
+      type: action.type as any, // Cast to interface type
+      config: action.config
+    }));
+
     this.stats = {
       ruleId: config.id,
       totalTriggered: 0,
@@ -227,6 +259,23 @@ export class AlertRule extends EventEmitter implements IAlertRule {
     this.config.conditions.forEach(condition => {
       this.stats.conditionBreakdown[condition.type] = 0;
     });
+  }
+
+  /**
+   * Convert AlertCondition to interface AlertCondition format
+   */
+  private convertToInterfaceCondition(condition: AlertCondition): IAlertRule['condition'] {
+    const interfaceCondition: IAlertRule['condition'] = {};
+
+    if (condition.type === AlertConditionType.THRESHOLD) {
+      const thresholdCondition = condition as ThresholdCondition;
+      interfaceCondition.threshold = {
+        count: thresholdCondition.threshold,
+        timeWindowMinutes: Math.ceil(thresholdCondition.windowMs / 60000)
+      };
+    }
+
+    return interfaceCondition;
   }
 
   /**
@@ -280,7 +329,7 @@ export class AlertRule extends EventEmitter implements IAlertRule {
       return false;
     }
 
-    if (filters.domains && !filters.domains.includes(entry.domain)) {
+    if (filters.domains && !filters.domains.includes(entry.domain as LogDomain)) {
       return false;
     }
 
@@ -333,7 +382,12 @@ export class AlertRule extends EventEmitter implements IAlertRule {
     this.config.conditions.forEach(condition => {
       if (this.checkCondition(condition, entry)) {
         triggeredConditions.push(condition.type);
-        this.stats.conditionBreakdown[condition.type]++;
+        const currentCount = this.stats.conditionBreakdown[condition.type];
+        if (typeof currentCount === 'number') {
+          this.stats.conditionBreakdown[condition.type] = currentCount + 1;
+        } else {
+          this.stats.conditionBreakdown[condition.type] = 1;
+        }
       }
     });
 
@@ -363,7 +417,7 @@ export class AlertRule extends EventEmitter implements IAlertRule {
   /**
    * Check threshold condition
    */
-  private checkThresholdCondition(condition: ThresholdCondition, entry: LogEntry): boolean {
+  private checkThresholdCondition(condition: ThresholdCondition, _entry: LogEntry): boolean {
     const windowKey = `${condition.type}_${condition.windowMs}`;
     const window = this.logWindows.get(windowKey);
     if (!window) return false;
@@ -379,20 +433,20 @@ export class AlertRule extends EventEmitter implements IAlertRule {
         break;
       case 'response_time':
         const responseTimes = window.entries
-          .filter(e => e.performance?.duration)
-          .map(e => e.performance!.duration);
+          .filter(e => e.performance?.duration !== undefined)
+          .map(e => e.performance!.duration as number);
         metricValue = responseTimes.length ? Math.max(...responseTimes) : 0;
         break;
       case 'memory_usage':
         const memoryUsages = window.entries
-          .filter(e => e.performance?.memoryUsage)
-          .map(e => e.performance!.memoryUsage!);
+          .filter(e => e.performance?.memoryUsage !== undefined)
+          .map(e => e.performance!.memoryUsage as number);
         metricValue = memoryUsages.length ? Math.max(...memoryUsages) : 0;
         break;
       case 'cpu_usage':
         const cpuUsages = window.entries
-          .filter(e => e.performance?.cpuUsage)
-          .map(e => e.performance!.cpuUsage!);
+          .filter(e => e.performance?.cpuUsage !== undefined)
+          .map(e => e.performance!.cpuUsage as number);
         metricValue = cpuUsages.length ? Math.max(...cpuUsages) : 0;
         break;
       default:
@@ -405,7 +459,7 @@ export class AlertRule extends EventEmitter implements IAlertRule {
   /**
    * Check pattern condition
    */
-  private checkPatternCondition(condition: PatternCondition, entry: LogEntry): boolean {
+  private checkPatternCondition(condition: PatternCondition, _entry: LogEntry): boolean {
     const windowKey = `${condition.type}_${condition.windowMs}`;
     const window = this.logWindows.get(windowKey);
     if (!window) return false;
@@ -427,7 +481,7 @@ export class AlertRule extends EventEmitter implements IAlertRule {
   /**
    * Check frequency condition
    */
-  private checkFrequencyCondition(condition: FrequencyCondition, entry: LogEntry): boolean {
+  private checkFrequencyCondition(condition: FrequencyCondition, _entry: LogEntry): boolean {
     const windowKey = `${condition.type}_${condition.windowMs}`;
     const window = this.logWindows.get(windowKey);
     if (!window) return false;
@@ -445,10 +499,8 @@ export class AlertRule extends EventEmitter implements IAlertRule {
     const currentValue = this.getFieldValue(entry, condition.metric);
     if (typeof currentValue !== 'number') return false;
 
-    // Simple z-score based anomaly detection
-    const threshold = 2 + (condition.sensitivity / 10) * 3; // Adjust based on sensitivity
-
     // For demo purposes, randomly trigger based on sensitivity
+    // In a real implementation, you would use statistical analysis with threshold
     const randomFactor = Math.random() * 10;
     return randomFactor < condition.sensitivity;
   }
@@ -456,7 +508,7 @@ export class AlertRule extends EventEmitter implements IAlertRule {
   /**
    * Check chain condition
    */
-  private checkChainCondition(condition: ChainCondition, entry: LogEntry): boolean {
+  private checkChainCondition(condition: ChainCondition, _entry: LogEntry): boolean {
     const windowKey = `${condition.type}_${condition.maxChainTimeMs}`;
     const window = this.logWindows.get(windowKey);
     if (!window) return false;

@@ -69,7 +69,7 @@ export function maskPII(cv: ParsedCV, settings: PrivacySettings): ParsedCV {
 function maskName(name: string): string {
   const parts = name.split(' ');
   if (parts.length === 1) {
-    return `${parts[0][0]}${'*'.repeat(5)}`;
+    return `${parts[0]![0]}${'*'.repeat(5)}`;
   }
   
   return parts.map(part => `${part[0]}${'*'.repeat(3)}`).join(' ');

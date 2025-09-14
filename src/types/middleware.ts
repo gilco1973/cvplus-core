@@ -224,13 +224,13 @@ export class MiddlewareError extends Error {
   }
 }
 
-export class AuthenticationError extends MiddlewareError {
+export class MiddlewareAuthenticationError extends MiddlewareError {
   constructor(message: string = 'Authentication required', details?: Record<string, any>) {
     super('AUTH_REQUIRED', message, details);
   }
 }
 
-export class AuthorizationError extends MiddlewareError {
+export class MiddlewareAuthorizationError extends MiddlewareError {
   constructor(message: string = 'Access denied', details?: Record<string, any>) {
     super('ACCESS_DENIED', message, details);
   }

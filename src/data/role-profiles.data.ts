@@ -45,3 +45,6 @@ export const getRoleProfile = (roleId: string): RoleProfile | undefined => {
 export const getRoleProfilesByIndustry = (industry: string): RoleProfile[] => {
   return roleProfiles.filter(profile => profile.industry === industry);
 };
+
+// Export with alternative name for compatibility
+export const roleProfilesData = roleProfiles;

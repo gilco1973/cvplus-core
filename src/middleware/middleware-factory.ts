@@ -16,7 +16,7 @@ import {
   AuthenticatedRequest,
   PremiumGuardOptions,
   RateLimitOptions,
-  AuthenticationError,
+  MiddlewareAuthenticationError as AuthenticationError,
   RateLimitError,
   FeatureAccessError,
   isAuthenticatedRequest

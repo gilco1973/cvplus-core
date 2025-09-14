@@ -83,3 +83,19 @@ export interface VideoRequirements {
   features: string[];
   budget?: number;
 }
+
+// Additional exports required by provider-selection-engine
+export interface ProviderPerformanceMetrics {
+  averageResponseTime: number;
+  successRate: number;
+  qualityScore: number;
+  costEfficiency: number;
+  lastUpdated: Date;
+}
+
+export interface ProviderHealthStatus {
+  status: 'healthy' | 'degraded' | 'unavailable';
+  uptime: number;
+  lastHealthCheck: Date;
+  issues?: string[];
+}

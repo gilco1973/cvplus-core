@@ -5,7 +5,7 @@
  */
 
 import * as admin from 'firebase-admin';
-import { FieldValue, DocumentReference, Transaction, WriteBatch } from 'firebase-admin/firestore';
+import { DocumentReference, Transaction } from 'firebase-admin/firestore';
 import { 
   FirestoreValidationService, 
   ValidationResult, 
@@ -242,7 +242,7 @@ export class SafeFirestoreService {
     operation: () => Promise<T>,
     maxAttempts: number,
     delay: number,
-    operationName: string
+    _operationName: string
   ): Promise<{ result: T; attempts: number }> {
     let lastError: Error | null = null;
     
@@ -450,24 +450,24 @@ export class SafeFirestoreService {
    * Monitor and log Firestore operation performance
    */
   static async monitoredOperation<T>(
-    operationName: string,
+    _operationName: string,
     operation: () => Promise<T>
   ): Promise<T> {
     const startTime = Date.now();
     
     try {
       const result = await operation();
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
       
       
       // Log performance warning for slow operations
-      if (duration > 5000) {
+      if (_duration > 5000) {
       }
       
       return result;
       
     } catch (error: any) {
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
       throw error;
     }
   }

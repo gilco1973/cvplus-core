@@ -215,6 +215,7 @@ Important guidelines:
    * Calculate confidence score based on similarity scores
    * Currently unused but reserved for future confidence scoring features
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _calculateConfidence(chunks: any[]): number {
     if (chunks.length === 0) return 0;
     

@@ -4,7 +4,6 @@
  * Phase 1.3 Implementation: Final safety net for timeline data
  */
 
-import { FieldValue } from 'firebase-admin/firestore';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -400,7 +399,7 @@ export class FirestoreValidationService {
    */
   private static validateUpdateDataWithPaths(
     data: Record<string, any>,
-    path: string,
+    _path: string,
     options: ValidationOptions,
     errors: string[],
     warnings: string[]
