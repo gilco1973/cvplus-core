@@ -7,7 +7,8 @@
  * @version 1.0.0
  */
 
-import type { BaseError, ErrorCategory, ErrorSeverity } from '../types';
+import type { ErrorCategory, ErrorSeverity } from '../types';
+import type { BaseError } from '../types/error';
 
 export function createError(
   code: string,

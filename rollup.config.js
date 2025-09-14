@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
@@ -17,7 +18,10 @@ export default {
     }
   ],
   plugins: [
-    resolve(),
+    json(),
+    resolve({
+      preferBuiltins: true
+    }),
     commonjs(),
     typescript({
       tsconfig: './tsconfig.build.json',
@@ -26,5 +30,5 @@ export default {
       outDir: 'dist'
     })
   ],
-  external: ['@types/node']
+  external: ['@types/node', 'firebase-functions', 'firebase-admin']
 };

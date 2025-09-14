@@ -28,6 +28,9 @@ export type ProcessingStatus =
   | 'cancelled'
   | 'timeout';
 
+// Alias for backward compatibility
+export type JobStatus = ProcessingStatus;
+
 export type HealthStatus = 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
 
 // ============================================================================

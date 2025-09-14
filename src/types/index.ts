@@ -1,47 +1,75 @@
-/**
- * CVPlus Core Types
- * 
- * Shared type definitions used across frontend, functions, and other packages.
- * This module provides the foundational types for the CVPlus platform.
- * 
- * @author Gil Klainert
- * @version 1.0.0
- */
+export interface Job {
+  id: string;
+  userId: string;
+  status: 'pending' | 'processing' | 'analyzed' | 'generating' | 'completed' | 'failed';
+  fileUrl?: string;
+  mimeType?: string;
+  isUrl?: boolean;
+  parsedData?: any;
+  generatedCV?: {
+    html: string;
+    pdfUrl: string;
+    docxUrl: string;
+  };
+  selectedTemplate?: string;
+  selectedFeatures?: string[];
+  error?: string;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface CVTemplate {
+  id: string;
+  name: string;
+  description: string;
+  thumbnail: string;
+  category: 'modern' | 'classic' | 'creative' | 'minimal' | 'executive';
+  isPremium: boolean;
+  config: {
+    colors: {
+      primary: string;
+      secondary: string;
+      accent: string;
+      text: string;
+      background: string;
+    };
+    fonts: {
+      heading: string;
+      body: string;
+    };
+    layout: string;
+  };
+}
+
+export interface GeneratedFeature {
+  id: string;
+  widget: string;
+  scripts?: string[];
+  styles?: string[];
+  data?: any;
+  requirements?: {
+    scripts?: string[];
+    styles?: string[];
+    apiKeys?: string[];
+  };
+}
 
 // ============================================================================
-// CORE JOB AND CV TYPES
+// MIDDLEWARE & ARCHITECTURE TYPES
 // ============================================================================
 
-export * from './job';
-export * from './cv';
-export * from './cv-template';
+export * from './middleware';
 
 // ============================================================================
-// FIREBASE TYPES
-// ============================================================================
-
-export * from './firebase';
-
-// ============================================================================
-// UTILITY TYPES
-// ============================================================================
-
-export * from './utility';
-
-// ============================================================================
-// ERROR HANDLING TYPES
-// ============================================================================
-
-export * from './error';
-
-// ============================================================================
-// API RESPONSE TYPES
+// ALL OTHER EXISTING TYPES
 // ============================================================================
 
 export * from './api';
-
-// ============================================================================
-// STATUS AND STATE TYPES
-// ============================================================================
-
+export * from './cv';
+export * from './cv-template';
+export * from './error';
+export * from './enhanced-models';
+export * from './firebase';
+export * from './industry-specialization';
 export * from './status';
+export * from './utility';

@@ -214,6 +214,18 @@ export interface CreateErrorOptions {
 }
 
 // ============================================================================
+// ERROR DETAILS TYPE (for multimedia compatibility)
+// ============================================================================
+
+export interface ErrorDetails {
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  stack?: string;
+  timestamp: number;
+}
+
+// ============================================================================
 // ERROR STATUS AND MONITORING
 // ============================================================================
 

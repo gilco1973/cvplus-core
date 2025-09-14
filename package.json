@@ -1,6 +1,7 @@
 {
   "name": "@cvplus/core",
   "version": "1.0.0",
+  "type": "module",
   "description": "CVPlus Core - Shared types, constants, and utilities",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -25,6 +26,16 @@
       "import": "./dist/utils/index.esm.js",
       "require": "./dist/utils/index.js",
       "types": "./dist/utils/index.d.ts"
+    },
+    "./config": {
+      "import": "./dist/config/index.esm.js",
+      "require": "./dist/config/index.js",
+      "types": "./dist/config/index.d.ts"
+    },
+    "./logging": {
+      "import": "./dist/logging/index.esm.js",
+      "require": "./dist/logging/index.js",
+      "types": "./dist/logging/index.d.ts"
     }
   },
   "files": [
@@ -44,16 +55,28 @@
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "validate-dependencies": "./scripts/validate-dependencies.sh"
   },
   "dependencies": {
-    "@types/node": "^22.9.1"
+    "@types/node": "^22.9.1",
+    "@types/redis": "^4.0.10",
+    "clsx": "^2.1.1",
+    "googleapis": "^159.0.0",
+    "ical-generator": "^9.0.0",
+    "tailwind-merge": "^3.3.1",
+    "winston": "^3.11.0",
+    "winston-transport": "^4.6.0",
+    "nanoid": "^5.0.4",
+    "cls-hooked": "^4.2.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.1",
     "@types/jest": "^29.5.14",
+    "@types/cls-hooked": "^4.3.8",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "eslint": "^9.15.0",
@@ -65,6 +88,7 @@
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
+    "firebase-functions": ">=4.0.0",
     "typescript": ">=5.0.0"
   },
   "publishConfig": {
