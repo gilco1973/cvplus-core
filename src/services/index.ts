@@ -22,34 +22,14 @@ export { ServiceRegistry } from "./service-registry";
 export type { ServiceConfig, ServiceHealth } from "./base-service";
 export type { EnhancedServiceConfig } from "./enhanced-base-service";
 // LogContext moved to @cvplus/logging submodule - import from there
-export { ServiceRegistry } from './service-registry';
 
 // Mixins for common functionality
-export {
-  CacheableMixin,
-  CacheOptions,
-  CacheResult,
-  CacheMetricsData,
-  createCacheableMixin
-} from './cache-mixin';
-export {
-  DatabaseMixin,
-  DatabaseOptions,
-  QueryResult,
-  QueryFilter,
-  DatabaseOperation,
-  DatabaseError,
-  createDatabaseMixin
-} from './database-mixin';
-export {
-  ApiClientMixin,
-  ApiClientOptions,
-  ApiRequestOptions,
-  ApiResponse,
-  ApiError,
-  RateLimitState,
-  createApiClientMixin
-} from './api-client-mixin';
+export { CacheableMixin, createCacheableMixin } from './cache-mixin';
+export type { CacheOptions, CacheResult, CacheMetricsData } from './cache-mixin';
+export { DatabaseMixin, createDatabaseMixin } from './database-mixin';
+export type { DatabaseOptions, QueryResult, QueryFilter, DatabaseOperation, DatabaseError } from './database-mixin';
+export { ApiClientMixin, createApiClientMixin } from './api-client-mixin';
+export type { ApiClientOptions, ApiRequestOptions, ApiResponse, ApiError, RateLimitState } from './api-client-mixin';
 
 // Cache services (re-exports from cache index)
 export * from './cache';

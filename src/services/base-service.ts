@@ -8,8 +8,20 @@
  * @version 1.0.0
  */
 
-import { createLogger } from '../../logging/dist/backend/index.js';
-import type { Logger } from '../../logging/dist/backend/index.js';
+// TODO: Import from @cvplus/logging after proper setup
+// import {  logger  } from '@cvplus/logging';
+
+// Temporary mock logging - TODO: Replace with proper import
+const logger = {
+  info: (message: string, data?: any) => console.log('[INFO]', message, data),
+  error: (message: string, data?: any) => console.error('[ERROR]', message, data),
+  warn: (message: string, data?: any) => console.warn('[WARN]', message, data),
+  debug: (message: string, data?: any) => console.debug('[DEBUG]', message, data)
+};
+const _loggerFactory = {
+  getLogger: (name: string) => logger
+};
+// TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
 
 export interface ServiceHealth {
   status: 'healthy' | 'unhealthy' | 'degraded';
@@ -38,7 +50,7 @@ export abstract class BaseService {
       timeoutMs: 30000,
       ...config
     };
-    this.logger = createLogger(this.config.name);
+    this.logger = logger;
   }
 
   /**

@@ -10,8 +10,22 @@
  */
 
 import { logger } from 'firebase-functions';
-import { pricingCacheService } from './pricing-cache.service';
-import { subscriptionCacheService } from './subscription-cache.service';
+// TODO: Move to premium module or establish proper dependency
+// import { pricingCacheService } from './pricing-cache.service';
+// import { subscriptionCacheService } from './subscription-cache.service';
+
+// Temporary mock services - TODO: Replace with proper architecture
+const pricingCacheService = {
+  getMetrics: () => ({ requests: 0, cacheHits: 0, averageResponseTime: 0, errorRate: 0 }),
+  getHitRate: () => 0,
+  warmCache: async (_userIds?: string[], _plans?: string[]) => {}
+};
+
+const subscriptionCacheService = {
+  getMetrics: () => ({ requests: 0, cacheHits: 0, averageResponseTime: 0, errorRate: 0, invalidations: 0 }),
+  getHitRate: () => 0,
+  warmCache: async (_userIds?: string[]) => {}
+};
 import { featureAccessCacheService } from './feature-access-cache.service';
 import { usageBatchCacheService } from './usage-batch-cache.service';
 import { analyticsCacheService } from './analytics-cache.service';

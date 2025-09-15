@@ -7,33 +7,32 @@
  * @version 1.0.0
  */
 
-import type { TemplateCategory } from '../types';
-import { PortalTemplateCategory } from '../types';
+import { TemplateCategory } from '../types';
 
 // ============================================================================
 // TEMPLATE CATEGORIES
 // ============================================================================
 
 export const TEMPLATE_CATEGORIES: TemplateCategory[] = [
-  PortalTemplateCategory.MODERN,
-  PortalTemplateCategory.CLASSIC,
-  PortalTemplateCategory.CREATIVE,
-  PortalTemplateCategory.MINIMAL,
-  PortalTemplateCategory.PROFESSIONAL
+  TemplateCategory.MODERN,
+  TemplateCategory.CLASSIC,
+  TemplateCategory.CREATIVE,
+  TemplateCategory.MINIMAL,
+  TemplateCategory.PROFESSIONAL
 ];
 
 export const TEMPLATE_CATEGORY_LABELS: Record<TemplateCategory, string> = {
-  [PortalTemplateCategory.MODERN]: 'Modern',
-  [PortalTemplateCategory.CLASSIC]: 'Classic',
-  [PortalTemplateCategory.CREATIVE]: 'Creative',
-  [PortalTemplateCategory.MINIMAL]: 'Minimal',
-  [PortalTemplateCategory.PROFESSIONAL]: 'Professional',
-  [PortalTemplateCategory.TECHNICAL]: 'Technical',
-  [PortalTemplateCategory.ACADEMIC]: 'Academic',
-  [PortalTemplateCategory.BUSINESS]: 'Business',
-  [PortalTemplateCategory.CORPORATE_PROFESSIONAL]: 'Corporate Professional',
-  [PortalTemplateCategory.CREATIVE_PORTFOLIO]: 'Creative Portfolio',
-  [PortalTemplateCategory.TECHNICAL_EXPERT]: 'Technical Expert'
+  [TemplateCategory.MODERN]: 'Modern',
+  [TemplateCategory.CLASSIC]: 'Classic',
+  [TemplateCategory.CREATIVE]: 'Creative',
+  [TemplateCategory.MINIMAL]: 'Minimal',
+  [TemplateCategory.PROFESSIONAL]: 'Professional',
+  [TemplateCategory.TECHNICAL]: 'Technical',
+  [TemplateCategory.ACADEMIC]: 'Academic',
+  [TemplateCategory.BUSINESS]: 'Business',
+  [TemplateCategory.CORPORATE_PROFESSIONAL]: 'Corporate Professional',
+  [TemplateCategory.CREATIVE_PORTFOLIO]: 'Creative Portfolio',
+  [TemplateCategory.TECHNICAL_EXPERT]: 'Technical Expert'
 };
 
 // ============================================================================

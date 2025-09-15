@@ -4,7 +4,7 @@
 
 import * as admin from 'firebase-admin';
 import * as QRCode from 'qrcode';
-import * as nodemailer from 'nodemailer';
+// import ... from "nodemailer"; // TODO: Add nodemailer dependency
 import { config } from '../config/environment';
 
 export class IntegrationsService {

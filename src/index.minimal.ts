@@ -19,7 +19,6 @@ export * from './types';
 export {
   LoggerFactory,
   logger,
-  createLogger,
   LogLevel,
   LogDomain
 } from '../../logging/dist/backend/index.js';

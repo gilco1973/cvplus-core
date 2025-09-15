@@ -109,7 +109,7 @@ export type {
   LoggerConfig as UtilsLoggerConfig
 } from './utils/firebase-logger';
 export {
-  createLogger as createUtilsLogger,
+  logger as createUtilsLogger,
   logger as utilsLogger
 } from './utils/firebase-logger';
 
@@ -214,7 +214,6 @@ export {
   LoggerFactory,
   CorrelationService,
   logger,
-  createLogger,
   correlationMiddleware,
   LogLevel,
   LogDomain,

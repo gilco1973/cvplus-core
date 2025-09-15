@@ -9,7 +9,7 @@
  */
 
 import { redisClient } from './cache/redis-client.service';
-import type { Logger } from '../../logging/dist/backend/index.js';
+// TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
 
 export interface CacheOptions {
   ttlSeconds?: number;

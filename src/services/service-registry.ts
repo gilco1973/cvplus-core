@@ -9,8 +9,20 @@
 
 import { BaseService, ServiceHealth } from './base-service';
 import { EnhancedBaseService } from './enhanced-base-service';
-import { createLogger } from '../../logging/dist/backend/index.js';
-import type { Logger } from '../../logging/dist/backend/index.js';
+// TODO: Import from @cvplus/logging after proper setup
+// import {  logger  } from '@cvplus/logging';
+
+// Temporary mock logging - TODO: Replace with proper import
+const logger = {
+  info: (message: string, data?: any) => console.log('[INFO]', message, data),
+  error: (message: string, data?: any) => console.error('[ERROR]', message, data),
+  warn: (message: string, data?: any) => console.warn('[WARN]', message, data),
+  debug: (message: string, data?: any) => console.debug('[DEBUG]', message, data)
+};
+const loggerFactory = {
+  getLogger: (name: string) => logger
+};
+// TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
 
 export interface ServiceRegistryConfig {
   autoInitialize?: boolean;
@@ -20,7 +32,7 @@ export interface ServiceRegistryConfig {
 export class ServiceRegistry {
   private static instance: ServiceRegistry;
   private readonly services = new Map<string, BaseService | EnhancedBaseService>();
-  private readonly logger = createLogger('ServiceRegistry');
+  private readonly logger = logger('ServiceRegistry');
   private readonly config: ServiceRegistryConfig;
   private healthCheckInterval?: NodeJS.Timeout;
 
