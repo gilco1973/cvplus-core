@@ -7,7 +7,7 @@
  */
 
 import { LoggerFactory } from './LoggerFactory';
-import { LogLevel, LogDomain } from '../types';
+import { LogDomain } from '../types';
 
 /**
  * Performance metric types
@@ -192,7 +192,7 @@ export class PerformanceCollector {
     this.checkThresholds(fullMetric);
 
     // Log metric at debug level
-    this.logger.log(LogLevel.DEBUG, 'Performance metric recorded', {
+    this.logger.debug('Performance metric recorded', {
       domain: LogDomain.PERFORMANCE,
       event: 'METRIC_RECORDED',
       metricId: fullMetric.id,
@@ -213,7 +213,7 @@ export class PerformanceCollector {
     const timer = new PerformanceTimer(name, tags);
     this.activeTimers.set(timerId, timer);
 
-    this.logger.log(LogLevel.DEBUG, 'Performance timer started', {
+    this.logger.debug('Performance timer started', {
       domain: LogDomain.PERFORMANCE,
       event: 'TIMER_STARTED',
       timerId,
@@ -230,7 +230,7 @@ export class PerformanceCollector {
   stopTimer(timerId: string, additionalContext?: Record<string, any>): PerformanceMetric | null {
     const timer = this.activeTimers.get(timerId);
     if (!timer) {
-      this.logger.log(LogLevel.WARN, 'Timer not found', {
+      this.logger.warn('Timer not found', {
         domain: LogDomain.PERFORMANCE,
         event: 'TIMER_NOT_FOUND',
         timerId
@@ -260,7 +260,7 @@ export class PerformanceCollector {
     // Get the recorded metric
     const metric = this.findMetricById(metricId);
 
-    this.logger.log(LogLevel.DEBUG, 'Performance timer stopped', {
+    this.logger.debug('Performance timer stopped', {
       domain: LogDomain.PERFORMANCE,
       event: 'TIMER_STOPPED',
       timerId,
@@ -307,10 +307,11 @@ export class PerformanceCollector {
       value: rps,
       unit: MetricUnit.RATE_PER_SECOND,
       tags,
-      context: {
+      metadata: {
         requestCount,
         timeWindowMs
-      }
+      },
+      context: {}
     });
   }
 
@@ -330,10 +331,11 @@ export class PerformanceCollector {
       value: errorRate,
       unit: MetricUnit.PERCENTAGE,
       tags,
-      context: {
+      metadata: {
         errorCount,
         totalCount
-      }
+      },
+      context: {}
     });
   }
 
@@ -370,9 +372,10 @@ export class PerformanceCollector {
       value: duration,
       unit: MetricUnit.MILLISECONDS,
       tags,
-      context: {
+      metadata: {
         resultCount
       },
+      context: {},
       duration
     });
   }
@@ -393,11 +396,12 @@ export class PerformanceCollector {
       value: hitRate,
       unit: MetricUnit.PERCENTAGE,
       tags,
-      context: {
+      metadata: {
         hits,
         misses: total - hits,
         total
-      }
+      },
+      context: {}
     });
   }
 
@@ -446,19 +450,24 @@ export class PerformanceCollector {
     const variance = values.reduce((acc, val) => acc + Math.pow(val - avg, 2), 0) / values.length;
     const stdDev = Math.sqrt(variance);
 
+    // Ensure we have values (already checked above, but make TypeScript happy)
+    if (values.length === 0 || filteredMetrics.length === 0) {
+      return null;
+    }
+
     return {
       count: filteredMetrics.length,
       sum,
-      min: values[0],
-      max: values[values.length - 1],
+      min: values[0]!,
+      max: values[values.length - 1]!,
       avg,
       median: this.calculatePercentile(values, 0.5),
       p95: this.calculatePercentile(values, 0.95),
       p99: this.calculatePercentile(values, 0.99),
       stdDev,
       timeWindow: timeWindow || 'all',
-      firstSample: filteredMetrics[0].timestamp,
-      lastSample: filteredMetrics[filteredMetrics.length - 1].timestamp
+      firstSample: filteredMetrics[0]!.timestamp,
+      lastSample: filteredMetrics[filteredMetrics.length - 1]!.timestamp
     };
   }
 
@@ -488,7 +497,7 @@ export class PerformanceCollector {
     this.thresholds = this.thresholds.filter(t => t.metricName !== threshold.metricName);
     this.thresholds.push(threshold);
 
-    this.logger.log(LogLevel.INFO, 'Performance threshold set', {
+    this.logger.info('Performance threshold set', {
       domain: LogDomain.PERFORMANCE,
       event: 'THRESHOLD_SET',
       metricName: threshold.metricName,
@@ -504,7 +513,7 @@ export class PerformanceCollector {
   removeThreshold(metricName: string): void {
     this.thresholds = this.thresholds.filter(t => t.metricName !== metricName);
 
-    this.logger.log(LogLevel.INFO, 'Performance threshold removed', {
+    this.logger.info('Performance threshold removed', {
       domain: LogDomain.PERFORMANCE,
       event: 'THRESHOLD_REMOVED',
       metricName
@@ -521,7 +530,7 @@ export class PerformanceCollector {
       return;
     }
 
-    this.logger.log(LogLevel.INFO, 'Flushing performance metrics', {
+    this.logger.info('Flushing performance metrics', {
       domain: LogDomain.PERFORMANCE,
       event: 'METRICS_FLUSH',
       totalMetrics,
@@ -535,12 +544,12 @@ export class PerformanceCollector {
     // 3. Update dashboards and alerts
 
     // For now, we'll just log summary statistics
-    this.metrics.forEach((metrics, key) => {
+    this.metrics.forEach((_, key) => {
       const [name, type] = this.parseMetricKey(key);
       const stats = this.getMetricStats(name, type as MetricType, '1h');
 
       if (stats) {
-        this.logger.log(LogLevel.DEBUG, 'Metric summary', {
+        this.logger.debug('Metric summary', {
           domain: LogDomain.PERFORMANCE,
           event: 'METRIC_SUMMARY',
           metricName: name,
@@ -558,7 +567,7 @@ export class PerformanceCollector {
     this.metrics.clear();
     this.activeTimers.clear();
 
-    this.logger.log(LogLevel.INFO, 'Performance metrics cleared', {
+    this.logger.info('Performance metrics cleared', {
       domain: LogDomain.PERFORMANCE,
       event: 'METRICS_CLEARED'
     });
@@ -617,7 +626,7 @@ export class PerformanceCollector {
       }
 
       if (violated) {
-        this.logger.log(LogLevel.WARN, 'Performance threshold exceeded', {
+        this.logger.warn('Performance threshold exceeded', {
           domain: LogDomain.PERFORMANCE,
           event: 'THRESHOLD_EXCEEDED',
           metricId: metric.id,
@@ -657,11 +666,13 @@ export class PerformanceCollector {
     const upper = Math.ceil(index);
 
     if (lower === upper) {
-      return sortedValues[lower];
+      return sortedValues[lower] ?? 0;
     }
 
     const weight = index - lower;
-    return sortedValues[lower] * (1 - weight) + sortedValues[upper] * weight;
+    const lowerValue = sortedValues[lower] ?? 0;
+    const upperValue = sortedValues[upper] ?? 0;
+    return lowerValue * (1 - weight) + upperValue * weight;
   }
 
   /**
@@ -669,7 +680,7 @@ export class PerformanceCollector {
    */
   private parseTimeWindow(timeWindow: string): number {
     const match = timeWindow.match(/^(\d+)([smhd])$/);
-    if (!match) {
+    if (!match || !match[1] || !match[2]) {
       return 0;
     }
 
@@ -697,7 +708,7 @@ export class PerformanceCollector {
    */
   private parseMetricKey(key: string): [string, string] {
     const parts = key.split(':');
-    return [parts[0], parts[1] || ''];
+    return [parts[0] || '', parts[1] || ''];
   }
 
   /**

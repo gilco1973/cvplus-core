@@ -1,5 +1,5 @@
-import { ParsedCV, CVRecommendation } from '../types/job';
-import { VerifiedClaudeService } from './verified-claude.service';
+import { ParsedCV, CVRecommendation } from '../../../types/job';
+import { VerifiedClaudeService } from '../../../services/verified-claude.service';
 
 export interface ATSAnalysisResult {
   currentScore: number;

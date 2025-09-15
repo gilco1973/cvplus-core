@@ -55,6 +55,21 @@ export interface GeneratedFeature {
 }
 
 // ============================================================================
+// LOGGING TYPES - Re-export from logging package
+// ============================================================================
+
+// Export enums as both values and types
+export {
+  LogLevel,
+  LogDomain
+} from '../../../logging/dist/backend/index.js';
+
+// Export pure types
+export type {
+  LogEntry
+} from '../../../logging/dist/backend/index.js';
+
+// ============================================================================
 // MIDDLEWARE & ARCHITECTURE TYPES
 // ============================================================================
 

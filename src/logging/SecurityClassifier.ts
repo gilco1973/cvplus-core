@@ -6,7 +6,7 @@
  * detection and severity scoring for the CVPlus logging system.
  */
 
-import { LogEntry, LogLevel, LogDomain } from '../types';
+import { LogEntry, LogDomain } from '../types';
 
 /**
  * Security threat categories
@@ -194,7 +194,7 @@ export class SecurityClassifier {
     const now = Date.now();
     const oneDayAgo = now - (24 * 60 * 60 * 1000);
 
-    this.attackFrequency.forEach((frequency, identifier) => {
+    this.attackFrequency.forEach((frequency, _) => {
       stats.totalAttacks += frequency.count;
 
       if (frequency.lastSeen > oneDayAgo) {
