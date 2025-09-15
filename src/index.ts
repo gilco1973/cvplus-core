@@ -225,4 +225,4 @@ export type {
 // ============================================================================
 
 export const VERSION = '1.0.0';
-export const PACKAGE_NAME = '@cvplus/core';
+export const PACKAGE_NAME = '@cvplus/core';export type { EnhancedSessionState, ProcessingCheckpoint, QueuedAction }; export { CVStep } from './types/enhanced-models';
