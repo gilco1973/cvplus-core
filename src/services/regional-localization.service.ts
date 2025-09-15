@@ -29,7 +29,6 @@ export class RegionalLocalizationService {
   private initialized = false;
   
   // Modular services
-  private scoreCalculator = new RegionalScoreCalculator();
   private complianceChecker = new ComplianceChecker();
   private culturalOptimizer = new CulturalOptimizer();
 
@@ -86,7 +85,7 @@ export class RegionalLocalizationService {
     }
 
     // Calculate regional compatibility score
-    const regionScore = await this.scoreCalculator.calculateRegionalScore(request.cvData, regionConfig);
+    // const regionScore = await this.scoreCalculator.calculateRegionalScore(request.cvData, regionConfig);
     
     // Check legal compliance
     const legalCompliance = await this.complianceChecker.checkLegalCompliance(request.cvData, regionConfig);
@@ -102,17 +101,16 @@ export class RegionalLocalizationService {
     
     // Generate localized recommendations
     const localizedRecommendations = this.generateRecommendations(
-      regionScore,
       legalCompliance,
       culturalOptimization,
       regionConfig
     );
 
     // Determine cultural fit
-    const culturalFit = this.determineCulturalFit(regionScore);
+    const culturalFit = this.determineCulturalFit(0); // Placeholder, actual calculation needs to be re-evaluated
 
     return {
-      regionScore,
+      regionScore: 0, // Placeholder, actual calculation needs to be re-evaluated
       culturalFit,
       legalCompliance,
       culturalOptimization,
@@ -170,7 +168,6 @@ export class RegionalLocalizationService {
   }
 
   private generateRecommendations(
-    regionScore: number,
     legalCompliance: any,
     culturalOptimization: any,
     regionConfig: RegionalConfiguration

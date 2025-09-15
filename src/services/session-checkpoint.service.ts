@@ -17,11 +17,9 @@ export interface CheckpointMetadata {
 
 export class SessionCheckpointService {
   private db: admin.firestore.Firestore;
-  private storage: admin.storage.Storage;
 
   constructor() {
     this.db = admin.firestore();
-    this.storage = admin.storage();
   }
 
   // =====================================================================================
@@ -45,7 +43,9 @@ export class SessionCheckpointService {
       priority: this.determinePriority(stepId, featureId),
       data: {},
       createdAt: new Date(),
-      isRestorable: true
+      isRestorable: true,
+      retryCount: 0,
+      maxRetries: 3
     };
 
     // Store checkpoint in Firestore
@@ -148,7 +148,7 @@ export class SessionCheckpointService {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
       // Check if we should retry
-      if (checkpoint.retryCount < checkpoint.maxRetries) {
+      if (checkpoint.retryCount !== undefined && checkpoint.retryCount < (checkpoint.maxRetries || 3)) {
         await this.updateCheckpointStatus(
           checkpointId,
           'pending',
@@ -316,7 +316,7 @@ export class SessionCheckpointService {
   }
 
   private async handleSessionUpdateAction(action: QueuedAction): Promise<void> {
-    const { sessionId, updates } = action.payload;
+    const { sessionId, updates } = action.payload || {};
     const session = await this.getEnhancedSession(sessionId);
     
     if (session) {
@@ -326,15 +326,15 @@ export class SessionCheckpointService {
   }
 
   private async handleFormSaveAction(action: QueuedAction): Promise<void> {
-    const { sessionId, formId, formData } = action.payload;
+    const { sessionId, formId, formData } = action.payload || {};
     // Save form data to session
   }
 
   private async handleFeatureToggleAction(action: QueuedAction): Promise<void> {
-    const { sessionId, featureId, enabled } = action.payload;
+    const { sessionId, featureId, enabled } = action.payload || {};
     const session = await this.getEnhancedSession(sessionId);
     
-    if (session && session.featureStates[featureId]) {
+    if (session && session.featureStates && session.featureStates[featureId]) {
       session.featureStates[featureId].enabled = enabled;
       await this.saveEnhancedSession(session);
     }
@@ -363,7 +363,7 @@ export class SessionCheckpointService {
     if (!session) return;
 
     // Update the checkpoint in the session
-    const checkpointIndex = session.processingCheckpoints.findIndex(
+    const checkpointIndex = session.processingCheckpoints?.findIndex(
       cp => cp.id === updatedCheckpoint.id
     );
 
@@ -384,11 +384,11 @@ export class SessionCheckpointService {
 
   private async updateSessionProgressFromCheckpoints(session: EnhancedSessionState): Promise<void> {
     // Update step progress based on checkpoint states
-    for (const checkpoint of session.processingCheckpoints) {
-      const stepProgress = session.stepProgress[checkpoint.stepId];
+    for (const checkpoint of session.processingCheckpoints || []) {
+      const stepProgress = session.stepProgress?.[checkpoint.stepId];
       if (stepProgress) {
         // Update substep progress based on checkpoint state
-        const relatedSubstep = stepProgress.substeps.find(
+        const relatedSubstep = stepProgress?.substeps.find(
           s => s.id === checkpoint.functionName || s.name === checkpoint.functionName
         );
         

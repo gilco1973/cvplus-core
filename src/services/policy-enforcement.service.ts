@@ -629,7 +629,7 @@ export class PolicyEnforcementService {
         ipAddress: request.requestInfo?.ipAddress,
         userAgent: request.requestInfo?.userAgent,
         premiumStatus: isPremium,
-        errorCode: violations.length > 0 ? violations[0].type : undefined,
+        errorCode: violations.length > 0 ? violations[0].type : 'unknown',
         metadata: {
           sources: request.sources,
           subscriptionStatus: subscriptionData?.subscriptionStatus
