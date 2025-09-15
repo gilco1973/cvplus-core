@@ -107,7 +107,7 @@ export async function initializeCacheServices(): Promise<void> {
 /**
  * Perform comprehensive health check on all cache services
  */
-export async function performCacheHealthCheck(): Promise<CacheHealthStatus> {
+export async function performCacheHealthCheck() {
   const { cachePerformanceMonitor } = await import('./cache-performance-monitor.service');
   return await cachePerformanceMonitor.performHealthCheck();
 }
@@ -115,7 +115,7 @@ export async function performCacheHealthCheck(): Promise<CacheHealthStatus> {
 /**
  * Generate performance report for all cache services
  */
-export async function generateCachePerformanceReport(): Promise<CachePerformanceReport> {
+export async function generateCachePerformanceReport() {
   const { cachePerformanceMonitor } = await import('./cache-performance-monitor.service');
   return await cachePerformanceMonitor.generatePerformanceReport();
 }

@@ -1,26 +1,42 @@
 /**
  * Workflow Domain - Re-exports for backward compatibility
  *
- * This module will be migrated to @cvplus/workflow submodule
+ * MIGRATION STATUS: Services moved to @cvplus/workflow but package not built yet
  * All imports should be updated to use @cvplus/workflow/backend
  */
 
+// TEMPORARILY DISABLED: Local files moved to @cvplus/workflow package
 // Timeline services
-export * from './services/timeline-generation.service';
-export * from './services/timeline-generation-v2.service';
-export * from './services/calendar-integration.service';
+// export * from './services/timeline-generation.service';
+// export * from './services/timeline-generation-v2.service';
+// export * from './services/calendar-integration.service';
 
 // Timeline framework
-export * from './timeline/timeline-processor.service';
-export * from './timeline/timeline-processor-core.service';
-export * from './timeline/timeline-processor-events.service';
-export * from './timeline/timeline-processor-insights.service';
-export * from './timeline/timeline-sanitizer.service';
-export * from './timeline/timeline-sanitizer-core.service';
-export * from './timeline/timeline-storage.service';
-export * from './timeline/timeline-utils.service';
-export * from './timeline/timeline-utils-core.service';
-export * from './timeline/timeline-validator.service';
+// export * from './timeline/timeline-processor.service';
+// export * from './timeline/timeline-processor-core.service';
+// export * from './timeline/timeline-processor-events.service';
+// export * from './timeline/timeline-processor-insights.service';
+// export * from './timeline/timeline-sanitizer.service';
+// export * from './timeline/timeline-sanitizer-core.service';
+// export * from './timeline/timeline-storage.service';
+// export * from './timeline/timeline-utils.service';
+// export * from './timeline/timeline-utils-core.service';
+// export * from './timeline/timeline-validator.service';
 
 // Timeline types
-export * from './types/timeline.types';
+// export * from './types/timeline.types';
+
+// Temporary fallback exports for backward compatibility
+export const WORKFLOW_PLACEHOLDER = {
+  TimelineGenerationService: null,
+  TimelineGenerationV2Service: null,
+  CalendarIntegrationService: null,
+  TimelineProcessor: null,
+  TimelineSanitizer: null,
+  TimelineStorage: null,
+  TimelineUtils: null,
+  TimelineValidator: null
+} as const;
+
+// TODO: Re-enable when @cvplus/workflow is built
+// export * from '@cvplus/workflow';

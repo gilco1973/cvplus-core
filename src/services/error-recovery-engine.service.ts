@@ -157,7 +157,7 @@ export class ErrorRecoveryEngine {
   private providerSelectionEngine: ProviderSelectionEngine;
   private circuitBreaker: CircuitBreakerService;
   private db: admin.firestore.Firestore;
-  private activeRecoveries: Map<string, RecoveryContext> = new Map();
+  private _activeRecoveries: Map<string, RecoveryContext> = new Map();
 
   constructor(
     providerSelectionEngine: ProviderSelectionEngine,
@@ -385,7 +385,7 @@ export class ErrorRecoveryEngine {
   }
 
   private async executeRecoveryStrategy(
-    strategy: RecoveryStrategy,
+    _strategy: RecoveryStrategy,
     context: RecoveryContext
   ): Promise<RecoveryResult> {
     const startTime = Date.now();
@@ -421,7 +421,7 @@ export class ErrorRecoveryEngine {
   }
 
   private async retryWithSameProvider(
-    strategy: RecoveryStrategy,
+    _strategy: RecoveryStrategy,
     context: RecoveryContext
   ): Promise<RecoveryResult> {
     const startTime = Date.now();
@@ -536,7 +536,7 @@ export class ErrorRecoveryEngine {
   }
 
   private async executeGracefulDegradation(
-    strategy: RecoveryStrategy,
+    _strategy: RecoveryStrategy,
     context: RecoveryContext
   ): Promise<RecoveryResult> {
     const startTime = Date.now();
@@ -641,7 +641,7 @@ export class ErrorRecoveryEngine {
 
   private adjustOptionsForRetry(
     options: VideoGenerationOptions,
-    strategy: RecoveryStrategy
+    _strategy: RecoveryStrategy
   ): VideoGenerationOptions {
     const adjustedOptions = { ...options };
     
@@ -691,7 +691,7 @@ export class ErrorRecoveryEngine {
 
   private getDegradedOptions(
     options: VideoGenerationOptions,
-    strategy: RecoveryStrategy
+    _strategy: RecoveryStrategy
   ): VideoGenerationOptions {
     const degradedOptions = { ...options };
     

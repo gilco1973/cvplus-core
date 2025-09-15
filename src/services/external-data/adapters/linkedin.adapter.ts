@@ -61,7 +61,7 @@ export class LinkedInAdapter {
   /**
    * Fetch data via LinkedIn API (requires OAuth)
    */
-  private async fetchViaAPI(profileId: string): Promise<any> {
+  private async fetchViaAPI(_profileId: string): Promise<any> {
     if (!this.accessToken) {
       throw new Error('LinkedIn API access token not configured');
     }

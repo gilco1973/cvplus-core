@@ -12,8 +12,28 @@
  * @since 2025-09-14
  */
 
-// Re-export from staging area to maintain compatibility
-export { CVAnalysisService } from '../../staging-for-submodules/cv-processing/services/cv/cv-analysis.service';
+// TEMPORARILY DISABLED: cv-processing package not built yet
+// export { CVAnalysisService } from "@cvplus/cv-processing";
+// export type * from "@cvplus/cv-processing";
 
-// Re-export any types that were previously exported from this file
-export type * from '../../staging-for-submodules/cv-processing/services/cv/cv-analysis.service';
+// Placeholder implementation for backward compatibility
+export const CVAnalysisService = {
+  analyze: async () => ({ success: false, error: 'Service temporarily unavailable during migration' }),
+  // Add other expected methods as needed
+} as const;
+
+// Placeholder types
+export interface CVAnalysisOptions {
+  includeATS?: boolean;
+  includePersonality?: boolean;
+}
+
+export interface CVAnalysisResult {
+  success: boolean;
+  analysis?: any;
+  error?: string;
+}
+
+// TODO: Re-enable when @cvplus/cv-processing is built
+// export { CVAnalysisService } from '@cvplus/cv-processing';
+// export type * from '@cvplus/cv-processing';

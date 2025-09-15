@@ -115,7 +115,8 @@ export type { ValidationResult } from './utils/firestore-validation.service';
 // These re-exports maintain backward compatibility for services being migrated
 // to independent submodules. Once migration is complete, consumers should
 // import directly from @cvplus/[domain]/backend
-export * from './staging-for-submodules';
+// TEMPORARILY DISABLED: Staging exports disabled to resolve type conflicts
+// export * from './staging-for-submodules';
 // MIDDLEWARE FACTORY (ZERO DEPENDENCIES)
 // ============================================================================
 
@@ -225,4 +226,16 @@ export type {
 // ============================================================================
 
 export const VERSION = '1.0.0';
-export const PACKAGE_NAME = '@cvplus/core';export type { EnhancedSessionState, ProcessingCheckpoint, QueuedAction }; export { CVStep } from './types/enhanced-models';
+export const PACKAGE_NAME = '@cvplus/core';
+
+// ============================================================================
+// ENHANCED MODELS
+// ============================================================================
+
+export type {
+  EnhancedSessionState,
+  ProcessingCheckpoint,
+  QueuedAction
+} from './types/enhanced-models';
+
+export { CVStep } from './types/enhanced-models';

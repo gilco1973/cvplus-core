@@ -12,16 +12,11 @@
  * Staging areas prepared for domain services migration
  */
 
-// Core service architecture - Values
-export { BaseService } from "./base-service";
-export { EnhancedBaseService } from "./enhanced-base-service";
-export { Logger, LogLevel } from "./logger";
-export { ServiceRegistry } from "./service-registry";
-
-// Core service architecture - Types
-export type { ServiceConfig, ServiceHealth } from "./base-service";
-export type { EnhancedServiceConfig } from "./enhanced-base-service";
-export type { LogContext } from "./logger";export { ServiceRegistry } from './service-registry';
+// Core service architecture
+export { BaseService, ServiceConfig, ServiceHealth } from './base-service';
+export { EnhancedBaseService, EnhancedServiceConfig } from './enhanced-base-service';
+export { Logger, LogLevel, LogContext } from './logger';
+export { ServiceRegistry } from './service-registry';
 
 // Mixins for common functionality
 export {

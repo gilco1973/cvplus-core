@@ -12,5 +12,21 @@
  * @since 2025-09-14
  */
 
-// Re-export from staging area to maintain compatibility
-export * from '../../staging-for-submodules/cv-processing/services/cv-generator/types';
+// TEMPORARILY DISABLED: Staging area import disabled, cv-processing not built yet
+// export * from '../../staging-for-submodules/cv-processing/services/cv-generator/types';
+
+// Temporary fallback types for backward compatibility
+export interface CVGeneratorOptions {
+  template?: string;
+  format?: 'pdf' | 'html' | 'docx';
+  theme?: string;
+}
+
+export interface CVGeneratorResult {
+  success: boolean;
+  url?: string;
+  error?: string;
+}
+
+// TODO: Re-enable when @cvplus/cv-processing is built
+// export * from '@cvplus/cv-processing/cv-generator/types';

@@ -10,4 +10,15 @@
  */
 
 // Re-export from migrated @cvplus/external-data package for backward compatibility
-export * from '@cvplus/external-data';
+// TEMPORARILY DISABLED: @cvplus/external-data package not built yet
+// export * from '@cvplus/external-data';
+
+// Temporary fallback exports for backward compatibility
+export const EXTERNAL_DATA_PLACEHOLDER = {
+  ExternalDataService: null,
+  DataEnrichmentService: null,
+  APIIntegrationService: null
+} as const;
+
+// TODO: Re-enable when @cvplus/external-data is built
+// export * from '@cvplus/external-data';

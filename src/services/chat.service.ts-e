@@ -212,6 +212,23 @@ Important guidelines:
   }
   
   /**
+   * Calculate confidence score based on similarity scores
+   * Currently unused but reserved for future confidence scoring features
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private _calculateConfidence(chunks: any[]): number {
+    if (chunks.length === 0) return 0;
+    
+    // Average of top 3 similarity scores
+    const topScores = chunks
+      .slice(0, 3)
+      .map(c => c.score || 0);
+    
+    const avgScore = topScores.reduce((a, b) => a + b, 0) / topScores.length;
+    
+    // Convert to 0-1 scale (assuming scores are typically 0.7-0.95 for good matches)
+    return Math.min(Math.max((avgScore - 0.7) / 0.25, 0), 1);
+  }
   
   /**
    * Get default system prompt

@@ -10,7 +10,25 @@
  */
 
 // Re-export from migrated @cvplus/cv-processing package for backward compatibility
-export * from '@cvplus/cv-processing';
+// TEMPORARILY DISABLED: @cvplus/cv-processing package not built yet
+// export * from '@cvplus/cv-processing';
+
+// Temporary fallback exports for backward compatibility
+export const CV_PROCESSING_PLACEHOLDER = {
+  CVAnalysisService: null,
+  EnhancedATSAnalysisService: null,
+  PolicyEnforcementService: null,
+  CVGenerationService: null,
+  CVTemplateService: null,
+  CVValidator: null,
+  CVValidationService: null,
+  CVHashService: null,
+  CVGenerator: null,
+  EnhancementProcessingService: null
+} as const;
+
+// TODO: Re-enable when @cvplus/cv-processing is built
+// export * from '@cvplus/cv-processing';
 
 // Legacy metadata for backward compatibility
 export const CV_PROCESSING_MODULE_METADATA = {

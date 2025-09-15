@@ -1,19 +1,25 @@
 /**
  * CV Validator - Re-export Facade
- *
- * MIGRATION NOTICE: This service has been moved to staging-for-submodules/cv-processing/
- * for future extraction to @cvplus/cv-processing submodule.
- *
- * This file maintains backward compatibility by re-exporting from the staging area.
- * All existing imports will continue to work without changes.
- *
- * @deprecated Use import from @cvplus/cv-processing when submodule is created
- * @author Gil Klainert
- * @since 2025-09-14
  */
 
-// Re-export from staging area to maintain compatibility
-export { CVValidator } from '../../staging-for-submodules/cv-processing/services/validation/cv-validator';
+// TEMPORARILY DISABLED: cv-processing package not built yet
+// export { CVValidator } from "@cvplus/cv-processing";
 
-// Re-export any types that were previously exported from this file
-export type * from '../../staging-for-submodules/cv-processing/services/validation/cv-validator';
+// Placeholder implementation for backward compatibility
+export const CVValidator = {
+  validate: async () => ({ success: false, error: 'Service temporarily unavailable during migration' }),
+  validateStructure: async () => ({ success: false, error: 'Service temporarily unavailable during migration' }),
+} as const;
+
+export interface CVValidatorOptions {
+  strict?: boolean;
+  format?: string;
+}
+
+export interface CVValidatorResult {
+  success: boolean;
+  valid?: boolean;
+  errors?: string[];
+  warnings?: string[];
+  error?: string;
+}

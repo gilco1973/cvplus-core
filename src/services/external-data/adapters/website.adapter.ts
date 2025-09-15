@@ -10,7 +10,7 @@
  */
 
 import * as cheerio from 'cheerio';
-import { EnhancedBaseService, EnhancedServiceConfig } from '../../enhanced-base-service';
+import { EnhancedBaseService, /* EnhancedServiceConfig */ } from '../../enhanced-base-service';
 import { 
   PersonalWebsite,
   PortfolioProject,
@@ -19,7 +19,7 @@ import {
 } from '../types';
 
 export class WebsiteAdapter extends EnhancedBaseService {
-  private readonly userAgent = 'CVPlus-Bot/1.0 (CV Enhancement Service)';
+  private readonly _userAgent = 'CVPlus-Bot/1.0 (CV Enhancement Service)';
   private readonly requestTimeout = 10000; // 10 seconds
   
   constructor() {

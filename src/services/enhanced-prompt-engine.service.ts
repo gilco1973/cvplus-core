@@ -159,12 +159,12 @@ export class EnhancedPromptEngineWithFallbacks extends AdvancedPromptEngine {
 
   private async generateBasicFallback(
     cv: ParsedCV,
-    options: PromptEngineOptions
+    _options: PromptEngineOptions
   ): Promise<EnhancedScriptResult> {
     // Basic fallback script generation
     const name = cv.personalInfo?.name || 'Professional';
-    const title = cv.workExperience?.[0]?.title || 'Experienced Professional';
-    const company = cv.workExperience?.[0]?.company || 'their organization';
+    const title = cv.experience?.[0]?.position || 'Experienced Professional';
+    const company = cv.experience?.[0]?.company || 'their organization';
 
     const basicScript = `Hello, I'm ${name}, a dedicated ${title} at ${company}. ` +
       `I bring expertise and passion to everything I do, with a track record of delivering results. ` +
