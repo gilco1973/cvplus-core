@@ -8,7 +8,7 @@
  * @created 2025-08-19
  */
 
-import { EnhancedQRService } from '../enhanced-qr.service';
+import { EnhancedQRService } from '../../staging-for-submodules/multimedia/services/enhanced-qr.service';
 import { PortalUrls } from '../../types/portal';
 
 /**

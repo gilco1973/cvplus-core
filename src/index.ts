@@ -108,6 +108,14 @@ export {
 export type { ValidationResult } from './utils/firestore-validation.service';
 
 // ============================================================================
+// ============================================================================
+// STAGING FOR SUBMODULES - BACKWARD COMPATIBILITY
+// ============================================================================
+
+// These re-exports maintain backward compatibility for services being migrated
+// to independent submodules. Once migration is complete, consumers should
+// import directly from @cvplus/[domain]/backend
+export * from './staging-for-submodules';
 // MIDDLEWARE FACTORY (ZERO DEPENDENCIES)
 // ============================================================================
 

@@ -6,14 +6,14 @@ import {
   NameExtractionResult, 
   NameVerificationResult, 
   AccountNameData 
-} from './name-verification.service';
+} from '../../../services/name-verification.service';
 // TEMPORARILY DISABLED FOR DEPLOYMENT - PAYMENTS ARCHITECTURE MIGRATION IN PROGRESS
 // Core module maintains zero external dependencies - subscription services are injected via interfaces
 import { 
   ExternalDataSecurityAudit,
   RateLimitStatus,
   ExternalDataUsageStats 
-} from '../types/external-data-analytics.types';
+} from '../../../types/external-data-analytics.types';
 
 export interface PolicyCheckRequest {
   userId: string;

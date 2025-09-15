@@ -5,8 +5,8 @@
 
 import * as admin from 'firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
-import { SafeFirestoreService } from '../../utils/safe-firestore.service';
-import { FirestoreValidationService } from '../../utils/firestore-validation.service';
+import { SafeFirestoreService } from '../../../utils/safe-firestore.service';
+import { FirestoreValidationService } from '../../../utils/firestore-validation.service';
 
 export class TimelineStorageService {
   

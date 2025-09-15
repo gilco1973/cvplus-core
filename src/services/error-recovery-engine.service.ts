@@ -15,7 +15,7 @@ import {
   VideoGenerationOptions,
   VideoGenerationResult,
   ProviderSelectionCriteria
-} from './video-providers/base-provider.interface';
+} from '../staging-for-submodules/multimedia/providers/video-providers/base-provider.interface';
 import { ProviderSelectionEngine } from './provider-selection-engine.service';
 import { CircuitBreakerService } from './circuit-breaker.service';
 import * as admin from 'firebase-admin';
