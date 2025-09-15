@@ -20,12 +20,12 @@ export type {
   OutcomeEvent 
 } from '../user-outcomes';
 
-// Analytics Types
-export type { 
-  AnalyticsEvent, 
-  AnalyticsMetrics,
-  AnalyticsTypes 
-} from '../analytics';
+// Analytics Types - MIGRATED TO @cvplus/analytics
+// export type {
+//   AnalyticsEvent,
+//   AnalyticsMetrics,
+//   AnalyticsTypes
+// } from '../analytics';
 
 // Industry Specialization Types
 export type { 
@@ -57,6 +57,6 @@ export type {
 
 // Convenience type unions for comprehensive type handling
 export type AllPredictionTypes = import('../success-prediction').PredictionTypes;
-export type AllAnalyticsTypes = import('../analytics').AnalyticsTypes;
+// export type AllAnalyticsTypes = import('../analytics').AnalyticsTypes; // MIGRATED TO @cvplus/analytics
 export type AllIndustryTypes = import('../industry-specialization').IndustryTypes;
 export type AllRegionalTypes = import('../regional-localization').RegionalTypes;

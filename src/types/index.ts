@@ -93,3 +93,13 @@ export * from './firebase';
 export * from './industry-specialization';
 export * from './status';
 export * from './utility';
+
+// ============================================================================
+// PORTAL TYPES
+// ============================================================================
+
+export * from './portal';
+export * from './regional-localization';
+
+// Template category alias for backward compatibility
+export { PortalTemplateCategory as TemplateCategory } from './portal';

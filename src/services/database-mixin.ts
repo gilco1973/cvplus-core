@@ -10,7 +10,7 @@
 
 import { db } from '../config/firebase';
 import * as admin from 'firebase-admin';
-import { Logger } from './logger';
+import type { Logger } from '../../logging/dist/backend/index.js';
 
 export interface DatabaseOptions {
   enableTransactions?: boolean;

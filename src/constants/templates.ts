@@ -8,25 +8,32 @@
  */
 
 import type { TemplateCategory } from '../types';
+import { PortalTemplateCategory } from '../types';
 
 // ============================================================================
 // TEMPLATE CATEGORIES
 // ============================================================================
 
 export const TEMPLATE_CATEGORIES: TemplateCategory[] = [
-  'modern',
-  'classic', 
-  'creative',
-  'minimal',
-  'executive'
+  PortalTemplateCategory.MODERN,
+  PortalTemplateCategory.CLASSIC,
+  PortalTemplateCategory.CREATIVE,
+  PortalTemplateCategory.MINIMAL,
+  PortalTemplateCategory.PROFESSIONAL
 ];
 
 export const TEMPLATE_CATEGORY_LABELS: Record<TemplateCategory, string> = {
-  modern: 'Modern',
-  classic: 'Classic',
-  creative: 'Creative', 
-  minimal: 'Minimal',
-  executive: 'Executive'
+  [PortalTemplateCategory.MODERN]: 'Modern',
+  [PortalTemplateCategory.CLASSIC]: 'Classic',
+  [PortalTemplateCategory.CREATIVE]: 'Creative',
+  [PortalTemplateCategory.MINIMAL]: 'Minimal',
+  [PortalTemplateCategory.PROFESSIONAL]: 'Professional',
+  [PortalTemplateCategory.TECHNICAL]: 'Technical',
+  [PortalTemplateCategory.ACADEMIC]: 'Academic',
+  [PortalTemplateCategory.BUSINESS]: 'Business',
+  [PortalTemplateCategory.CORPORATE_PROFESSIONAL]: 'Corporate Professional',
+  [PortalTemplateCategory.CREATIVE_PORTFOLIO]: 'Creative Portfolio',
+  [PortalTemplateCategory.TECHNICAL_EXPERT]: 'Technical Expert'
 };
 
 // ============================================================================

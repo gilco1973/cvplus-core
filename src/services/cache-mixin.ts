@@ -9,7 +9,7 @@
  */
 
 import { redisClient } from './cache/redis-client.service';
-import { Logger } from './logger';
+import type { Logger } from '../../logging/dist/backend/index.js';
 
 export interface CacheOptions {
   ttlSeconds?: number;

@@ -62,6 +62,15 @@ export {
 export type { PricingConfig } from './config';
 
 // ============================================================================
+// SERVICES
+// ============================================================================
+
+// Export services needed by other modules
+export { EnhancedBaseService } from './services/enhanced-base-service';
+export { resilienceService } from './services/resilience.service';
+export type { EnhancedServiceConfig } from './services/enhanced-base-service';
+
+// ============================================================================
 // UTILITIES
 // ============================================================================
 
@@ -256,47 +265,49 @@ export { CVStep } from './types/enhanced-models';
 // } from '@cvplus/cv-processing'; // Temporarily disabled
 
 // Re-export CV processing types for backward compatibility
-export type {
-  CV,
-  CVContent,
-  CVMetadata,
-  WorkExperience,
-  Education,
-  Skill,
-  Achievement,
-  Reference,
-  CVTemplate,
-  TemplateConfig,
-  TemplateSection,
-  TemplateStyle,
-  EnhancedJob,
-  EnhancedJobCore,
-  JobFunction,
-  EnhancedATS,
-  EnhancedSkills,
-  CVTemplateType,
-  CVTemplateMetadata,
-  CVTemplateSections,
-  CVTemplateOptions,
-  JobType,
-  JobRequirements,
-  JobBenefits,
-  CompanyInfo,
-  JobFunctionType,
-  JobFunctionCategory,
-  JobFunctionData,
-  EnhancedJobType,
-  EnhancedJobAnalysis,
-  EnhancedJobMatching,
-  EnhancedJobCoreType,
-  EnhancedJobCoreData,
-  EnhancedJobCoreAnalysis,
-  EnhancedATSType,
-  ATSScore,
-  ATSRecommendations,
-  ATSCompatibility,
-  EnhancedSkillsType,
-  SkillCategory,
-  SkillAnalysis,
-  SkillRecommendations
-} from '@cvplus/cv-processing';
+// TODO: Re-enable when cv-processing module is available
+// These types should be defined locally or imported from cv-processing when available
+// export type {
+//   CV,
+//   CVContent,
+//   CVMetadata,
+//   WorkExperience,
+//   Education,
+//   Skill,
+//   Achievement,
+//   Reference,
+//   CVTemplate,
+//   TemplateConfig,
+//   TemplateSection,
+//   TemplateStyle,
+//   EnhancedJob,
+//   EnhancedJobCore,
+//   JobFunction,
+//   EnhancedATS,
+//   EnhancedSkills,
+//   CVTemplateType,
+//   CVTemplateMetadata,
+//   CVTemplateSections,
+//   CVTemplateOptions,
+//   JobType,
+//   JobRequirements,
+//   JobBenefits,
+//   CompanyInfo,
+//   JobFunctionType,
+//   JobFunctionCategory,
+//   JobFunctionData,
+//   EnhancedJobType,
+//   EnhancedJobAnalysis,
+//   EnhancedJobMatching,
+//   EnhancedJobCoreType,
+//   EnhancedJobCoreData,
+//   EnhancedJobCoreAnalysis,
+//   EnhancedATSType,
+//   ATSScore,
+//   ATSRecommendations,
+//   ATSCompatibility,
+//   EnhancedSkillsType,
+//   SkillCategory,
+//   SkillAnalysis,
+//   SkillRecommendations
+// } from '@cvplus/cv-processing';

@@ -5,9 +5,11 @@
  * @version 1.0.0
  */
 
-import { Job } from './job';
+import { Job } from './index';
 import { UserRAGProfile } from './enhanced-rag';
-import { FeatureInteraction } from './enhanced-analytics';
+// MIGRATED: FeatureInteraction moved to @cvplus/analytics
+// import { FeatureInteraction } from './enhanced-analytics';
+import type { FeatureInteraction } from '@cvplus/analytics';
 import { ATSOptimizationResult } from './enhanced-ats';
 
 /**

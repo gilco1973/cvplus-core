@@ -9,8 +9,8 @@
  */
 
 // Core types - re-export for minimal builds
-import type { ParsedCV } from './job';
-export type { ParsedCV } from './job';
+import type { ParsedCV } from './index';
+export type { ParsedCV } from './index';
 
 // Use the imported type to avoid unused warning
 const _typeCheck: ParsedCV | undefined = undefined;
@@ -28,11 +28,12 @@ export type {
   SkillCategory,
   LanguageSkill,
   Certification
-} from './enhanced-job';
+} from './enhanced-job-trimmed';
 
-export type {
-  FlexibleSkillsFormat
-} from './enhanced-skills';
+// TODO: Create enhanced-skills.ts file or move FlexibleSkillsFormat to appropriate file
+// export type {
+//   FlexibleSkillsFormat
+// } from './enhanced-skills';
 
 export type {
   PublicCVProfile,
@@ -41,7 +42,7 @@ export type {
   FeatureInteraction,
   ContactFormSubmission,
   QRCodeScan
-} from './enhanced-analytics';
+} from '@cvplus/analytics';
 
 // Session and processing management types
 export interface EnhancedSessionState {
@@ -217,7 +218,7 @@ export type {
   ATSOptimizationResult,
   ATSIssue,
   ATSSuggestion
-} from './enhanced-ats';
+} from './enhanced-models-original';
 
 // All enhanced model interfaces are now imported from modular files
 // This provides a clean main interface while maintaining type safety

@@ -9,7 +9,7 @@
  */
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { Logger } from './logger';
+import type { Logger } from '../../logging/dist/backend/index.js';
 
 export interface ApiClientOptions {
   baseURL?: string;

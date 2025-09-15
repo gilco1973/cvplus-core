@@ -33,7 +33,7 @@ export class EnhancedDatabaseService {
     if (features) {
       for (const [featureId, featureData] of Object.entries(features)) {
         updates[`enhancedFeatures.${featureId}`] = {
-          ...featureData,
+          ...(typeof featureData === 'object' && featureData !== null ? featureData : {}),
           processedAt: new Date()
         };
       }

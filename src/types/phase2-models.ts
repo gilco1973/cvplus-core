@@ -61,7 +61,7 @@ export type {
  * The types are now organized in the following modules:
  * - success-prediction.ts: Success predictions, salary predictions, time to hire
  * - user-outcomes.ts: User outcome tracking and events
- * - analytics.ts: Analytics events and metrics
+ * - analytics.ts: Analytics events and metrics (MIGRATED TO @cvplus/analytics)
  * - industry-specialization.ts: Industry models, skills, career paths
  * - regional-localization.ts: Regional configurations and localization
  * - ml-pipeline.ts: ML models, feature vectors, API responses
@@ -93,7 +93,7 @@ export class Phase2TypeValidator {
     );
   }
 
-  static isValidAnalyticsEvent(obj: any): obj is import('./analytics').AnalyticsEvent {
+  static isValidAnalyticsEvent(obj: any): obj is import('@cvplus/analytics').AnalyticsEvent {
     return (
       obj &&
       typeof obj.eventId === 'string' &&
@@ -157,7 +157,7 @@ export class Phase2TypeFactory {
     };
   }
 
-  static createEmptyAnalyticsEvent(userId: string, eventType: string): Partial<import('./analytics').AnalyticsEvent> {
+  static createEmptyAnalyticsEvent(userId: string, eventType: string): Partial<import('@cvplus/analytics').AnalyticsEvent> {
     return {
       eventId: `evt_${Date.now()}`,
       userId,

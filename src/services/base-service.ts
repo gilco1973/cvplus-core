@@ -8,7 +8,8 @@
  * @version 1.0.0
  */
 
-import { Logger } from './logger';
+import { createLogger } from '../../logging/dist/backend/index.js';
+import type { Logger } from '../../logging/dist/backend/index.js';
 
 export interface ServiceHealth {
   status: 'healthy' | 'unhealthy' | 'degraded';
@@ -37,7 +38,7 @@ export abstract class BaseService {
       timeoutMs: 30000,
       ...config
     };
-    this.logger = new Logger(this.config.name);
+    this.logger = createLogger(this.config.name);
   }
 
   /**

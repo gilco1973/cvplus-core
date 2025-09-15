@@ -21,10 +21,8 @@
 export { redisClient } from './redis-client.service';
 export { cacheService } from './cache.service';
 
-// Specialized cache services - exporting from original locations
-// These are COPIED to staging areas but original exports maintained for compatibility
-export { pricingCacheService } from './pricing-cache.service';
-export { subscriptionCacheService } from './subscription-cache.service';
+// Specialized cache services - remaining core services only
+// Premium cache services moved to @cvplus/premium submodule
 export { featureAccessCacheService } from './feature-access-cache.service';
 export { usageBatchCacheService } from './usage-batch-cache.service';
 export { analyticsCacheService } from './analytics-cache.service';
@@ -46,14 +44,7 @@ export type {
   BatchCacheResult
 } from './cache.service';
 
-// Premium types
-export type {
-  PricingRequest,
-  PricingResult
-} from './pricing-cache.service';
-export type {
-  SubscriptionCacheResult
-} from './subscription-cache.service';
+// Core cache service types (premium types moved to @cvplus/premium)
 export type {
   FeatureAccessCacheMetrics,
   FeatureAccessResult
@@ -81,18 +72,14 @@ export async function initializeCacheServices(): Promise<void> {
   try {
     // Import services dynamically to avoid circular dependencies
     const { redisClient } = await import('./redis-client.service');
-    const { pricingCacheService } = await import('./pricing-cache.service');
-    const { subscriptionCacheService } = await import('./subscription-cache.service');
     const { featureAccessCacheService } = await import('./feature-access-cache.service');
     const { analyticsCacheService } = await import('./analytics-cache.service');
 
     // Initialize Redis client
     await redisClient.initialize();
 
-    // Warm critical caches
+    // Warm critical caches (premium caches are handled by @cvplus/premium)
     await Promise.allSettled([
-      pricingCacheService.warmCache(['common_user']),
-      subscriptionCacheService.warmCache(['common_user']),
       featureAccessCacheService.warmCache(['common_user']),
       analyticsCacheService.warmCache()
     ]);

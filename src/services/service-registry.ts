@@ -9,7 +9,8 @@
 
 import { BaseService, ServiceHealth } from './base-service';
 import { EnhancedBaseService } from './enhanced-base-service';
-import { Logger } from './logger';
+import { createLogger } from '../../logging/dist/backend/index.js';
+import type { Logger } from '../../logging/dist/backend/index.js';
 
 export interface ServiceRegistryConfig {
   autoInitialize?: boolean;
@@ -19,7 +20,7 @@ export interface ServiceRegistryConfig {
 export class ServiceRegistry {
   private static instance: ServiceRegistry;
   private readonly services = new Map<string, BaseService | EnhancedBaseService>();
-  private readonly logger = new Logger('ServiceRegistry');
+  private readonly logger = createLogger('ServiceRegistry');
   private readonly config: ServiceRegistryConfig;
   private healthCheckInterval?: NodeJS.Timeout;
 

@@ -15,13 +15,14 @@
 // Core service architecture - Values
 export { BaseService } from "./base-service";
 export { EnhancedBaseService } from "./enhanced-base-service";
-export { Logger, LogLevel } from "./logger";
+// Logger moved to @cvplus/logging submodule - import from there
 export { ServiceRegistry } from "./service-registry";
 
 // Core service architecture - Types
 export type { ServiceConfig, ServiceHealth } from "./base-service";
 export type { EnhancedServiceConfig } from "./enhanced-base-service";
-export type { LogContext } from "./logger";export { ServiceRegistry } from './service-registry';
+// LogContext moved to @cvplus/logging submodule - import from there
+export { ServiceRegistry } from './service-registry';
 
 // Mixins for common functionality
 export {
@@ -59,8 +60,9 @@ export * from './cache';
 // - analytics-cache.service.ts
 // - cache-performance-monitor.service.ts
 //
-// - subscription-cache.service.ts
-// - pricing-cache.service.ts
+// - subscription-cache.service.ts (moved to @cvplus/premium)
+// - pricing-cache.service.ts (moved to @cvplus/premium)
+// - tier-management/ (moved to @cvplus/premium)
 // - feature-access-cache.service.ts
 // - usage-batch-cache.service.ts
 //
