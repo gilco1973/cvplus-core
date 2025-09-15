@@ -189,7 +189,28 @@ export type {
 // ============================================================================
 
 // Re-export logging from dedicated logging submodule
-export * from '@cvplus/logging/backend';
+// Re-export logging from @cvplus/logging backend
+// Note: Using relative path to logging package build output
+// Re-export runtime values (including enums)
+export {
+  LoggerFactory,
+  CorrelationService,
+  logger,
+  createLogger,
+  correlationMiddleware,
+  LogLevel,
+  LogDomain,
+  FirebaseTransport,
+  LogStream,
+  AlertRule,
+  AuditTrail,
+  LogArchive
+} from '../../logging/dist/backend/index.js';
+
+// Re-export types separately for isolatedModules compatibility
+export type {
+  LogEntry
+} from '../../logging/dist/backend/index.js';
 
 // ============================================================================
 // VERSION INFO

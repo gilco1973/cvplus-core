@@ -14,4 +14,17 @@ export * from './types';
 // ============================================================================
 
 // Re-export logging from dedicated logging submodule
-export * from '@cvplus/logging/backend';
+// Re-export essential logging from @cvplus/logging backend
+// Re-export runtime values (including enums)
+export {
+  LoggerFactory,
+  logger,
+  createLogger,
+  LogLevel,
+  LogDomain
+} from '../../logging/dist/backend/index.js';
+
+// Re-export types separately for isolatedModules compatibility
+export type {
+  LogEntry
+} from '../../logging/dist/backend/index.js';
