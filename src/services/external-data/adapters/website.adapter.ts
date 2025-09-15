@@ -19,7 +19,7 @@ import {
 } from '../types';
 
 export class WebsiteAdapter extends EnhancedBaseService {
-  private readonly _userAgent = 'CVPlus-Bot/1.0 (CV Enhancement Service)';
+  // Removed unused property
   private readonly requestTimeout = 10000; // 10 seconds
   
   constructor() {
@@ -71,16 +71,16 @@ export class WebsiteAdapter extends EnhancedBaseService {
         throw new Error('Invalid website URL');
       }
       
-      // Fetch the main page
+      // Fix the cheerio usage - use the loaded $ instance instead of global $
       const html = await this.fetchPage(websiteUrl);
       const $ = cheerio.load(html);
-      
+
       // Extract metadata
       const metadata = this.extractMetadata($, websiteUrl);
-      
+
       // Discover relevant pages
       const pages = await this.discoverPages($, websiteUrl);
-      
+
       // Extract content from discovered pages
       const [portfolioProjects, blogPosts, testimonials] = await Promise.all([
         this.extractPortfolioProjects($, pages),
@@ -109,9 +109,9 @@ export class WebsiteAdapter extends EnhancedBaseService {
       
       return website;
       
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error('Failed to fetch website data', { error, websiteUrl });
-      throw new Error(`Website fetch failed: ${error.message}`);
+      throw new Error(`Website fetch failed: ${error?.message || 'Unknown error'}`);
     }
   }
 
@@ -235,27 +235,27 @@ export class WebsiteAdapter extends EnhancedBaseService {
    * Parse a project element
    */
   private parseProject(elem: any): PortfolioProject {
-    const $ = elem;
+    const $ = cheerio.load(elem);
     
     return {
-      title: $.find('h2, h3, h4, .title, .project-title').first().text().trim(),
-      description: $.find('p, .description, .summary').first().text().trim(),
-      url: $.find('a').first().attr('href'),
-      imageUrl: $.find('img').first().attr('src'),
+      title: $('h2, h3, h4, .title, .project-title').first().text().trim(),
+      description: $('p, .description, .summary').first().text().trim(),
+      url: $('a').first().attr('href'),
+      imageUrl: $('img').first().attr('src'),
       technologies: this.extractTechnologies($),
-      role: $.find('.role').text().trim(),
-      duration: $.find('.duration, .date').text().trim()
+      role: $('.role').text().trim(),
+      duration: $('.duration, .date').text().trim()
     };
   }
 
   /**
    * Extract technologies from project
    */
-  private extractTechnologies($elem: any): string[] {
+  private extractTechnologies($: cheerio.CheerioAPI): string[] {
     const techs: string[] = [];
     
-    $elem.find('.tech, .technology, .skill, .tag').each((_: any, elem: any) => {
-      const tech = cheerio.load(elem)('*').text().trim();
+    $('.tech, .technology, .skill, .tag').each((_: any, elem: any) => {
+      const tech = $(elem).text().trim();
       if (tech && tech.length < 30) {
         techs.push(tech);
       }
@@ -268,14 +268,15 @@ export class WebsiteAdapter extends EnhancedBaseService {
    * Extract blog posts
    */
   private async extractBlogPosts(
-    $: cheerio.Root,
-    pages: Map<string, string>
+    $: cheerio.CheerioAPI,
+    pages: string[]
   ): Promise<BlogPost[]> {
     const posts: BlogPost[] = [];
     
     // Look for blog page
-    const blogUrl = Array.from(pages.entries())
-      .find(([key]) => key.includes('blog') || key.includes('article'))?.[1];
+    const blogUrl = pages.find(page => 
+      page.includes('blog') || page.includes('article')
+    );
     
     if (blogUrl) {
       try {
@@ -301,7 +302,7 @@ export class WebsiteAdapter extends EnhancedBaseService {
    * Parse a blog post element
    */
   private parseBlogPost(elem: any): BlogPost {
-    const $ = elem;
+    const _$ = elem;
     
     const title = $.find('h2, h3, .title, .post-title').first().text().trim();
     const url = $.find('a').first().attr('href') || '';
@@ -368,7 +369,7 @@ export class WebsiteAdapter extends EnhancedBaseService {
    * Parse a testimonial element
    */
   private parseTestimonial(elem: any): Testimonial {
-    const $ = elem;
+    const _$ = elem;
     
     const text = $.find('p, .text, .content').first().text().trim() ||
                  $.text().trim();

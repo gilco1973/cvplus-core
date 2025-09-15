@@ -215,7 +215,7 @@ export class LanguageProficiencyService {
         response_format: { type: 'json_object' }
       });
       
-      const result = JSON.parse(response.choices[0].message?.content || '{"languages":[]}');
+      const result = JSON.parse(response.choices?.[0]?.message?.content || '{"languages":[]}');
       const aiLanguages = result.languages || [];
       
       // Merge AI findings with extracted languages
@@ -290,8 +290,8 @@ export class LanguageProficiencyService {
     for (const pattern of patterns) {
       const match = langString.match(pattern);
       if (match) {
-        const name = match[1].trim();
-        const levelStr = match[2].trim();
+        const name = match[1]?.trim() || '';
+        const levelStr = match[2]?.trim() || '';
         const proficiency = this.normalizeLevel(levelStr);
         
         return {
@@ -355,8 +355,8 @@ export class LanguageProficiencyService {
   /**
    * Convert level to numeric score
    */
-  private levelToScore(level: LanguageProficiency['proficiency']): number {
-    return this.proficiencyScores[level] || 50;
+  private levelToScore(_level: LanguageProficiency['proficiency']): number {
+    return this.proficiencyScores[_level] || 50;
   }
   
   /**
@@ -372,17 +372,17 @@ export class LanguageProficiencyService {
       
       // Verify certifications
       if (cv.certifications) {
-        const relatedCerts = cv.certifications.filter(cert => 
+        const relatedCerts = cv.certifications.filter((cert: any) => 
           this.isLanguageCertification(cert.name, lang.name)
         );
         if (relatedCerts.length > 0) {
-          lang.certifications = relatedCerts.map(c => c.name);
+          lang.certifications = relatedCerts.map((c: any) => c.name);
           lang.verified = true;
         }
       }
     }
     
-    return languages.sort((a, b) => b.score - a.score);
+    return languages.sort((a, b) => (b.score || 0) - (a.score || 0));
   }
   
   /**
@@ -531,10 +531,10 @@ export class LanguageProficiencyService {
           return {
             language: p.name,
             skills: {
-              'Speaking': base - 5 + Math.random() * 10,
-              'Writing': base - 5 + Math.random() * 10,
-              'Reading': base + Math.random() * 5,
-              'Listening': base - 2 + Math.random() * 7
+              'Speaking': (base || 70) - 5 + Math.random() * 10,
+              'Writing': (base || 70) - 5 + Math.random() * 10,
+              'Reading': (base || 70) + Math.random() * 5,
+              'Listening': (base || 70) - 2 + Math.random() * 7
             }
           };
         })
@@ -563,7 +563,7 @@ export class LanguageProficiencyService {
     );
     
     const businessReady = proficiencies.filter(p => 
-      p.score >= 70 && p.contexts?.some(c => 
+      (p.score || 0) >= 70 && p.contexts?.some(c => 
         c.toLowerCase().includes('business') || 
         c.toLowerCase().includes('professional')
       )
@@ -587,7 +587,7 @@ export class LanguageProficiencyService {
     const conversationalLanguages = proficiencies.filter(p => p.proficiency === 'limited');
     if (conversationalLanguages.length > 0) {
       recommendations.push(
-        `Improve ${conversationalLanguages[0].name} to professional level for career advancement`
+        `Improve ${conversationalLanguages[0]?.name || 'language skills'} to professional level for career advancement`
       );
     }
     
@@ -617,11 +617,11 @@ export class LanguageProficiencyService {
       }
     }
     
-    if (cv.certifications?.some(c => this.isLanguageCertification(c.name))) {
+    if (cv.certifications?.some((c: any) => this.isLanguageCertification(c.name))) {
       sources.push('Certifications');
     }
     
-    if (cv.experience?.some(exp => 
+    if (cv.experience?.some((exp: any) => 
       exp.description?.toLowerCase().includes('language') ||
       exp.description?.toLowerCase().includes('multilingual') ||
       exp.description?.toLowerCase().includes('international')
@@ -629,7 +629,7 @@ export class LanguageProficiencyService {
       sources.push('Work experience');
     }
     
-    if (cv.education?.some(edu => 
+    if (cv.education?.some((edu: any) => 
       edu.field?.toLowerCase().includes('language') ||
       edu.field?.toLowerCase().includes('linguistics')
     )) {
@@ -666,7 +666,7 @@ export class LanguageProficiencyService {
   ): number {
     if (language.proficiency === 'native') {
       // Estimate based on age (if available) or professional experience
-      const totalExperience = cv.experience?.reduce((sum, exp) => {
+      const totalExperience = cv.experience?.reduce((sum: any, exp: any) => {
         const start = new Date(exp.startDate || 0);
         const end = exp.endDate ? new Date(exp.endDate) : new Date();
         return sum + (end.getFullYear() - start.getFullYear());
@@ -677,7 +677,7 @@ export class LanguageProficiencyService {
     
     // Look for language mentions in experience
     let years = 0;
-    cv.experience?.forEach(exp => {
+    cv.experience?.forEach((exp: any) => {
       if (exp.description?.toLowerCase().includes(language.name.toLowerCase()) ||
           exp.company?.toLowerCase().includes(language.name.toLowerCase())) {
         const start = new Date(exp.startDate || 0);
@@ -799,10 +799,19 @@ export class LanguageProficiencyService {
     }
     
     // Update the language
-    visualization.proficiencies[langIndex] = {
-      ...visualization.proficiencies[langIndex],
+    const proficiency = {
+      name: visualization.proficiencies[langIndex]?.name || 'Unknown',
+      proficiency: visualization.proficiencies[langIndex]?.proficiency || 'elementary',
+      score: visualization.proficiencies[langIndex]?.score,
+      certifications: visualization.proficiencies[langIndex]?.certifications,
+      yearsOfExperience: visualization.proficiencies[langIndex]?.yearsOfExperience,
+      contexts: visualization.proficiencies[langIndex]?.contexts,
+      verified: visualization.proficiencies[langIndex]?.verified,
+      flag: visualization.proficiencies[langIndex]?.flag,
+      frameworks: visualization.proficiencies[langIndex]?.frameworks,
       ...updates
     };
+    visualization.proficiencies[langIndex] = proficiency;
     
     // Regenerate visualizations
     visualization.visualizations = this.generateVisualizations(visualization.proficiencies);
@@ -819,7 +828,7 @@ export class LanguageProficiencyService {
         'enhancedFeatures.languageProficiency.lastModified': FieldValue.serverTimestamp()
       });
     
-    return visualization.proficiencies[langIndex];
+    return visualization.proficiencies[langIndex] || proficiency;
   }
 }
 

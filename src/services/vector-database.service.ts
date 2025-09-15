@@ -837,9 +837,11 @@ export class VectorDatabase {
     let magnitudeB = 0;
 
     for (let i = 0; i < a.length; i++) {
-      dotProduct += a[i] * b[i];
-      magnitudeA += a[i] * a[i];
-      magnitudeB += b[i] * b[i];
+      if (a && b && a[i] !== undefined && b[i] !== undefined) {
+        dotProduct += a[i] * b[i];
+        magnitudeA += a[i] * a[i];
+        magnitudeB += b[i] * b[i];
+      }
     }
 
     const magnitude = Math.sqrt(magnitudeA) * Math.sqrt(magnitudeB);
@@ -851,7 +853,7 @@ export class VectorDatabase {
       throw new Error('Vector dimensions must match');
     }
 
-    return a.reduce((sum, val, i) => sum + val * b[i], 0);
+    return a.reduce((sum, val, i) => sum + val * (b[i] || 0), 0);
   }
 
   private euclideanDistance(a: number[], b: number[]): number {
@@ -860,7 +862,7 @@ export class VectorDatabase {
     }
 
     const sumSquaredDiffs = a.reduce((sum, val, i) => {
-      const diff = val - b[i];
+      const diff = val - (b[i] || 0);
       return sum + diff * diff;
     }, 0);
 

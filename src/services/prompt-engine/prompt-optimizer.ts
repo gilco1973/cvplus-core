@@ -106,17 +106,17 @@ Target Audience: ${this.determineTargetAudience(personalityProfile, industryTemp
     const optimizations: string[] = [];
 
     // Common keywords integration
-    if (template.commonKeywords && template.commonKeywords.length > 0) {
+    if (template?.commonKeywords && template.commonKeywords.length > 0) {
       optimizations.push(`Incorporate industry keywords: ${template.commonKeywords.slice(0, 5).join(', ')}`);
     }
 
     // Vocabulary focus
-    if (template.vocabularyFocus && template.vocabularyFocus.length > 0) {
+    if (template?.vocabularyFocus && template.vocabularyFocus.length > 0) {
       optimizations.push(`Use focused vocabulary: ${template.vocabularyFocus.slice(0, 3).join(', ')}`);
     }
 
     // Avoid certain keywords
-    if (template.avoidKeywords && template.avoidKeywords.length > 0) {
+    if (template?.avoidKeywords && template.avoidKeywords.length > 0) {
       optimizations.push(`Avoid terms: ${template.avoidKeywords.slice(0, 3).join(', ')}`);
     }
 

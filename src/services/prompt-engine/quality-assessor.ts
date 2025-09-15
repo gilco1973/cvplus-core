@@ -107,8 +107,8 @@ Provide only a numerical score (0-10) with one decimal place.`;
     let totalChecks = 0;
 
     // Check for industry-specific keywords
-    if (industryTemplate.commonKeywords) {
-      const keywordMatches = industryTemplate.commonKeywords.filter(keyword =>
+    if (industryTemplate?.commonKeywords) {
+      const keywordMatches = industryTemplate.commonKeywords.filter((keyword: string) =>
         scriptLower.includes(keyword.toLowerCase())
       ).length;
       alignmentScore += (keywordMatches / industryTemplate.commonKeywords.length) * 0.4;
@@ -116,8 +116,8 @@ Provide only a numerical score (0-10) with one decimal place.`;
     }
 
     // Check vocabulary focus alignment
-    if (industryTemplate.vocabularyFocus) {
-      const vocabMatches = industryTemplate.vocabularyFocus.filter(term =>
+    if (industryTemplate?.vocabularyFocus) {
+      const vocabMatches = industryTemplate.vocabularyFocus.filter((term: string) =>
         scriptLower.includes(term.toLowerCase())
       ).length;
       alignmentScore += (vocabMatches / industryTemplate.vocabularyFocus.length) * 0.3;
@@ -125,8 +125,8 @@ Provide only a numerical score (0-10) with one decimal place.`;
     }
 
     // Avoid keywords penalty
-    if (industryTemplate.avoidKeywords) {
-      const avoidMatches = industryTemplate.avoidKeywords.filter(keyword =>
+    if (industryTemplate?.avoidKeywords) {
+      const avoidMatches = industryTemplate.avoidKeywords.filter((keyword: string) =>
         scriptLower.includes(keyword.toLowerCase())
       ).length;
       alignmentScore -= (avoidMatches / industryTemplate.avoidKeywords.length) * 0.2;

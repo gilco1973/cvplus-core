@@ -7,8 +7,6 @@ import * as admin from 'firebase-admin';
 import {
   UserTier,
   TierConfig,
-  TierLimits,
-  TierCheckResult,
   UserTierInfo,
   FeatureAccessRequest,
   FeatureAccessResponse,
@@ -271,7 +269,7 @@ export class TierManager {
 
     const alternatives: string[] = [];
     for (const availableFeature of config.features) {
-      if (availableFeature.includes(feature.split('_')[0])) {
+      if (availableFeature.includes(feature?.split('_')[0] || '')) {
         alternatives.push(availableFeature);
       }
     }

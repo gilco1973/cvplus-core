@@ -54,7 +54,7 @@ export class LinkedInAdapter {
       
     } catch (error) {
       logger.error('[LINKEDIN-ADAPTER] Failed to fetch LinkedIn data', error);
-      throw new Error(`LinkedIn fetch failed: ${error.message}`);
+      throw new Error(`LinkedIn fetch failed: ${(error as any)?.message || 'Unknown error'}`);
     }
   }
 
@@ -178,9 +178,7 @@ export class LinkedInAdapter {
    */
   private transformAPIResponse(apiData: any): any {
     const profile: LinkedInProfile = {
-      profileUrl: apiData.profile.vanityName 
-        ? `https://linkedin.com/in/${apiData.profile.vanityName}`
-        : undefined,
+      profileUrl: apiData.profile.publicProfileUrl ?? null,
       headline: apiData.profile.headline,
       summary: apiData.profile.summary,
       location: apiData.profile.location?.name,

@@ -159,8 +159,8 @@ export class PlaceholderManager {
       const definition = this.PLACEHOLDER_DEFINITIONS[fullKey] || {
         placeholder: fullKey,
         type: 'text' as const,
-        label: this.formatLabel(placeholderKey),
-        helpText: `Enter ${this.formatLabel(placeholderKey).toLowerCase()}`,
+        label: this.formatLabel(placeholderKey || ''),
+        helpText: `Enter ${this.formatLabel(placeholderKey || '').toLowerCase()}`,
         example: 'Enter value',
         required: true
       };

@@ -29,11 +29,11 @@ Career Progression: ${careerProgression}
 
 Technical Expertise: ${technicalExpertise}
 
-Professional Summary: ${cv.professionalSummary?.summary || 'Experienced professional with diverse skill set'}
+Professional Summary: ${cv.summary || 'Experienced professional with diverse skill set'}
 
-Industry Focus: ${cv.professionalSummary?.industry || 'General'}
+Industry Focus: ${(cv.personalInfo as any)?.industry || 'General'}
 
-Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExperience?.[0]?.company || 'Current Organization'}
+Current Role: ${cv.experience?.[0]?.position || 'Professional'} at ${cv.experience?.[0]?.company || 'Current Organization'}
 `.trim();
     } catch (error) {
       return this.generateFallbackContext(cv);
@@ -44,8 +44,8 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
     const strengths: string[] = [];
 
     // Extract from professional summary
-    if (cv.professionalSummary?.summary) {
-      const summary = cv.professionalSummary.summary.toLowerCase();
+    if (cv.summary) {
+      const summary = cv.summary.toLowerCase();
       const strengthKeywords = [
         'leadership', 'management', 'strategic', 'innovative', 'experienced',
         'expert', 'skilled', 'proficient', 'accomplished', 'successful'
@@ -59,13 +59,13 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
     }
 
     // Extract from technical skills
-    if (cv.skills?.technical && cv.skills.technical.length > 0) {
-      strengths.push(`technical expertise in ${cv.skills.technical.slice(0, 3).join(', ')}`);
+    if (Array.isArray(cv.skills) && cv.skills.length > 0) {
+      strengths.push(`technical expertise in ${cv.skills.slice(0, 3).join(', ')}`);
     }
 
     // Extract from work experience achievements
-    if (cv.workExperience && cv.workExperience.length > 0) {
-      const recentAchievements = cv.workExperience[0].achievements || [];
+    if (cv.experience && cv.experience.length > 0) {
+      const recentAchievements = cv.experience?.[0]?.achievements || [];
       if (recentAchievements.length > 0) {
         strengths.push('proven track record of achievements');
       }
@@ -75,19 +75,19 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
   }
 
   private analyzeCareerProgression(cv: ParsedCV): string {
-    if (!cv.workExperience || cv.workExperience.length === 0) {
+    if (!cv.experience || cv.experience.length === 0) {
       return 'Building professional experience';
     }
 
-    const experiences = cv.workExperience;
+    const experiences = cv.experience;
     const careerYears = this.calculateTotalExperience(cv);
 
     if (careerYears < 3) {
-      return `Early-career professional with ${careerYears} years of experience, showing rapid growth in ${experiences[0].title}`;
+      return `Early-career professional with ${careerYears} years of experience, showing rapid growth in ${experiences[0]?.position || 'current role'}`;
     } else if (careerYears < 8) {
       return `Mid-level professional with ${careerYears} years of progressive experience across ${experiences.length} roles`;
     } else if (careerYears < 15) {
-      return `Senior professional with ${careerYears} years of leadership experience, advancing from ${experiences[experiences.length - 1]?.title} to ${experiences[0].title}`;
+      return `Senior professional with ${careerYears} years of leadership experience, advancing from ${experiences[experiences.length - 1]?.position || 'early role'} to ${experiences[0]?.position || 'current role'}`;
     } else {
       return `Executive-level professional with ${careerYears}+ years of comprehensive experience, demonstrating consistent career advancement`;
     }
@@ -97,8 +97,8 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
     const technical: string[] = [];
 
     // Programming languages
-    if (cv.skills?.technical) {
-      const programmingLanguages = cv.skills.technical.filter(skill =>
+    if (Array.isArray(cv.skills)) {
+      const programmingLanguages = cv.skills.filter((skill: string) =>
         ['javascript', 'python', 'java', 'typescript', 'react', 'node', 'angular', 'vue'].some(lang =>
           skill.toLowerCase().includes(lang)
         )
@@ -109,28 +109,28 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
     }
 
     // Frameworks and tools
-    if (cv.skills?.tools && cv.skills.tools.length > 0) {
-      technical.push(`Tools: ${cv.skills.tools.slice(0, 3).join(', ')}`);
-    }
-
-    // Databases
-    if (cv.skills?.databases && cv.skills.databases.length > 0) {
-      technical.push(`Databases: ${cv.skills.databases.slice(0, 2).join(', ')}`);
-    }
-
-    // Cloud platforms
-    if (cv.skills?.cloud && cv.skills.cloud.length > 0) {
-      technical.push(`Cloud: ${cv.skills.cloud.slice(0, 2).join(', ')}`);
+    // Simplified skills handling for array-based skills
+    if (Array.isArray(cv.skills) && cv.skills.length > 3) {
+      const toolSkills = cv.skills.filter((skill: string) => 
+        skill.toLowerCase().includes('docker') || 
+        skill.toLowerCase().includes('kubernetes') ||
+        skill.toLowerCase().includes('git') ||
+        skill.toLowerCase().includes('aws') ||
+        skill.toLowerCase().includes('azure')
+      );
+      if (toolSkills.length > 0) {
+        technical.push(`Tools & Platforms: ${toolSkills.slice(0, 3).join(', ')}`);
+      }
     }
 
     return technical.length > 0 ? technical.join(' | ') : 'Diverse technical skill set';
   }
 
   private calculateTotalExperience(cv: ParsedCV): number {
-    if (!cv.workExperience) return 0;
+    if (!cv.experience) return 0;
 
     let totalYears = 0;
-    for (const exp of cv.workExperience) {
+    for (const exp of cv.experience) {
       if (exp.duration) {
         totalYears += this.parseDurationToYears(exp.duration);
       }
@@ -156,7 +156,7 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
       // Assume format like "2020-2023" or "Jan 2020 - Dec 2022"
       if (numbers.length >= 2) {
         const startYear = parseInt(numbers[0]);
-        const endYear = parseInt(numbers[numbers.length - 1]);
+        const endYear = parseInt(numbers[numbers.length - 1] || '0');
         years = endYear - startYear;
       }
     }
@@ -166,8 +166,8 @@ Current Role: ${cv.workExperience?.[0]?.title || 'Professional'} at ${cv.workExp
 
   private generateFallbackContext(cv: ParsedCV): string {
     const name = cv.personalInfo?.name || 'Professional';
-    const title = cv.workExperience?.[0]?.title || 'Experienced Professional';
-    const company = cv.workExperience?.[0]?.company || 'Industry Leader';
+    const title = cv.experience?.[0]?.position || 'Experienced Professional';
+    const company = cv.experience?.[0]?.company || 'Industry Leader';
 
     return `
 CONTEXT LAYER - Professional Profile:

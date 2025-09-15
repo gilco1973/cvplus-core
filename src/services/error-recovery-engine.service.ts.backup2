@@ -8,73 +8,14 @@
  * @version 1.0.0
  */
 
-// TEMPORARILY DISABLED: Import from staging area not available
-// Placeholder types for video provider interfaces
-interface VideoGenerationProvider { 
-  id: string; 
-  name: string;
-  capabilities?: {
-    voiceCloning?: boolean;
-    customAvatars?: boolean;
-    emotionControl?: boolean;
-    voiceSpeedControl?: boolean;
-  };
-}
-
-export enum VideoProviderErrorType {
-  NETWORK = 'NETWORK',
-  AUTH = 'AUTH', 
-  QUOTA = 'QUOTA',
-  SERVICE = 'SERVICE',
-  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
-  TIMEOUT_ERROR = 'TIMEOUT_ERROR',
-  AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR',
-  INSUFFICIENT_CREDITS = 'INSUFFICIENT_CREDITS',
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  QUOTA_EXCEEDED = 'QUOTA_EXCEEDED',
-  PROVIDER_UNAVAILABLE = 'PROVIDER_UNAVAILABLE',
-  PROCESSING_ERROR = 'PROCESSING_ERROR',
-  INVALID_PARAMETERS = 'INVALID_PARAMETERS',
-  UNSUPPORTED_FEATURE = 'UNSUPPORTED_FEATURE'
-}
-
-export class VideoProviderError extends Error {
-  public type: VideoProviderErrorType;
-  public retryable?: boolean;
-  
-  constructor(type: VideoProviderErrorType, message: string, retryable = false) {
-    super(message);
-    this.type = type;
-    this.retryable = retryable;
-    this.name = 'VideoProviderError';
-  }
-}
-
-interface VideoGenerationOptions { 
-  script?: string; 
-  template?: string;
-  duration?: number | string;
-  style?: string;
-  avatarStyle?: string;
-  background?: string;
-  includeSubtitles?: boolean;
-  customAvatarId?: string;
-  customVoiceId?: string;
-  emotion?: string;
-  voiceSpeed?: number;
-}
-
-interface VideoGenerationResult { 
-  success: boolean; 
-  url?: string; 
-  error?: string; 
-}
-
-interface ProviderSelectionCriteria { 
-  priority?: number; 
-  reliability?: number;
-  context?: any;
-}
+import {
+  VideoGenerationProvider,
+  VideoProviderError,
+  VideoProviderErrorType,
+  VideoGenerationOptions,
+  VideoGenerationResult,
+  ProviderSelectionCriteria
+} from '../staging-for-submodules/multimedia/providers/video-providers/base-provider.interface';
 import { ProviderSelectionEngine } from './provider-selection-engine.service';
 import { CircuitBreakerService } from './circuit-breaker.service';
 import * as admin from 'firebase-admin';
@@ -212,11 +153,11 @@ class BackoffCalculator {
  * Error Recovery Engine
  */
 export class ErrorRecoveryEngine {
-  private recoveryStrategies: Map<ErrorCategory, RecoveryStrategy> = new Map();
+  private recoveryStrategies: Map<ErrorCategory, RecoveryStrategy>;
   private providerSelectionEngine: ProviderSelectionEngine;
   private circuitBreaker: CircuitBreakerService;
   private db: admin.firestore.Firestore;
-  // Removed unused property
+  private _activeRecoveries: Map<string, RecoveryContext> = new Map();
 
   constructor(
     providerSelectionEngine: ProviderSelectionEngine,
@@ -373,7 +314,8 @@ export class ErrorRecoveryEngine {
       if (!strategy) {
         throw new VideoProviderError(
           VideoProviderErrorType.PROCESSING_ERROR,
-          `No recovery strategy for error category: ${category}`
+          `No recovery strategy for error category: ${category}`,
+          'error_recovery_engine'
         );
       }
 
@@ -400,10 +342,11 @@ export class ErrorRecoveryEngine {
         errorHistory: context.previousErrors,
         finalError: recoveryError instanceof VideoProviderError ? 
           recoveryError : 
-                      new VideoProviderError(
-              VideoProviderErrorType.PROCESSING_ERROR,
-              `Recovery failed: ${recoveryError.message}`
-            )
+          new VideoProviderError(
+            VideoProviderErrorType.PROCESSING_ERROR,
+            `Recovery failed: ${recoveryError.message}`,
+            'error_recovery_engine'
+          )
       };
     }
   }
@@ -470,7 +413,8 @@ export class ErrorRecoveryEngine {
           errorHistory: context.previousErrors,
           finalError: new VideoProviderError(
             VideoProviderErrorType.PROCESSING_ERROR,
-            'All recovery strategies exhausted'
+            'All recovery strategies exhausted',
+            'error_recovery_engine'
           )
         };
     }
@@ -502,10 +446,11 @@ export class ErrorRecoveryEngine {
       // Get provider and retry
       const provider = this.providerSelectionEngine.getProvider(context.providerId);
       if (!provider) {
-                  throw new VideoProviderError(
-            VideoProviderErrorType.PROVIDER_UNAVAILABLE,
-            `Provider ${context.providerId} not available`
-          );
+        throw new VideoProviderError(
+          VideoProviderErrorType.PROVIDER_UNAVAILABLE,
+          `Provider ${context.providerId} not available`,
+          'error_recovery_engine'
+        );
       }
 
       // Adjust options for retry if needed
@@ -629,8 +574,9 @@ export class ErrorRecoveryEngine {
         totalRecoveryTime: Date.now() - startTime,
         errorHistory: context.previousErrors,
         finalError: new VideoProviderError(
-                      VideoProviderErrorType.PROVIDER_UNAVAILABLE,
-            'All providers failed, even with degraded quality'
+          VideoProviderErrorType.PROVIDER_UNAVAILABLE,
+          'All providers failed, even with degraded quality',
+          'error_recovery_engine'
         )
       };
 
@@ -702,12 +648,10 @@ export class ErrorRecoveryEngine {
     // Allow quality degradation if strategy permits
     if (strategy.quality.allowQualityDegradation) {
       // Reduce duration for faster processing
-      if (typeof adjustedOptions.duration === 'string') {
-        if (adjustedOptions.duration === 'long') {
-          adjustedOptions.duration = 60;
-        } else if (adjustedOptions.duration === 'medium') {
-          adjustedOptions.duration = 30;
-        }
+      if (adjustedOptions.duration === 'long') {
+        adjustedOptions.duration = 'medium';
+      } else if (adjustedOptions.duration === 'medium') {
+        adjustedOptions.duration = 'short';
       }
       
       // Use simpler avatar style
@@ -726,19 +670,19 @@ export class ErrorRecoveryEngine {
     const adjustedOptions = { ...options };
     
     // Adjust options based on provider capabilities
-    if (!provider.capabilities?.voiceCloning) {
+    if (!provider.capabilities.voiceCloning) {
       delete adjustedOptions.customVoiceId;
     }
     
-    if (!provider.capabilities?.customAvatars) {
+    if (!provider.capabilities.customAvatars) {
       delete adjustedOptions.customAvatarId;
     }
     
-    if (!provider.capabilities?.emotionControl) {
+    if (!provider.capabilities.emotionControl) {
       delete adjustedOptions.emotion;
     }
     
-    if (!provider.capabilities?.voiceSpeedControl) {
+    if (!provider.capabilities.voiceSpeedControl) {
       delete adjustedOptions.voiceSpeed;
     }
     

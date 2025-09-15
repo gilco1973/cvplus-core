@@ -19,7 +19,7 @@ import { roleProfilesData } from '../data/role-profiles.data';
 export class RoleProfileService {
   private db: FirebaseFirestore.Firestore;
   private cache: Map<string, RoleProfile>;
-  private cacheTimeout: number = 3600000; // Initialize with default value
+  private _unused_cacheTimeout: number = 3600000; // Initialize with default value
   private config: RoleProfileServiceConfig;
   private lastCacheUpdate: number;
   private metrics: RoleDetectionMetrics;

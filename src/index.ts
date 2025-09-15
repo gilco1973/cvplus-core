@@ -239,3 +239,64 @@ export type {
 } from './types/enhanced-models';
 
 export { CVStep } from './types/enhanced-models';
+
+// ============================================================================
+// CV PROCESSING RE-EXPORTS (Backward Compatibility)
+// ============================================================================
+
+// Re-export CV processing services for backward compatibility
+// export {
+//   CVAnalysisService,
+//   CVGenerationService,
+//   CVTemplateService,
+//   CVValidationService,
+//   CVGenerator,
+//   EnhancementProcessingService,
+//   PiiDetector
+// } from '@cvplus/cv-processing'; // Temporarily disabled
+
+// Re-export CV processing types for backward compatibility
+export type {
+  CV,
+  CVContent,
+  CVMetadata,
+  WorkExperience,
+  Education,
+  Skill,
+  Achievement,
+  Reference,
+  CVTemplate,
+  TemplateConfig,
+  TemplateSection,
+  TemplateStyle,
+  EnhancedJob,
+  EnhancedJobCore,
+  JobFunction,
+  EnhancedATS,
+  EnhancedSkills,
+  CVTemplateType,
+  CVTemplateMetadata,
+  CVTemplateSections,
+  CVTemplateOptions,
+  JobType,
+  JobRequirements,
+  JobBenefits,
+  CompanyInfo,
+  JobFunctionType,
+  JobFunctionCategory,
+  JobFunctionData,
+  EnhancedJobType,
+  EnhancedJobAnalysis,
+  EnhancedJobMatching,
+  EnhancedJobCoreType,
+  EnhancedJobCoreData,
+  EnhancedJobCoreAnalysis,
+  EnhancedATSType,
+  ATSScore,
+  ATSRecommendations,
+  ATSCompatibility,
+  EnhancedSkillsType,
+  SkillCategory,
+  SkillAnalysis,
+  SkillRecommendations
+} from '@cvplus/cv-processing';

@@ -12,7 +12,7 @@ import * as validator from 'validator';
 import { ValidationResult, ValidationError, ValidationErrorCode } from './types';
 
 export class TextValidator {
-  private readonly htmlSanitizeOptions = {
+  private readonly _unused_htmlSanitizeOptions = {
     allowedTags: ['b', 'i', 'em', 'strong', 'br', 'p'],
     allowedAttributes: {},
     disallowedTagsMode: 'discard'
@@ -42,7 +42,8 @@ export class TextValidator {
     const errors: ValidationError[] = [];
 
     if (!text || typeof text !== 'string') {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'TextValidationError',
         field: fieldName,
         code: ValidationErrorCode.REQUIRED_FIELD,
         message: `${fieldName} is required and must be a string`,
@@ -53,7 +54,8 @@ export class TextValidator {
 
     // Length validation
     if (text.length > maxLength) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'TextValidationError',
         field: fieldName,
         code: ValidationErrorCode.TOO_LONG,
         message: `${fieldName} exceeds maximum length of ${maxLength} characters`,
@@ -63,7 +65,8 @@ export class TextValidator {
 
     // Security validation
     if (this.containsDangerousPatterns(text)) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'ValidationError',
         field: fieldName,
         code: ValidationErrorCode.DANGEROUS_CONTENT,
         message: `${fieldName} contains potentially dangerous content`,
@@ -88,7 +91,7 @@ export class TextValidator {
     const errors: ValidationError[] = [];
 
     if (!email || typeof email !== 'string') {
-      errors.push({
+      errors.push({ name: 'ValidationError',
         field: 'email',
         code: ValidationErrorCode.REQUIRED_FIELD,
         message: 'Email is required',
@@ -99,7 +102,8 @@ export class TextValidator {
 
     // Basic format validation
     if (!validator.isEmail(email)) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'ValidationError',
         field: 'email',
         code: ValidationErrorCode.INVALID_EMAIL,
         message: 'Invalid email format',
@@ -109,7 +113,7 @@ export class TextValidator {
 
     // Length validation
     if (email.length > 254) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
         field: 'email',
         code: ValidationErrorCode.TOO_LONG,
         message: 'Email address is too long',
@@ -120,7 +124,8 @@ export class TextValidator {
     // Domain validation
     const domain = email.split('@')[1];
     if (domain && domain.length > 253) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'ValidationError',
         field: 'email',
         code: ValidationErrorCode.INVALID_FORMAT,
         message: 'Email domain is too long',
@@ -150,7 +155,8 @@ export class TextValidator {
 
     // Basic format validation
     if (!validator.isMobilePhone(cleanPhone, 'any', { strictMode: false })) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
+        name: 'ValidationError',
         field: 'phone',
         code: ValidationErrorCode.INVALID_PHONE,
         message: 'Invalid phone number format',
@@ -160,7 +166,7 @@ export class TextValidator {
 
     // Length validation
     if (cleanPhone.length < 7 || cleanPhone.length > 15) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
         field: 'phone',
         code: ValidationErrorCode.INVALID_FORMAT,
         message: 'Phone number should be between 7 and 15 digits',
@@ -192,12 +198,12 @@ export class TextValidator {
       require_host: true,
       require_valid_protocol: true,
       allow_underscores: false,
-      host_whitelist: false,
-      host_blacklist: false,
+      host_whitelist: [] as (string | RegExp)[],
+      host_blacklist: [] as (string | RegExp)[],
       allow_trailing_dot: false,
       allow_protocol_relative_urls: false
     })) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
         field: fieldName,
         code: ValidationErrorCode.INVALID_URL,
         message: `Invalid URL format for ${fieldName}`,
@@ -217,7 +223,7 @@ export class TextValidator {
     const lowerUrl = url.toLowerCase();
     for (const pattern of forbiddenPatterns) {
       if (lowerUrl.includes(pattern)) {
-        errors.push({
+        errors.push({ name: 'ValidationError',
           field: fieldName,
           code: ValidationErrorCode.DANGEROUS_CONTENT,
           message: `URL contains forbidden protocol: ${pattern}`,
@@ -248,7 +254,7 @@ export class TextValidator {
     const parsedDate = new Date(date);
 
     if (isNaN(parsedDate.getTime())) {
-      errors.push({
+      errors.push({ name: 'ValidationError',
         field: fieldName,
         code: ValidationErrorCode.INVALID_DATE,
         message: `Invalid date format for ${fieldName}`,
@@ -260,7 +266,7 @@ export class TextValidator {
       const year = parsedDate.getFullYear();
 
       if (year < 1900 || year > currentYear + 10) {
-        errors.push({
+        errors.push({ name: 'ValidationError',
           field: fieldName,
           code: ValidationErrorCode.OUT_OF_RANGE,
           message: `Date year should be between 1900 and ${currentYear + 10}`,

@@ -338,7 +338,7 @@ export class IntegrationsService {
   /**
    * Generate podcast audio using the dedicated podcast service
    */
-  async generatePodcastAudio(script: string, voice?: string): Promise<Buffer> {
+  async generatePodcastAudio(_script: string, _voice?: string): Promise<Buffer> {
     try {
       // TODO: Implement podcast generation service
       // const { PodcastGenerationService } = await import('./podcast-generation.service');

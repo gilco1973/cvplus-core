@@ -15,7 +15,7 @@ import {
   VideoGenerationOptions,
   VideoGenerationResult,
   ProviderSelectionCriteria
-} from './video-providers/base-provider.interface';
+} from '../staging-for-submodules/multimedia/providers/video-providers/base-provider.interface';
 import { ProviderSelectionEngine } from './provider-selection-engine.service';
 import { CircuitBreakerService } from './circuit-breaker.service';
 import * as admin from 'firebase-admin';
@@ -157,7 +157,7 @@ export class ErrorRecoveryEngine {
   private providerSelectionEngine: ProviderSelectionEngine;
   private circuitBreaker: CircuitBreakerService;
   private db: admin.firestore.Firestore;
-  private activeRecoveries: Map<string, RecoveryContext> = new Map();
+  private _activeRecoveries: Map<string, RecoveryContext> = new Map();
 
   constructor(
     providerSelectionEngine: ProviderSelectionEngine,

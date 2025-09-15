@@ -273,7 +273,7 @@ export class EnhancedErrorHandler {
    */
   private static shouldRetryError(errorId: string): boolean {
     const errorKey = errorId.split('_')[1];
-    const count = this.errorCounts.get(errorKey) || 0;
+    const count = this.errorCounts.get(errorKey || '') || 0;
     return count < 3; // Max 3 retries
   }
 

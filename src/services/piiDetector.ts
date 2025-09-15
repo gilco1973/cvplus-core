@@ -304,14 +304,14 @@ For masking, use:
     if (hasPIIMatch) {
       try {
         const result: PIIDetectionResult = {
-          hasPII: hasPIIMatch[1].toLowerCase() === 'true',
+          hasPII: hasPIIMatch?.[1]?.toLowerCase() === 'true',
           detectedTypes: [],
           recommendations: []
         };
         
         if (detectedTypesMatch) {
           const typesStr = detectedTypesMatch[1];
-          result.detectedTypes = typesStr
+          result.detectedTypes = (typesStr || '')
             .split(',')
             .map(type => type.replace(/["'\s]/g, ''))
             .filter(type => type.length > 0);
@@ -319,7 +319,7 @@ For masking, use:
         
         if (recommendationsMatch) {
           const recsStr = recommendationsMatch[1];
-          result.recommendations = recsStr
+          result.recommendations = (recsStr || '')
             .split(',')
             .map(rec => rec.replace(/^["'\s]+|["'\s]+$/g, ''))
             .filter(rec => rec.length > 0);

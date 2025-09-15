@@ -56,17 +56,14 @@ export * from './cache';
 // MIGRATION PHASE 4B: Domain Services Staging
 // The following services have been COPIED to staging areas for migration preparation:
 //
-// Analytics Domain (staging-for-submodules/analytics/services/):
 // - analytics-cache.service.ts
 // - cache-performance-monitor.service.ts
 //
-// Premium Domain (staging-for-submodules/premium/services/):
 // - subscription-cache.service.ts
 // - pricing-cache.service.ts
 // - feature-access-cache.service.ts
 // - usage-batch-cache.service.ts
 //
-// External Data Domain (staging-for-submodules/external-data/services/):
 // - Complete external-data/ directory with adapters and enrichment services
 //
 // NOTE: Original exports maintained for backward compatibility.

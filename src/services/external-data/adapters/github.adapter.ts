@@ -67,9 +67,9 @@ export class GitHubAdapter {
         repositories: repositories.slice(0, 10) // Return top 10 repos
       };
       
-    } catch (error) {
+    } catch (error: any) {
       logger.error('[GITHUB-ADAPTER] Failed to fetch GitHub data', error);
-      throw new Error(`GitHub fetch failed: ${error.message}`);
+      throw new Error(`GitHub fetch failed: ${error?.message || 'Unknown error'}`);
     }
   }
 
@@ -100,7 +100,7 @@ export class GitHubAdapter {
         createdAt: data.created_at,
         avatarUrl: data.avatar_url
       };
-    } catch (error) {
+    } catch (error: any) {
       if (error.response?.status === 404) {
         throw new Error(`GitHub user not found: ${username}`);
       }

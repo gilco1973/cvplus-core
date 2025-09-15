@@ -69,7 +69,7 @@ export class WebSearchAdapter {
       
     } catch (error) {
       logger.error('[WEB-SEARCH-ADAPTER] Failed to search web presence', error);
-      throw new Error(`Web search failed: ${error.message}`);
+      throw new Error(`Web search failed: ${(error as any)?.message || 'Unknown error'}`);
     }
   }
 

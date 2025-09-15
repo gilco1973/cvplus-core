@@ -17,12 +17,12 @@ import { PortalValidator } from './portal-validator';
 
 export class ValidationService {
   private textValidator: TextValidator;
-  private cvValidator: CVValidator;
+  private cvValidator: any;
   private portalValidator: PortalValidator;
 
   constructor() {
     this.textValidator = new TextValidator();
-    this.cvValidator = new CVValidator();
+    this.cvValidator = CVValidator;
     this.portalValidator = new PortalValidator();
   }
 
@@ -41,8 +41,8 @@ export class ValidationService {
     }
 
     // Validate work experience
-    if (cv.workExperience) {
-      const expResult = this.cvValidator.validateExperience(cv.workExperience);
+    if (cv.experience) {
+      const expResult = this.cvValidator.validateExperience(cv.experience);
       allErrors.push(...expResult.errors);
       sanitizedCV.workExperience = expResult.sanitizedData;
     }

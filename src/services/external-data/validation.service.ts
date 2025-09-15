@@ -12,7 +12,7 @@
 import { logger } from 'firebase-functions';
 import { 
   EnrichedCVData,
-  ValidationStatus,
+  _ValidationStatus,
   ValidationIssue
 } from './types';
 

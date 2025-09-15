@@ -14,7 +14,7 @@ export class LLMVerificationService {
   /**
    * Verify LLM response quality
    */
-  async verifyResponse(response: string, prompt: string): Promise<VerificationResult> {
+  async verifyResponse(_response: string, _prompt: string): Promise<VerificationResult> {
     // TODO: Implement proper LLM response verification
     return {
       isValid: true,
@@ -27,7 +27,7 @@ export class LLMVerificationService {
   /**
    * Verify content appropriateness
    */
-  async verifyContent(content: string): Promise<VerificationResult> {
+  async verifyContent(_content: string): Promise<VerificationResult> {
     // TODO: Implement content verification
     return {
       isValid: true,

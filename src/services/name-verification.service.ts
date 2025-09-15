@@ -107,7 +107,7 @@ export class NameVerificationService {
       let bestMatch: NameVerificationResult = {
         isMatch: false,
         confidence: 0,
-        extractedName: extractedResult.extractedNames[0],
+        extractedName: extractedResult.extractedNames[0] || 'Unknown',
         accountName: accountData.fullName,
         matchType: 'none',
         shouldFlag: true
@@ -210,10 +210,10 @@ export class NameVerificationService {
       const localPart = match[1];
       
       // Skip generic email prefixes
-      if (this.isGenericEmail(localPart)) continue;
+      if (localPart && this.isGenericEmail(localPart)) continue;
       
       // Extract name from email local part
-      const nameFromEmail = this.extractNameFromEmailLocal(localPart);
+      const nameFromEmail = localPart ? this.extractNameFromEmailLocal(localPart) : null;
       if (nameFromEmail && this.isValidName(nameFromEmail)) {
         names.push(nameFromEmail);
       }
@@ -262,7 +262,7 @@ export class NameVerificationService {
       const word1 = words[i];
       const word2 = words[i + 1];
 
-      if (this.isCapitalizedWord(word1) && this.isCapitalizedWord(word2)) {
+      if (word1 && word2 && this.isCapitalizedWord(word1) && this.isCapitalizedWord(word2)) {
         const candidate = `${word1} ${word2}`;
         if (this.isValidName(candidate) && !this.isCommonPhrase(candidate)) {
           names.push(candidate);
@@ -385,7 +385,7 @@ export class NameVerificationService {
       }
     }
     
-    return matrix[str2.length][str1.length];
+    return matrix[str2.length]?.[str1.length] || 0;
   }
 
   /**
@@ -445,8 +445,8 @@ export class NameVerificationService {
    * Check if word is capitalized
    */
   private isCapitalizedWord(word: string): boolean {
-    return word.length > 1 && 
-           word[0] === word[0].toUpperCase() &&
+    return word && word.length > 1 && 
+           word[0] && word[0] === word[0].toUpperCase() &&
            /^[A-Za-z]+$/.test(word);
   }
 

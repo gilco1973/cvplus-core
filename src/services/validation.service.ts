@@ -152,6 +152,7 @@ export class ValidationService {
     severity: 'error' | 'warning' = 'error'
   ): ValidationError {
     return {
+      name: 'ValidationError',
       field,
       code,
       message,

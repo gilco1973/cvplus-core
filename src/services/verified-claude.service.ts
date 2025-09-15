@@ -48,7 +48,7 @@ export interface VerificationStatus {
 }
 
 export class VerifiedClaudeService {
-  private anthropic: Anthropic;
+  private anthropic: Anthropic | null = null;
   private verificationService: LLMVerificationService;
   private config: VerifiedClaudeConfig;
 
@@ -71,6 +71,7 @@ export class VerifiedClaudeService {
         apiKey: process.env.ANTHROPIC_API_KEY,
       });
     } else {
+      this.anthropic = null;
       console.warn('VerifiedClaudeService: ANTHROPIC_API_KEY not configured - verification service will be limited');
     }
 
@@ -167,7 +168,7 @@ export class VerifiedClaudeService {
           service: 'VerifiedClaudeService',
           context: options.context || 'CV processing',
         };
-        const verificationResult = await this.verificationService.verifyResponse(verificationRequest);
+        const verificationResult = await this.verificationService.verifyResponse(verificationRequest, content);
         result.metadata = { ...result.metadata, verification: verificationResult };
       }
 

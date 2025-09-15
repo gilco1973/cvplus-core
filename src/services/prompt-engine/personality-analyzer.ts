@@ -26,15 +26,15 @@ export class PersonalityAnalyzer {
       communicationStyle,
       leadershipType,
       technicalDepth,
-      industryFocus: cv.professionalSummary?.industry || 'general',
+      industryFocus: (cv.personalInfo as any)?.industry || 'general',
       careerStage,
       personalityTraits
     };
   }
 
   private determineCommunicationStyle(cv: ParsedCV): PersonalityProfile['communicationStyle'] {
-    const summary = cv.professionalSummary?.summary || '';
-    const achievements = cv.workExperience?.map(exp => exp.achievements).flat() || [];
+    const summary = cv.summary || '';
+    const achievements = cv.experience?.map((exp: any) => exp.achievements).flat() || [];
     const allText = summary + ' ' + achievements.join(' ');
 
     // Analyze language patterns
@@ -54,8 +54,8 @@ export class PersonalityAnalyzer {
   }
 
   private determineLeadershipType(cv: ParsedCV): PersonalityProfile['leadershipType'] {
-    const titles = cv.workExperience?.map(exp => exp.title.toLowerCase()) || [];
-    const responsibilities = cv.workExperience?.map(exp => exp.responsibilities).flat() || [];
+    const titles = cv.experience?.map((exp: any) => exp.position?.toLowerCase() || '') || [];
+    const responsibilities = cv.experience?.map((exp: any) => exp.description || []).flat() || [];
     const allText = titles.join(' ') + ' ' + responsibilities.join(' ');
 
     const visionaryIndicators = ['strategy', 'vision', 'innovation', 'transformation'];
@@ -74,18 +74,18 @@ export class PersonalityAnalyzer {
   }
 
   private determineTechnicalDepth(cv: ParsedCV): PersonalityProfile['technicalDepth'] {
-    const skills = cv.skills?.technical || [];
-    const experience = cv.workExperience || [];
+    const skills = Array.isArray(cv.skills) ? cv.skills : [];
+    const experience = cv.experience || [];
 
     // Count technical skills depth
     const skillCount = skills.length;
-    const hasArchitectureExperience = experience.some(exp =>
-      exp.title.toLowerCase().includes('architect') ||
-      exp.responsibilities.some(resp => resp.toLowerCase().includes('architecture'))
+    const hasArchitectureExperience = experience.some((exp: any) =>
+      exp.position?.toLowerCase().includes('architect') ||
+      (exp.description && exp.description.toLowerCase().includes('architecture'))
     );
-    const hasManagementExperience = experience.some(exp =>
-      exp.title.toLowerCase().includes('manager') ||
-      exp.title.toLowerCase().includes('director')
+    const hasManagementExperience = experience.some((exp: any) =>
+      exp.position?.toLowerCase().includes('manager') ||
+      exp.position?.toLowerCase().includes('director')
     );
 
     if (hasArchitectureExperience) return 'architect';
@@ -96,9 +96,9 @@ export class PersonalityAnalyzer {
 
   private determineCareerStage(cv: ParsedCV): PersonalityProfile['careerStage'] {
     const totalYears = this.calculateTotalExperience(cv);
-    const hasExecutiveTitle = cv.workExperience?.some(exp =>
+    const hasExecutiveTitle = cv.experience?.some((exp: any) =>
       ['ceo', 'cto', 'vp', 'president', 'director'].some(title =>
-        exp.title.toLowerCase().includes(title)
+        exp.position?.toLowerCase().includes(title)
       )
     ) || false;
 
@@ -110,8 +110,8 @@ export class PersonalityAnalyzer {
 
   private extractPersonalityTraits(cv: ParsedCV): string[] {
     const traits: string[] = [];
-    const summary = cv.professionalSummary?.summary || '';
-    const achievements = cv.workExperience?.map(exp => exp.achievements).flat() || [];
+    const summary = cv.summary || '';
+    const achievements = cv.experience?.map((exp: any) => exp.achievements || []).flat() || [];
     const allText = summary + ' ' + achievements.join(' ');
 
     // Define trait patterns
@@ -134,10 +134,10 @@ export class PersonalityAnalyzer {
   }
 
   private calculateTotalExperience(cv: ParsedCV): number {
-    if (!cv.workExperience) return 0;
+    if (!cv.experience) return 0;
 
     let totalYears = 0;
-    for (const exp of cv.workExperience) {
+    for (const exp of cv.experience) {
       if (exp.duration) {
         totalYears += this.parseDurationToYears(exp.duration);
       }
@@ -163,7 +163,7 @@ export class PersonalityAnalyzer {
       // Assume format like "2020-2023" or "Jan 2020 - Dec 2022"
       if (numbers.length >= 2) {
         const startYear = parseInt(numbers[0]);
-        const endYear = parseInt(numbers[numbers.length - 1]);
+        const endYear = parseInt(numbers[numbers.length - 1] || '0');
         years = endYear - startYear;
       }
     }
@@ -180,9 +180,15 @@ export class PersonalityAnalyzer {
   }
 
   private getHighestScore(scores: Record<string, number>): string {
-    return Object.entries(scores).reduce((highest, [key, value]) =>
-      value > scores[highest] ? key : highest,
-      Object.keys(scores)[0]
-    );
+    const keys = Object.keys(scores);
+    if (keys.length === 0) return '';
+    
+    let highest = keys[0];
+    for (const [key, value] of Object.entries(scores)) {
+      if (highest && value > (scores[highest] || 0)) {
+        highest = key;
+      }
+    }
+    return highest || '';
   }
 }

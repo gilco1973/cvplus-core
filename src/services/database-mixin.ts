@@ -117,7 +117,7 @@ export class DatabaseMixin {
         docRef = db.collection(collection).doc();
       }
 
-      await docRef.set(documentData);
+      await docRef.set(documentData as any);
       
       this.logger.debug('Document created', { 
         collection, 

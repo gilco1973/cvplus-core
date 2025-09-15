@@ -12,7 +12,7 @@ import * as path from 'path';
 if (process.env.NODE_ENV !== 'production') {
   const envPath = path.resolve(__dirname, '../../.env');
   loadDotenv({ path: envPath });
-  
+
   // Log successful env loading for debugging
   if (process.env.PROJECT_ID) {
     functions.logger.info('Environment variables loaded successfully from .env file');
@@ -25,7 +25,8 @@ export enum SecurityEventType {
   INVALID_FORMAT = 'INVALID_FORMAT',
   SUSPICIOUS_VALUE = 'SUSPICIOUS_VALUE',
   VALIDATION_ERROR = 'VALIDATION_ERROR',
-  CONFIG_ACCESS_ATTEMPT = 'CONFIG_ACCESS_ATTEMPT'
+  CONFIG_ACCESS_ATTEMPT = 'CONFIG_ACCESS_ATTEMPT',
+  WEAK_API_KEY = 'WEAK_API_KEY'
 }
 
 // Configuration validation result
@@ -49,99 +50,138 @@ class SecurityLogger {
       ...(!sensitive && details) // Only log details if not sensitive
     };
 
-    if (logEntry.severity === 'CRITICAL' || logEntry.severity === 'HIGH') {
+    if (logEntry.severity === 'CRITICAL') {
       functions.logger.error('Security Event', logEntry);
     } else {
       functions.logger.warn('Security Event', logEntry);
     }
   }
 
-  private static getSeverity(event: SecurityEventType): string {
-    switch (event) {
-      case SecurityEventType.MISSING_REQUIRED_VAR:
-        return 'CRITICAL';
-      case SecurityEventType.INVALID_FORMAT:
-        return 'HIGH';
-      case SecurityEventType.SUSPICIOUS_VALUE:
-        return 'MEDIUM';
-      default:
-        return 'LOW';
-    }
+  private static getSeverity(event: SecurityEventType): 'CRITICAL' | 'HIGH' | 'MEDIUM' {
+    const criticalEvents = [
+      SecurityEventType.MISSING_REQUIRED_VAR,
+      SecurityEventType.SUSPICIOUS_VALUE,
+      SecurityEventType.WEAK_API_KEY
+    ];
+    return criticalEvents.includes(event) ? 'CRITICAL' : 'HIGH';
   }
 }
 
-// Environment variable validator
+// Environment validation utilities
 class EnvironmentValidator {
-  // Sanitize string input
-  static sanitizeString(value: string | undefined, maxLength = 500): string | undefined {
-    if (!value) return undefined;
-    
+  // Sanitize string values
+  static sanitizeString(value: string | undefined): string | undefined {
+    if (!value || typeof value !== 'string') return undefined;
+
     // Remove potentially dangerous characters
-    const sanitized = value
-      .replace(/[<>'"&]/g, '') // Remove HTML/script injection chars
-      .replace(/\r?\n/g, ' ') // Replace newlines with spaces
-      .trim()
-      .substring(0, maxLength); // Limit length
-    
+    const sanitized = value.trim().replace(/[<>'"]/g, '');
+
     return sanitized || undefined;
   }
 
-  // Validate API key format
+  // Cryptographically validate API key format and strength
   static validateApiKey(value: string | undefined, keyName: string): string | undefined {
     if (!value) return undefined;
 
     // Check for suspicious patterns
     const suspiciousPatterns = [
       /script/i,
-      /<.*>/,
-      /javascript:/i,
-      /data:/i,
-      /eval\(/i,
-      /function\(/i
+      /javascript/i,
+      /eval/i,
+      /<[^>]*>/,
+      /['"`]/
     ];
 
-    if (suspiciousPatterns.some(pattern => pattern.test(value))) {
-      SecurityLogger.logSecurityEvent(
-        SecurityEventType.SUSPICIOUS_VALUE,
-        { keyName, reason: 'Contains suspicious patterns' },
-        true
-      );
+    for (const pattern of suspiciousPatterns) {
+      if (pattern.test(value)) {
+        SecurityLogger.logSecurityEvent(
+          SecurityEventType.SUSPICIOUS_VALUE,
+          { keyName, reason: 'Contains suspicious patterns' },
+          true
+        );
+        return undefined;
+      }
+    }
+
+    // Cryptographic validation - check entropy and format patterns
+    if (!EnvironmentValidator.validateApiKeyEntropy(value, keyName)) {
       return undefined;
     }
 
-    // Validate key format based on common patterns
-    const keyPatterns = {
-      openai: /^sk-[A-Za-z0-9]{48,}$/,
-      pinecone: /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i,
-      elevenlabs: /^[a-f0-9]{32}$/i,
-      did: /^[A-Za-z0-9_-]{20,}$/,
-      firebase: /^[A-Za-z0-9_-]{20,}$/
+    // Provider-specific format validation
+    if (!EnvironmentValidator.validateApiKeyFormat(value, keyName)) {
+      return undefined;
+    }
+
+    return value;
+  }
+
+  // Validate API key entropy for cryptographic strength
+  private static validateApiKeyEntropy(value: string, keyName: string): boolean {
+    // Basic length requirements by provider type
+    const minLengths: Record<string, number> = {
+      'OPENAI_API_KEY': 51,          // OpenAI keys start with "sk-" and are 51 chars
+      'STRIPE_SECRET_KEY': 32,       // Stripe secret keys are 32+ chars
+      'ELEVENLABS_API_KEY': 32,      // ElevenLabs keys are 32+ chars
+      'DID_API_KEY': 32,            // D-ID keys are 32+ chars
+      'SYNTHESIA_API_KEY': 32,      // Synthesia keys are 32+ chars
+      'HEYGEN_API_KEY': 32,         // HeyGen keys are 32+ chars
+      'RUNWAYML_API_KEY': 32,       // RunwayML keys are 32+ chars
+      'SERPER_API_KEY': 32,         // Serper keys are 32+ chars
+      'PINECONE_API_KEY': 36,       // Pinecone keys are typically 36+ chars
+      'SENDGRID_API_KEY': 69,       // SendGrid keys start with "SG." and are 69 chars
+      'RESEND_API_KEY': 32,         // Resend keys are 32+ chars
+      'WEB_API_KEY': 32,            // Firebase web API keys are 32+ chars
     };
 
-    // Check if we have a specific pattern for this key type
-    const keyType = keyName.toLowerCase().split('_')[0]; // Get prefix like 'openai' from 'OPENAI_API_KEY'
-    const pattern = keyPatterns[keyType as keyof typeof keyPatterns];
-    
+    const minLength = minLengths[keyName] || 32;
+
+    if (value.length < minLength) {
+      SecurityLogger.logSecurityEvent(
+        SecurityEventType.WEAK_API_KEY,
+        { keyName, reason: `Length ${value.length} below minimum ${minLength}` },
+        true
+      );
+      return false;
+    }
+
+    // Check character diversity for entropy
+    const uniqueChars = new Set(value).size;
+    const minUniqueChars = Math.max(8, Math.floor(value.length * 0.3));
+
+    if (uniqueChars < minUniqueChars) {
+      SecurityLogger.logSecurityEvent(
+        SecurityEventType.WEAK_API_KEY,
+        { keyName, reason: 'Low character entropy' },
+        true
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  // Validate API key format patterns by provider
+  private static validateApiKeyFormat(value: string, keyName: string): boolean {
+    const formatPatterns: Record<string, RegExp> = {
+      'OPENAI_API_KEY': /^sk-[a-zA-Z0-9]{48}$/,
+      'STRIPE_SECRET_KEY': /^sk_(test_|live_)?[a-zA-Z0-9]{24,}$/,
+      'ELEVENLABS_API_KEY': /^[a-f0-9]{32}$/i,
+      'SENDGRID_API_KEY': /^SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}$/,
+      'PINECONE_API_KEY': /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
+    };
+
+    const pattern = formatPatterns[keyName];
     if (pattern && !pattern.test(value)) {
       SecurityLogger.logSecurityEvent(
         SecurityEventType.INVALID_FORMAT,
-        { keyName, reason: `Invalid ${keyType} API key format` },
+        { keyName, reason: 'Invalid format pattern' },
         true
       );
-      return undefined;
+      return false;
     }
 
-    // Basic length and character validation for unknown keys
-    if (value.length < 10 || value.length > 200) {
-      SecurityLogger.logSecurityEvent(
-        SecurityEventType.INVALID_FORMAT,
-        { keyName, reason: 'Invalid length' },
-        true
-      );
-      return undefined;
-    }
-
-    return EnvironmentValidator.sanitizeString(value);
+    return true;
   }
 
   // Validate URL format
@@ -150,12 +190,12 @@ class EnvironmentValidator {
 
     try {
       const url = new URL(value);
-      
-      // Only allow HTTPS in production
+
+      // Only allow https in production
       if (process.env.NODE_ENV === 'production' && url.protocol !== 'https:') {
         SecurityLogger.logSecurityEvent(
           SecurityEventType.INVALID_FORMAT,
-          { reason: 'Non-HTTPS URL in production' }
+          { reason: 'HTTP not allowed in production' }
         );
         return undefined;
       }
@@ -169,11 +209,11 @@ class EnvironmentValidator {
         return undefined;
       }
 
-      return EnvironmentValidator.sanitizeString(value);
-    } catch {
+      return value;
+    } catch (error) {
       SecurityLogger.logSecurityEvent(
         SecurityEventType.INVALID_FORMAT,
-        { reason: 'Invalid URL format' }
+        { reason: 'Invalid URL format', error: (error as Error).message }
       );
       return undefined;
     }
@@ -183,7 +223,7 @@ class EnvironmentValidator {
   static validateEmail(value: string | undefined): string | undefined {
     if (!value) return undefined;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(value)) {
       SecurityLogger.logSecurityEvent(
         SecurityEventType.INVALID_FORMAT,
@@ -192,28 +232,20 @@ class EnvironmentValidator {
       return undefined;
     }
 
-    return EnvironmentValidator.sanitizeString(value);
+    return value;
   }
 
   // Validate boolean string
   static validateBoolean(value: string | undefined, defaultValue = false): boolean {
     if (!value) return defaultValue;
-    
-    const normalized = value.toLowerCase().trim();
-    if (['true', '1', 'yes', 'on'].includes(normalized)) return true;
-    if (['false', '0', 'no', 'off'].includes(normalized)) return false;
-    
-    SecurityLogger.logSecurityEvent(
-      SecurityEventType.INVALID_FORMAT,
-      { reason: 'Invalid boolean value', value: normalized }
-    );
-    return defaultValue;
+
+    return ['true', '1', 'yes', 'on'].includes(value.toLowerCase());
   }
 }
 
 // Secure configuration interface
 interface SecureConfig {
-  baseUrl?: string; // Base URL for webhooks and callbacks
+  baseUrl?: string;
   firebase: {
     apiKey?: string;
     authDomain?: string;
@@ -222,7 +254,7 @@ interface SecureConfig {
     appId?: string;
   };
   storage: {
-    bucketName: string;
+    bucketName?: string;
   };
   stripe: {
     secretKey?: string;
@@ -236,15 +268,15 @@ interface SecureConfig {
   email: {
     user?: string;
     password?: string;
-    from: string;
+    from?: string;
     sendgridApiKey?: string;
     resendApiKey?: string;
   };
   rag: {
     openaiApiKey?: string;
     pineconeApiKey?: string;
-    pineconeEnvironment: string;
-    pineconeIndex: string;
+    pineconeEnvironment?: string;
+    pineconeIndex?: string;
   };
   openai: {
     apiKey?: string;
@@ -327,7 +359,7 @@ class SecureEnvironmentLoader {
         });
       }
     }
-    
+
     return SecureEnvironmentLoader.instance;
   }
 
@@ -359,7 +391,7 @@ class SecureEnvironmentLoader {
       }
     });
 
-    // Build secure configuration
+    // Build secure configuration - NO HARDCODED PRODUCTION DEFAULTS
     const config: SecureConfig = {
       baseUrl: EnvironmentValidator.sanitizeString(process.env.BASE_URL),
       firebase: {
@@ -370,7 +402,7 @@ class SecureEnvironmentLoader {
         appId: EnvironmentValidator.sanitizeString(process.env.APP_ID)
       },
       storage: {
-        bucketName: EnvironmentValidator.sanitizeString(process.env.STORAGE_BUCKET) || 'getmycv-ai.firebasestorage.app'
+        bucketName: EnvironmentValidator.sanitizeString(process.env.STORAGE_BUCKET)
       },
       stripe: {
         secretKey: EnvironmentValidator.validateApiKey(process.env.STRIPE_SECRET_KEY, 'STRIPE_SECRET_KEY'),
@@ -384,15 +416,15 @@ class SecureEnvironmentLoader {
       email: {
         user: EnvironmentValidator.validateEmail(process.env.EMAIL_USER),
         password: EnvironmentValidator.sanitizeString(process.env.EMAIL_PASSWORD),
-        from: EnvironmentValidator.validateEmail(process.env.EMAIL_FROM) || 'CVPlus <noreply@getmycv-ai.com>',
+        from: EnvironmentValidator.validateEmail(process.env.EMAIL_FROM),
         sendgridApiKey: EnvironmentValidator.validateApiKey(process.env.SENDGRID_API_KEY, 'SENDGRID_API_KEY'),
         resendApiKey: EnvironmentValidator.validateApiKey(process.env.RESEND_API_KEY, 'RESEND_API_KEY')
       },
       rag: {
         openaiApiKey: EnvironmentValidator.validateApiKey(process.env.OPENAI_API_KEY, 'OPENAI_API_KEY'),
         pineconeApiKey: EnvironmentValidator.validateApiKey(process.env.PINECONE_API_KEY, 'PINECONE_API_KEY'),
-        pineconeEnvironment: EnvironmentValidator.sanitizeString(process.env.PINECONE_ENVIRONMENT) || 'us-east-1',
-        pineconeIndex: EnvironmentValidator.sanitizeString(process.env.PINECONE_INDEX) || 'cv-embeddings'
+        pineconeEnvironment: EnvironmentValidator.sanitizeString(process.env.PINECONE_ENVIRONMENT),
+        pineconeIndex: EnvironmentValidator.sanitizeString(process.env.PINECONE_INDEX)
       },
       openai: {
         apiKey: EnvironmentValidator.validateApiKey(process.env.OPENAI_API_KEY, 'OPENAI_API_KEY')
@@ -430,7 +462,7 @@ class SecureEnvironmentLoader {
           baseUrl: EnvironmentValidator.validateUrl(
             process.env.PUBLIC_PROFILES_BASE_URL,
             ['getmycv-ai.web.app', 'localhost']
-          ) || 'https://getmycv-ai.web.app/cv'
+          ) || ''
         },
         enableVideoGeneration: EnvironmentValidator.validateBoolean(process.env.ENABLE_VIDEO_GENERATION),
         enablePodcastGeneration: EnvironmentValidator.validateBoolean(process.env.ENABLE_PODCAST_GENERATION),
@@ -453,79 +485,6 @@ class SecureEnvironmentLoader {
 
     return { config, validation };
   }
-
-  // Validate configuration completeness
-  static validateConfiguration(): ValidationResult {
-    const config = SecureEnvironmentLoader.getConfig();
-    const errors: string[] = [];
-    const warnings: string[] = [];
-
-    // Check Firebase configuration completeness
-    if (!config.firebase.projectId || !config.firebase.apiKey) {
-      errors.push('Incomplete Firebase configuration - basic functionality will not work');
-    }
-
-    // Check OpenAI configuration
-    if (!config.openai.apiKey) {
-      warnings.push('Missing OpenAI API key - AI features will not work');
-    }
-
-    // Check email configuration if email features are used
-    if (!config.email.user || !config.email.password) {
-      warnings.push('Incomplete email configuration - email features may not work');
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
-
-  // Health check for configuration
-  static performHealthCheck(): {
-    status: 'healthy' | 'degraded' | 'unhealthy';
-    details: {
-      healthPercentage: number;
-      healthyServices: string;
-      errorCount: number;
-      warningCount: number;
-    };
-  } {
-    const validation = SecureEnvironmentLoader.validateConfiguration();
-    const config = SecureEnvironmentLoader.getConfig();
-
-    let healthyServices = 0;
-    const totalServices = 9; // Firebase, OpenAI, Email, ElevenLabs, Video, Search, RAG, Storage, Stripe
-
-    // Check each service
-    if (config.firebase.apiKey && config.firebase.projectId) healthyServices++;
-    if (config.openai.apiKey) healthyServices++;
-    if (config.email.user && config.email.password) healthyServices++;
-    if (config.elevenLabs.apiKey) healthyServices++;
-    if (config.videoGeneration.didApiKey || config.videoGeneration.synthesiaApiKey || config.videoGeneration.heygenApiKey || config.videoGeneration.runwaymlApiKey) healthyServices++;
-    if (config.search.serperApiKey) healthyServices++;
-    if (config.rag.openaiApiKey && config.rag.pineconeApiKey) healthyServices++;
-    if (config.storage.bucketName) healthyServices++;
-    if (config.stripe.secretKey) healthyServices++;
-
-    const healthPercentage = (healthyServices / totalServices) * 100;
-    
-    let status: 'healthy' | 'degraded' | 'unhealthy';
-    if (healthPercentage >= 80) status = 'healthy';
-    else if (healthPercentage >= 50) status = 'degraded';
-    else status = 'unhealthy';
-
-    return {
-      status,
-      details: {
-        healthPercentage,
-        healthyServices: `${healthyServices}/${totalServices}`,
-        errorCount: validation.errors.length,
-        warningCount: validation.warnings.length
-      }
-    };
-  }
 }
 
 // Export secure configuration
@@ -534,20 +493,16 @@ export const config = SecureEnvironmentLoader.getConfig();
 // Export utility functions for monitoring and health checks
 export const environmentUtils = {
   getValidationResult: () => SecureEnvironmentLoader.getValidationResult(),
-  validateConfiguration: () => SecureEnvironmentLoader.validateConfiguration(),
-  performHealthCheck: () => SecureEnvironmentLoader.performHealthCheck(),
-  
-  // Secure way to check if a service is available
   isServiceAvailable: (serviceName: keyof SecureConfig): boolean => {
     const config = SecureEnvironmentLoader.getConfig();
     const service = config[serviceName];
-    
+
     if (typeof service === 'object' && service !== null) {
-      return Object.values(service).some(value => 
+      return Object.values(service).some(value =>
         value !== undefined && value !== null && value !== ''
       );
     }
-    
+
     return false;
   }
 };

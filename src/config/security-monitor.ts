@@ -57,7 +57,8 @@ class SecurityMonitor {
     [SecurityEventType.INVALID_FORMAT]: { threshold: 5, window: 10 }, // 5 in 10 minutes
     [SecurityEventType.SUSPICIOUS_VALUE]: { threshold: 3, window: 5 }, // 3 in 5 minutes
     [SecurityEventType.VALIDATION_ERROR]: { threshold: 10, window: 15 }, // 10 in 15 minutes
-    [SecurityEventType.CONFIG_ACCESS_ATTEMPT]: { threshold: 100, window: 60 } // 100 in 60 minutes
+    [SecurityEventType.CONFIG_ACCESS_ATTEMPT]: { threshold: 100, window: 60 }, // 100 in 60 minutes
+    [SecurityEventType.WEAK_API_KEY]: { threshold: 1, window: 1 } // 1 in 1 minute - immediate alert
   };
 
   private constructor() {

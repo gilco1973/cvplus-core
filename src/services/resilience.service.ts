@@ -196,7 +196,7 @@ class RateLimiter {
 
     if (this.requests.length >= this.config.maxRequests) {
       const oldestRequest = this.requests[0];
-      const waitTime = this.config.windowMs - (now - oldestRequest);
+      const waitTime = this.config.windowMs - (now - (oldestRequest || now));
       
       if (waitTime > 0) {
         logger.info('[RATE-LIMITER] Rate limit exceeded, waiting', { waitTimeMs: waitTime });

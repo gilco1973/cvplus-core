@@ -208,7 +208,7 @@ export class IndustrySpecializationService {
     return score * 100; // Convert to 0-100 scale
   }
 
-  private getSkillsArray(skills: string[] | { [key: string]: string[]; technical?: string[]; soft?: string[]; languages?: string[]; tools?: string[]; frontend?: string[]; backend?: string[]; databases?: string[]; cloud?: string[]; competencies?: string[]; frameworks?: string[]; expertise?: string[]; } | undefined): string[] {
+  private getSkillsArray(skills: string[] | { [key: string]: string[] | undefined; technical?: string[]; soft?: string[]; languages?: string[]; tools?: string[]; frontend?: string[]; backend?: string[]; databases?: string[]; cloud?: string[]; competencies?: string[]; frameworks?: string[]; expertise?: string[]; } | undefined): string[] {
     if (!skills) return [];
     if (Array.isArray(skills)) return skills;
     
@@ -280,7 +280,7 @@ export class IndustrySpecializationService {
 
     let maxScore = 0;
 
-    education.forEach(edu => {
+    education.forEach((edu: any) => {
       const degreeRelevance = this.calculateEducationRelevance(edu, model);
       const prestige = this.calculateInstitutionPrestige(edu.institution);
       const score = (degreeRelevance * 0.8) + (prestige * 0.2);
@@ -297,7 +297,7 @@ export class IndustrySpecializationService {
     let score = 0;
     let count = 0;
 
-    certifications.forEach(cert => {
+    certifications.forEach((cert: any) => {
       const relevance = this.calculateCertificationRelevance(cert, model);
       if (relevance > 0.3) { // Only count relevant certifications
         score += relevance;
@@ -385,7 +385,7 @@ export class IndustrySpecializationService {
   }
 
   // Helper methods for analysis
-  private calculateExperienceYears(exp: any): number {
+  private calculateExperienceYears(_exp: any): number {
     // Simple implementation - in real scenario, parse dates properly
     return 2; // Default 2 years per role
   }
@@ -693,12 +693,12 @@ export class IndustrySpecializationService {
     };
   }
 
-  private getRecommendedCareerPath(cv: ParsedCV, model: IndustryModel): CareerPath {
+  private getRecommendedCareerPath(_cv: ParsedCV, _model: IndustryModel): CareerPath {
     // Return a basic career path
     return {
-      pathId: `${model.industry?.toLowerCase()}_path`,
-      pathName: `${model.industry} Career Path`,
-      industryId: model.industry || 'Unknown',
+      pathId: `${_model.industry?.toLowerCase()}_path`,
+      pathName: `${_model.industry} Career Path`,
+      industryId: _model.industry || 'Unknown',
       levels: [],
       averageProgressionTime: 2,
       entryRequirements: {
