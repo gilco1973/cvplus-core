@@ -71,6 +71,20 @@ export { resilienceService } from './services/resilience.service';
 export type { EnhancedServiceConfig } from './services/enhanced-base-service';
 
 // ============================================================================
+// SECURITY SERVICES
+// ============================================================================
+
+// Export consolidated security services for platform-wide use
+export {
+  SecureRateLimitGuard,
+  secureRateLimitGuard
+} from './services/security';
+export type {
+  RateLimitResult,
+  RateLimitConfig
+} from './services/security';
+
+// ============================================================================
 // UTILITIES
 // ============================================================================
 

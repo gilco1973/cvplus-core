@@ -34,6 +34,9 @@ export type { ApiClientOptions, ApiRequestOptions, ApiResponse, ApiError, RateLi
 // Cache services (re-exports from cache index)
 export * from './cache';
 
+// Security services (consolidated platform-wide security)
+export * from './security';
+
 // MIGRATION PHASE 4B: Domain Services Staging
 // The following services have been COPIED to staging areas for migration preparation:
 //
