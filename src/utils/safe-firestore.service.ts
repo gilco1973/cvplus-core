@@ -467,7 +467,9 @@ export class SafeFirestoreService {
       return result;
       
     } catch (error: any) {
-      const _duration = Date.now() - startTime;
+      const duration = Date.now() - startTime;
+      // Log error with duration for debugging purposes
+      console.error('Firestore operation failed', { duration, error });
       throw error;
     }
   }

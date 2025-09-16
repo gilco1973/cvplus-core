@@ -164,25 +164,8 @@ export interface ApiUploadResponse extends ApiSuccessResponse<UploadedFile> {
   data: UploadedFile;
 }
 
-export interface MultimediaGenerationResult {
-  id: string;
-  type: 'image' | 'audio' | 'video' | 'document';
-  url: string;
-  thumbnailUrl?: string;
-  metadata: {
-    duration?: number;
-    dimensions?: { width: number; height: number };
-    format: string;
-    size: number;
-    quality?: string;
-  };
-  generatedAt: number;
-  expiresAt?: number;
-}
-
-export interface ApiMultimediaResponse extends ApiSuccessResponse<MultimediaGenerationResult> {
-  data: MultimediaGenerationResult;
-}
+// Multimedia types moved to @cvplus/multimedia
+// Import from multimedia module for backward compatibility
 
 // ============================================================================
 // ANALYTICS AND METRICS RESPONSES

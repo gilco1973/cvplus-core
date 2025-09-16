@@ -34,7 +34,7 @@ export class EnhancedDatabaseService {
       for (const [featureId, featureData] of Object.entries(features)) {
         updates[`enhancedFeatures.${featureId}`] = {
           ...(typeof featureData === 'object' && featureData !== null ? featureData : {}),
-          processedAt: new Date()
+          processedAt: Date.now()
         };
       }
     }
@@ -53,6 +53,7 @@ export class EnhancedDatabaseService {
       jobId,
       userId,
       slug,
+      title: 'Professional CV',
       parsedCV: {} as ParsedCV, // Will be populated with PII-masked data
       features: {},
       template: 'modern',
@@ -66,8 +67,8 @@ export class EnhancedDatabaseService {
         platforms: ['linkedin', 'twitter', 'facebook'],
         customMessage: 'Check out my professional CV'
       },
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       analytics: {
         totalViews: 0,
         uniqueVisitors: 0,
@@ -75,7 +76,7 @@ export class EnhancedDatabaseService {
         bounceRate: 0,
         featureUsage: {},
         conversionRate: 0,
-        lastAnalyticsUpdate: new Date(),
+        lastAnalyticsUpdate: Date.now(),
         views: 0,
         qrScans: 0,
         contactSubmissions: 0,
@@ -134,7 +135,7 @@ export class EnhancedDatabaseService {
     
     const interactionData: FeatureInteraction = {
       ...interaction,
-      timestamp: new Date()
+      timestamp: Date.now()
     };
     
     await this.db.runTransaction(async (transaction) => {
@@ -144,26 +145,31 @@ export class EnhancedDatabaseService {
         // Create new analytics document
         const analytics: FeatureAnalytics = {
           jobId,
-          featureId,
+          feature: featureId,
+          timestamp: Date.now(),
+          value: interactionData,
           interactions: [interactionData],
           aggregates: {
             totalInteractions: 1,
             uniqueUsers: 1,
             averageEngagementTime: interactionData.duration || 0,
-            lastInteraction: new Date()
+            lastInteraction: Date.now()
           }
         };
         transaction.set(analyticsRef, analytics);
       } else {
         // Update existing analytics
         const data = doc.data() as FeatureAnalytics;
+        const currentInteractions = data.interactions || [];
+        const currentAggregates = data.aggregates || { totalInteractions: 0, averageEngagementTime: 0 };
+
         transaction.update(analyticsRef, {
-          interactions: [...data.interactions, interactionData],
-          'aggregates.totalInteractions': data.aggregates.totalInteractions + 1,
-          'aggregates.lastInteraction': new Date(),
-          'aggregates.averageEngagementTime': 
-            ((data.aggregates.averageEngagementTime * data.aggregates.totalInteractions) + 
-            (interactionData.duration || 0)) / (data.aggregates.totalInteractions + 1)
+          interactions: [...currentInteractions, interactionData],
+          'aggregates.totalInteractions': currentAggregates.totalInteractions + 1,
+          'aggregates.lastInteraction': Date.now(),
+          'aggregates.averageEngagementTime':
+            ((currentAggregates.averageEngagementTime * currentAggregates.totalInteractions) +
+            (interactionData.duration || 0)) / (currentAggregates.totalInteractions + 1)
         });
       }
     });
@@ -188,8 +194,8 @@ export class EnhancedDatabaseService {
       ...session,
       sessionId,
       messages: [],
-      createdAt: new Date(),
-      lastActivity: new Date()
+      createdAt: Date.now(),
+      lastActivity: Date.now()
     };
     
     await sessionRef.set(sessionData);
@@ -210,7 +216,7 @@ export class EnhancedDatabaseService {
     
     await sessionRef.update({
       messages: admin.firestore.FieldValue.arrayUnion(message),
-      lastActivity: new Date()
+      lastActivity: Date.now()
     });
     
     // Get session to update job analytics
@@ -235,16 +241,18 @@ export class EnhancedDatabaseService {
     const data: ContactFormSubmission = {
       ...submission,
       id,
-      timestamp: new Date(),
+      timestamp: Date.now(),
       status: 'pending'
     };
     
     await submissionRef.set(data);
     
     // Update job analytics
-    await this.incrementJobAnalytics(submission.jobId, {
-      'analytics.contactFormSubmissions': 1
-    });
+    if (submission.jobId) {
+      await this.incrementJobAnalytics(submission.jobId, {
+        'analytics.contactFormSubmissions': 1
+      });
+    }
     
     return id;
   }
@@ -258,15 +266,17 @@ export class EnhancedDatabaseService {
     const scanData: QRCodeScan = {
       ...scan,
       scanId: scanRef.id,
-      timestamp: new Date()
+      timestamp: Date.now()
     };
     
     await scanRef.set(scanData);
     
     // Update job analytics
-    await this.incrementJobAnalytics(scan.jobId, {
-      'analytics.qrCodeScans': 1
-    });
+    if (scan.jobId) {
+      await this.incrementJobAnalytics(scan.jobId, {
+        'analytics.qrCodeScans': 1
+      });
+    }
   }
 
   /**

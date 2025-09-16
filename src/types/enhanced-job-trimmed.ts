@@ -7,10 +7,18 @@
 
 import { Job } from './index';
 import { UserRAGProfile } from './enhanced-rag';
-// MIGRATED: FeatureInteraction moved to @cvplus/analytics
-// import { FeatureInteraction } from './enhanced-analytics';
-import type { FeatureInteraction } from '@cvplus/analytics';
-import { ATSOptimizationResult } from './enhanced-ats';
+// ARCHITECTURAL VIOLATION FIXED: Core cannot import from analytics (Layer 2)
+// FeatureInteraction type should be defined in core or imported by consumers
+// import type { FeatureInteraction } from '@cvplus/analytics';
+
+// Temporary inline definition - consumers should import from @cvplus/analytics
+interface FeatureInteraction {
+  id: string;
+  type: string;
+  timestamp: number;
+  data?: any;
+}
+import type { ATSOptimization } from './enhanced-ats';
 
 /**
  * Enhanced Job interface with all new features
@@ -75,7 +83,7 @@ export interface EnhancedJob extends Job {
   ragProfile?: UserRAGProfile;
   
   /** ATS optimization data */
-  atsOptimization?: ATSOptimizationResult;
+  atsOptimization?: ATSOptimization;
   
   /** Feature interaction tracking */
   featureInteractions?: FeatureInteraction[];

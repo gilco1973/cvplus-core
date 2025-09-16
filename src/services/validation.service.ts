@@ -44,8 +44,8 @@ export class ValidationService {
    * @param options Validation options
    * @returns Validation result with errors and sanitized data
    */
-  validateCV(cv: ParsedCV, options: ValidationOptions = {}): ValidationResult {
-    return this.modularService.validateCV(cv, options);
+  validateCV(cv: ParsedCV, _options: ValidationOptions = {}): ValidationResult {
+    return this.modularService.validateCV(cv);
   }
 
   /**
@@ -55,8 +55,8 @@ export class ValidationService {
    * @param options Validation options
    * @returns Validation result with errors and sanitized data
    */
-  validatePortalConfig(config: PortalConfig, options: ValidationOptions = {}): ValidationResult {
-    return this.modularService.validatePortalConfig(config, options);
+  validatePortalConfig(config: PortalConfig, _options: ValidationOptions = {}): ValidationResult {
+    return this.modularService.validatePortalConfig(config);
   }
 
   /**
@@ -67,8 +67,8 @@ export class ValidationService {
    * @param maxLength Maximum allowed length
    * @returns Validation result
    */
-  validateText(text: string, fieldName: string, maxLength: number = 1000): ValidationResult {
-    return this.modularService.validateText(text, fieldName, maxLength);
+  validateText(text: string, _fieldName: string, _maxLength: number = 1000): ValidationResult {
+    return this.modularService.validateText(text);
   }
 
   /**
@@ -88,8 +88,8 @@ export class ValidationService {
    * @param fieldName Field name for error reporting
    * @returns Validation result
    */
-  validateUrl(url: string, fieldName: string = 'url'): ValidationResult {
-    return this.modularService.validateUrl(url, fieldName);
+  validateUrl(url: string, _fieldName: string = 'url'): ValidationResult {
+    return this.modularService.validateUrl(url);
   }
 
   /**
@@ -99,8 +99,8 @@ export class ValidationService {
    * @param fieldName Field name for error reporting
    * @returns Validation result
    */
-  validateDate(date: string, fieldName: string = 'date'): ValidationResult {
-    return this.modularService.validateDate(date, fieldName);
+  validateDate(date: string, _fieldName: string = 'date'): ValidationResult {
+    return this.modularService.validateDate(date);
   }
 
   // Utility methods for backward compatibility
@@ -122,7 +122,7 @@ export class ValidationService {
    * @returns Array of error messages
    */
   getErrorMessages(result: ValidationResult): string[] {
-    return result.errors.map(error => error.message);
+    return result.errors.map((error: ValidationError) => error.message);
   }
 
   /**
@@ -133,7 +133,7 @@ export class ValidationService {
    * @returns Array of errors with specified severity
    */
   getErrorsBySeverity(result: ValidationResult, severity: 'error' | 'warning'): ValidationError[] {
-    return result.errors.filter(error => error.severity === severity);
+    return result.errors.filter((error: ValidationError) => (error as any).severity === severity);
   }
 
   /**
@@ -147,17 +147,15 @@ export class ValidationService {
    */
   createError(
     field: string,
-    code: string,
+    code: ValidationErrorCode,
     message: string,
-    severity: 'error' | 'warning' = 'error'
+    _severity: 'error' | 'warning' = 'error'
   ): ValidationError {
     return {
-      name: 'ValidationError',
       field,
       code,
-      message,
-      severity
-    };
+      message
+    } as ValidationError & { severity: 'error' | 'warning' };
   }
 }
 

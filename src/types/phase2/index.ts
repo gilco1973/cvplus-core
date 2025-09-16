@@ -20,12 +20,22 @@ export type {
   OutcomeEvent 
 } from '../user-outcomes';
 
-// Analytics Types - MIGRATED TO @cvplus/analytics
-// export type {
-//   AnalyticsEvent,
-//   AnalyticsMetrics,
-//   AnalyticsTypes
-// } from '../analytics';
+// Analytics Types - Temporary local definitions for compilation
+export interface AnalyticsEvent {
+  id: string;
+  type: string;
+  timestamp: Date;
+  data: Record<string, any>;
+}
+
+export interface AnalyticsMetrics {
+  events: AnalyticsEvent[];
+  aggregations: Record<string, number>;
+}
+
+export type AnalyticsTypes = 'user_action' | 'system_event' | 'performance_metric';
+
+export type AllAnalyticsTypes = AnalyticsTypes;
 
 // Industry Specialization Types
 export type { 

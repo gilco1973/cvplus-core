@@ -308,7 +308,7 @@ export class EnhancedErrorHandler {
    */
   private static async logError(processedError: ProcessedError): Promise<void> {
     const logLevel = this.getLogLevel(processedError.metadata.severity);
-    const _logData = {
+    const logData = {
       errorId: processedError.errorId,
       function: processedError.context.functionName,
       category: processedError.metadata.category,
@@ -322,12 +322,16 @@ export class EnhancedErrorHandler {
 
     switch (logLevel) {
       case 'error':
+        console.error('Enhanced Error Handler', logData);
         break;
       case 'warn':
+        console.warn('Enhanced Error Handler', logData);
         break;
       case 'info':
+        console.info('Enhanced Error Handler', logData);
         break;
       default:
+        console.log('Enhanced Error Handler', logData);
     }
   }
 

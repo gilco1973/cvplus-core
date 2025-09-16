@@ -252,7 +252,7 @@ export class ResilienceService {
       ...config
     };
 
-    let lastError: Error;
+    let lastError: Error = new Error('No retry attempts were made');
     
     for (let attempt = 1; attempt <= retryConfig.maxAttempts; attempt++) {
       try {

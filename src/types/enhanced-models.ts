@@ -9,12 +9,7 @@
  */
 
 // Core types - re-export for minimal builds
-import type { ParsedCV } from './index';
-export type { ParsedCV } from './index';
-
-// Use the imported type to avoid unused warning
-const _typeCheck: ParsedCV | undefined = undefined;
-void _typeCheck;
+export type { ParsedCV } from './job';
 
 // Import and re-export modular types
 export type {
@@ -27,7 +22,7 @@ export type {
   SkillsVisualization,
   SkillCategory,
   LanguageSkill,
-  Certification
+  JobCertification
 } from './enhanced-job-trimmed';
 
 // TODO: Create enhanced-skills.ts file or move FlexibleSkillsFormat to appropriate file
@@ -35,14 +30,70 @@ export type {
 //   FlexibleSkillsFormat
 // } from './enhanced-skills';
 
-export type {
-  PublicCVProfile,
-  PublicProfileAnalytics,
-  FeatureAnalytics,
-  FeatureInteraction,
-  ContactFormSubmission,
-  QRCodeScan
-} from '@cvplus/analytics';
+// ARCHITECTURAL VIOLATION FIXED: Core cannot re-export from analytics (Layer 2)
+// These types should be imported directly from @cvplus/analytics by consumers
+// For now, providing minimal interface definitions to avoid build errors
+
+// Minimal analytics types for core module (consumers should use @cvplus/analytics)
+export interface PublicCVProfile {
+  id: string;
+  userId: string;
+  slug: string;
+  title: string;
+  description?: string;
+  isPublic: boolean;
+  createdAt: number;
+  updatedAt: number;
+  data?: any;
+  jobId?: string;
+  parsedCV?: any;
+  features?: any;
+  template?: string;
+  allowContactForm?: boolean;
+  showAnalytics?: boolean;
+  qrCodeUrl?: string;
+  publicUrl?: string;
+  socialSharing?: any;
+  analytics?: any;
+}
+
+export interface FeatureAnalytics {
+  feature: string;
+  timestamp: number;
+  value: any;
+  metadata?: Record<string, any>;
+  jobId?: string;
+  interactions?: any[];
+  aggregates?: Record<string, any>;
+}
+
+export interface FeatureInteraction {
+  id: string;
+  type: string;
+  timestamp: number;
+  data?: any;
+  duration?: number;
+}
+
+export interface ContactFormSubmission {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  timestamp: number;
+  profileId?: string;
+  jobId?: string;
+  status?: string;
+}
+
+export interface QRCodeScan {
+  id: string;
+  profileId: string;
+  timestamp: number;
+  metadata?: Record<string, any>;
+  scanId?: string;
+  jobId?: string;
+}
 
 // Session and processing management types
 export interface EnhancedSessionState {

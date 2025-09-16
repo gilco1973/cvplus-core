@@ -12,6 +12,10 @@
  * Staging areas prepared for domain services migration
  */
 
+// Import for internal use
+import { ServiceRegistry } from "./service-registry";
+import type { ServiceHealth } from "./base-service";
+
 // Core service architecture - Values
 export { BaseService } from "./base-service";
 export { EnhancedBaseService } from "./enhanced-base-service";
@@ -34,8 +38,8 @@ export type { ApiClientOptions, ApiRequestOptions, ApiResponse, ApiError, RateLi
 // Cache services (re-exports from cache index)
 export * from './cache';
 
-// Security services (consolidated platform-wide security)
-export * from './security';
+// Security services migrated to @cvplus/admin
+// Use backward compatibility exports from main index
 
 // MIGRATION PHASE 4B: Domain Services Staging
 // The following services have been COPIED to staging areas for migration preparation:

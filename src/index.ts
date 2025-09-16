@@ -74,15 +74,8 @@ export type { EnhancedServiceConfig } from './services/enhanced-base-service';
 // SECURITY SERVICES
 // ============================================================================
 
-// Export consolidated security services for platform-wide use
-export {
-  SecureRateLimitGuard,
-  secureRateLimitGuard
-} from './services/security';
-export type {
-  RateLimitResult,
-  RateLimitConfig
-} from './services/security';
+// Security services migrated to @cvplus/admin
+// Use backward compatibility exports below
 
 // ============================================================================
 // UTILITIES
@@ -104,7 +97,8 @@ export * from './utils/classnames';
 export * from './utils/firebase-error-handler';
 export * from './utils/firebase-response-formatter';
 export * from './utils/firebase-auth-validator';
-export * from './utils/auth';
+// Auth utilities moved to @cvplus/auth module
+// export * from './utils/auth';
 export * from './utils/firestore-sanitizer';
 export * from './utils/firestore-validation.service';
 export * from './utils/safe-firestore.service';
@@ -267,20 +261,36 @@ export { CVStep } from './types/enhanced-models';
 // ============================================================================
 
 // Re-export CV processing services for backward compatibility
+// TODO: Re-enable when cv-processing module is properly built
 // export {
+//   RoleProfileService,
+//   IndustrySpecializationService,
+//   LanguageProficiencyService,
+//   languageProficiencyService,
+//   PersonalityAnalyzer,
+//   roleProfilesData,
 //   CVAnalysisService,
 //   CVGenerationService,
 //   CVTemplateService,
 //   CVValidationService,
-//   CVGenerator,
 //   EnhancementProcessingService,
 //   PiiDetector
-// } from '@cvplus/cv-processing'; // Temporarily disabled
+// } from '@cvplus/cv-processing';
 
+// ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
+// These types should be imported directly from @cvplus/cv-processing by consumers
 // Re-export CV processing types for backward compatibility
-// TODO: Re-enable when cv-processing module is available
-// These types should be defined locally or imported from cv-processing when available
 // export type {
+//   RoleProfile,
+//   RoleMatchResult,
+//   MatchingFactor,
+//   RoleBasedRecommendation,
+//   RoleDetectionMetrics,
+//   RoleCategory,
+//   IndustryOptimizationRequest,
+//   IndustryOptimizationResult,
+//   LanguageProficiency,
+//   LanguageVisualization,
 //   CV,
 //   CVContent,
 //   CVMetadata,
@@ -324,3 +334,93 @@ export { CVStep } from './types/enhanced-models';
 //   SkillAnalysis,
 //   SkillRecommendations
 // } from '@cvplus/cv-processing';
+
+// ============================================================================
+// AI/RAG/CHAT SERVICES RE-EXPORTS (Backward Compatibility)
+// ============================================================================
+
+// ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
+// These services should be imported directly from @cvplus/recommendations by consumers
+// Re-export AI/RAG/Chat services for backward compatibility
+// These services have been migrated to @cvplus/recommendations
+// export {
+//   ChatService,
+//   chatService,
+//   VectorDatabaseService,
+//   AdvancedPromptEngine,
+//   EnhancedPromptEngineWithFallbacks,
+//   VerifiedClaudeService,
+//   verifiedClaudeService,
+//   LLMVerificationService
+// } from '@cvplus/recommendations';
+
+// ============================================================================
+// ANALYTICS TYPES RE-EXPORTS (Backward Compatibility)
+// ============================================================================
+
+// ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
+// These types should be imported directly from @cvplus/analytics by consumers
+// Re-export analytics types for backward compatibility
+// These types have been migrated to @cvplus/analytics
+// export type {
+//   UserOutcome,
+//   OutcomeEvent,
+//   MLPipeline,
+//   MLModel,
+//   MLModelMetadata,
+//   FeatureVector,
+//   Phase2APIResponse,
+//   PredictionResponse,
+//   AnalyticsResponse,
+//   IndustryOptimizationResponse,
+//   RegionalOptimizationResponse,
+//   MLTrainingConfig,
+//   SuccessPrediction,
+//   PredictionResult,
+//   SalaryPrediction,
+//   TimeToHirePrediction,
+//   PredictiveRecommendation,
+//   PredictionTypes
+// } from '@cvplus/analytics';
+
+// ============================================================================
+// MULTIMEDIA TYPES RE-EXPORTS (Backward Compatibility)
+// ============================================================================
+
+// ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
+// These types should be imported directly from @cvplus/multimedia by consumers
+// Re-export multimedia types for backward compatibility
+// These types have been migrated to @cvplus/multimedia
+// export type {
+//   MultimediaGenerationResult,
+//   ApiMultimediaResponse,
+//   PortfolioImage,
+//   CalendarSettings,
+//   Testimonial,
+//   PersonalityProfile
+// } from '@cvplus/multimedia';
+
+// ============================================================================
+// VALIDATION/SECURITY SERVICES RE-EXPORTS (Backward Compatibility)
+// ============================================================================
+
+// ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
+// These services should be imported directly from @cvplus/admin by consumers
+// Re-export validation and security services for backward compatibility
+// These services have been migrated to @cvplus/admin
+// export {
+//   SecureRateLimitGuard,
+//   secureRateLimitGuard,
+//   TextValidator,
+//   CVValidator,
+//   PortalValidator,
+//   ValidationService,
+//   PIIDetector
+// } from '@cvplus/admin';
+
+// export type {
+//   RateLimitResult,
+//   RateLimitConfig,
+//   PIIDetectionResult,
+//   PIIMaskingOptions
+// } from '@cvplus/admin';

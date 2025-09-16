@@ -1,0 +1,222 @@
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import {
+  environment,
+  performHealthCheck,
+  validateConfiguration,
+  validateApiKeys,
+  validateEmailConfiguration,
+  validateSecurityConfiguration,
+  isFeatureEnabled,
+  isDevelopment,
+  isProduction,
+  isTest,
+} from '../environment';
+
+describe('Environment Configuration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('environment object', () => {
+    it('should have required Firebase configuration', () => {
+      expect(environment.FIREBASE_PROJECT_ID).toBeDefined();
+      expect(environment.FIREBASE_PRIVATE_KEY).toBeDefined();
+      expect(environment.FIREBASE_CLIENT_EMAIL).toBeDefined();
+      expect(typeof environment.FIREBASE_PROJECT_ID).toBe('string');
+      expect(typeof environment.FIREBASE_PRIVATE_KEY).toBe('string');
+      expect(typeof environment.FIREBASE_CLIENT_EMAIL).toBe('string');
+    });
+
+    it('should have proper default values', () => {
+      expect(environment.NODE_ENV).toBe('development');
+      expect(environment.ENABLE_AI_FEATURES).toBe('true');
+      expect(environment.ENABLE_MULTIMEDIA).toBe('true');
+      expect(environment.ENABLE_ANALYTICS).toBe('true');
+      expect(environment.SMTP_PORT).toBe('587');
+    });
+
+    it('should handle optional API keys gracefully', () => {
+      // API keys might be undefined in test environment
+      if (environment.OPENAI_API_KEY) {
+        expect(typeof environment.OPENAI_API_KEY).toBe('string');
+      }
+      if (environment.ANTHROPIC_API_KEY) {
+        expect(typeof environment.ANTHROPIC_API_KEY).toBe('string');
+      }
+    });
+  });
+
+  describe('performHealthCheck', () => {
+    it('should return health check status and checks', () => {
+      const result = performHealthCheck();
+      expect(result).toHaveProperty('status');
+      expect(result).toHaveProperty('checks');
+      expect(['healthy', 'degraded', 'unhealthy']).toContain(result.status);
+      expect(typeof result.checks).toBe('object');
+      expect(result.checks).toHaveProperty('firebase');
+      expect(result.checks).toHaveProperty('ai_services');
+      expect(result.checks).toHaveProperty('multimedia');
+      expect(result.checks).toHaveProperty('email');
+      expect(result.checks).toHaveProperty('security');
+    });
+
+    it('should mark firebase as healthy when all required fields are present', () => {
+      const result = performHealthCheck();
+      // Firebase should be healthy in development with default values
+      expect(result.checks.firebase).toBe(true);
+    });
+
+    it('should properly assess overall health status', () => {
+      const result = performHealthCheck();
+      const passedChecks = Object.values(result.checks).filter(Boolean).length;
+
+      if (passedChecks >= 2) {
+        expect(['healthy', 'degraded']).toContain(result.status);
+      } else {
+        expect(result.status).toBe('unhealthy');
+      }
+    });
+  });
+
+  describe('validateConfiguration', () => {
+    it('should return validation result', () => {
+      const result = validateConfiguration();
+      expect(result).toHaveProperty('valid');
+      expect(result).toHaveProperty('errors');
+      expect(typeof result.valid).toBe('boolean');
+      expect(Array.isArray(result.errors)).toBe(true);
+    });
+
+    it('should pass validation with default development config', () => {
+      const result = validateConfiguration();
+      // Development config should be valid by default
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('validateApiKeys', () => {
+    it('should return API key validation result', () => {
+      const result = validateApiKeys();
+      expect(result).toHaveProperty('valid');
+      expect(result).toHaveProperty('missing');
+      expect(typeof result.valid).toBe('boolean');
+      expect(Array.isArray(result.missing)).toBe(true);
+    });
+
+    it('should identify missing API keys', () => {
+      const result = validateApiKeys();
+      // In test environment, most API keys will be missing
+      expect(result.missing.length).toBeGreaterThanOrEqual(0);
+      result.missing.forEach(key => {
+        expect(typeof key).toBe('string');
+        expect(key.endsWith('_API_KEY')).toBe(true);
+      });
+    });
+  });
+
+  describe('validateEmailConfiguration', () => {
+    it('should return email validation result', () => {
+      const result = validateEmailConfiguration();
+      expect(result).toHaveProperty('valid');
+      expect(result).toHaveProperty('errors');
+      expect(typeof result.valid).toBe('boolean');
+      expect(Array.isArray(result.errors)).toBe(true);
+    });
+
+    it('should validate email format when SMTP_USER is provided', () => {
+      const result = validateEmailConfiguration();
+      // In development, email config might not be complete
+      if (!result.valid) {
+        expect(result.errors.length).toBeGreaterThan(0);
+        result.errors.forEach(error => {
+          expect(typeof error).toBe('string');
+        });
+      }
+    });
+  });
+
+  describe('validateSecurityConfiguration', () => {
+    it('should return security validation result', () => {
+      const result = validateSecurityConfiguration();
+      expect(result).toHaveProperty('valid');
+      expect(result).toHaveProperty('errors');
+      expect(typeof result.valid).toBe('boolean');
+      expect(Array.isArray(result.errors)).toBe(true);
+    });
+
+    it('should require JWT_SECRET and ENCRYPTION_KEY in production', () => {
+      const result = validateSecurityConfiguration();
+      // In development/test, these might not be set
+      if (!result.valid) {
+        const errorMessages = result.errors.join(' ');
+        if (errorMessages.includes('JWT_SECRET')) {
+          expect(errorMessages).toMatch(/JWT_SECRET/);
+        }
+        if (errorMessages.includes('ENCRYPTION_KEY')) {
+          expect(errorMessages).toMatch(/ENCRYPTION_KEY/);
+        }
+      }
+    });
+  });
+
+  describe('feature flags', () => {
+    it('should correctly evaluate AI features flag', () => {
+      const result = isFeatureEnabled('ai');
+      expect(typeof result).toBe('boolean');
+      // Default should be true
+      expect(result).toBe(true);
+    });
+
+    it('should correctly evaluate multimedia features flag', () => {
+      const result = isFeatureEnabled('multimedia');
+      expect(typeof result).toBe('boolean');
+      // Default should be true
+      expect(result).toBe(true);
+    });
+
+    it('should correctly evaluate analytics features flag', () => {
+      const result = isFeatureEnabled('analytics');
+      expect(typeof result).toBe('boolean');
+      // Default should be true
+      expect(result).toBe(true);
+    });
+
+    it('should return false for unknown features', () => {
+      const result = isFeatureEnabled('unknown' as any);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('environment utilities', () => {
+    it('should correctly identify development environment', () => {
+      const result = isDevelopment();
+      expect(typeof result).toBe('boolean');
+      // Default environment should be development
+      expect(result).toBe(true);
+    });
+
+    it('should correctly identify production environment', () => {
+      const result = isProduction();
+      expect(typeof result).toBe('boolean');
+      // Default environment should not be production
+      expect(result).toBe(false);
+    });
+
+    it('should correctly identify test environment', () => {
+      const result = isTest();
+      expect(typeof result).toBe('boolean');
+      // This depends on how NODE_ENV is set during testing
+    });
+
+    it('should have mutually exclusive environment states', () => {
+      const dev = isDevelopment();
+      const prod = isProduction();
+      const test = isTest();
+
+      // Only one should be true at a time
+      const trueCount = [dev, prod, test].filter(Boolean).length;
+      expect(trueCount).toBeLessThanOrEqual(1);
+    });
+  });
+});

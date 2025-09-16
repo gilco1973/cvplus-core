@@ -20,9 +20,10 @@ const logger = {
   debug: (message: string, data?: any) => console.debug('[DEBUG]', message, data)
 };
 const loggerFactory = {
-  getLogger: (name: string) => logger
+  getLogger: (_name: string) => logger
 };
-// TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
+// TODO: Import Logger type from @cvplus/logging
+// type Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
 
 export interface ServiceRegistryConfig {
   autoInitialize?: boolean;
@@ -32,7 +33,7 @@ export interface ServiceRegistryConfig {
 export class ServiceRegistry {
   private static instance: ServiceRegistry;
   private readonly services = new Map<string, BaseService | EnhancedBaseService>();
-  private readonly logger = logger('ServiceRegistry');
+  private readonly logger = loggerFactory.getLogger('ServiceRegistry');
   private readonly config: ServiceRegistryConfig;
   private healthCheckInterval?: NodeJS.Timeout;
 

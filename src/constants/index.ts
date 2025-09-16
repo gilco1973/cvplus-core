@@ -14,9 +14,12 @@
 
 export * from './app';
 export * from './validation';
-export * from './templates';
+// ARCHITECTURAL VIOLATION FIXED: Core cannot import from Layer 2 modules
+// Templates and processing constants moved to @cvplus/cv-processing
+// Consumers should import directly from @cvplus/cv-processing/constants
+// export * from './templates';  // Moved to @cvplus/cv-processing
+// export * from './processing'; // Moved to @cvplus/cv-processing
 export * from './features';
-export * from './processing';
 export * from './api';
 export * from './errors';
 

@@ -1,25 +1,55 @@
-/**
- * Success Prediction Types - Stub implementation
- * Note: These types should be moved to analytics or ml module
- */
-
 export interface SuccessPrediction {
   score: number;
   confidence: number;
-  factors: string[];
+  factors: SuccessFactor[];
+  recommendations: string[];
+  timeline: PredictionTimeline;
 }
 
-export interface PredictionResult {
-  success: boolean;
-  prediction?: SuccessPrediction;
-  error?: string;
+export interface SuccessFactor {
+  name: string;
+  weight: number;
+  score: number;
+  description: string;
+  impact: 'positive' | 'negative' | 'neutral';
 }
 
-// Additional exports required by phase2 types
+export interface PredictionTimeline {
+  shortTerm: {
+    period: string;
+    probability: number;
+    outcomes: string[];
+  };
+  mediumTerm: {
+    period: string;
+    probability: number;
+    outcomes: string[];
+  };
+  longTerm: {
+    period: string;
+    probability: number;
+    outcomes: string[];
+  };
+}
+
+export interface PredictionModel {
+  version: string;
+  accuracy: number;
+  trainingData: {
+    size: number;
+    lastUpdated: Date;
+  };
+  features: string[];
+}
+
 export interface SalaryPrediction {
-  predictedSalary: number;
-  range: { min: number; max: number };
+  estimatedSalary: {
+    min: number;
+    max: number;
+    currency: string;
+  };
   confidence: number;
+  factors: string[];
 }
 
 export interface TimeToHirePrediction {
@@ -30,13 +60,9 @@ export interface TimeToHirePrediction {
 
 export interface PredictiveRecommendation {
   type: string;
-  recommendation: string;
+  description: string;
   impact: number;
+  priority: 'high' | 'medium' | 'low';
 }
 
-export enum PredictionTypes {
-  SALARY = 'salary',
-  TIME_TO_HIRE = 'time_to_hire',
-  SUCCESS_RATE = 'success_rate',
-  SKILL_MATCH = 'skill_match'
-}
+export type PredictionTypes = 'success' | 'salary' | 'time_to_hire' | 'recommendation';

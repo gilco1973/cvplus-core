@@ -361,31 +361,31 @@ export class NameVerificationService {
    * Calculate Levenshtein distance
    */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = [];
-    
+    const matrix: number[][] = [];
+
     for (let i = 0; i <= str2.length; i++) {
       matrix[i] = [i];
     }
-    
+
     for (let j = 0; j <= str1.length; j++) {
-      matrix[0][j] = j;
+      matrix[0]![j] = j;
     }
     
     for (let i = 1; i <= str2.length; i++) {
       for (let j = 1; j <= str1.length; j++) {
         if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
+          matrix[i]![j] = matrix[i - 1]?.[j - 1] ?? 0;
         } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
+          matrix[i]![j] = Math.min(
+            (matrix[i - 1]?.[j - 1] ?? 0) + 1,
+            (matrix[i]?.[j - 1] ?? 0) + 1,
+            (matrix[i - 1]?.[j] ?? 0) + 1
           );
         }
       }
     }
     
-    return matrix[str2.length]?.[str1.length] || 0;
+    return matrix[str2.length]?.[str1.length] ?? 0;
   }
 
   /**
@@ -395,11 +395,12 @@ export class NameVerificationService {
     return [
       accountData.fullName,
       accountData.displayName,
-      `${accountData.firstName} ${accountData.lastName}`,
+      `${accountData.firstName || ''} ${accountData.lastName || ''}`.trim(),
       extractedName
-    ].filter((name, index, arr) => 
-      name && arr.indexOf(name) === index
-    );
+    ].filter((name): name is string => Boolean(name) && typeof name === 'string' && name.trim().length > 0).filter((name, index, arr) => {
+      if (!name) return false;
+      return arr.indexOf(name) === index;
+    });
   }
 
   /**
@@ -434,9 +435,9 @@ export class NameVerificationService {
     if (words.length < 2 || words.length > 5) return false;
     
     // All words should be capitalized
-    return words.every(word => 
-      word.length > 0 && 
-      word[0] === word[0].toUpperCase() &&
+    return words.every(word =>
+      word && word.length > 0 &&
+      word[0] && word[0] === word[0].toUpperCase() &&
       /^[A-Za-z]+$/.test(word)
     );
   }
@@ -445,9 +446,9 @@ export class NameVerificationService {
    * Check if word is capitalized
    */
   private isCapitalizedWord(word: string): boolean {
-    return word && word.length > 1 && 
+    return Boolean(word && word.length > 1 &&
            word[0] && word[0] === word[0].toUpperCase() &&
-           /^[A-Za-z]+$/.test(word);
+           /^[A-Za-z]+$/.test(word));
   }
 
   /**

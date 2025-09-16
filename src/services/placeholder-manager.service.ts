@@ -189,7 +189,6 @@ export class PlaceholderManager {
     Object.entries(replacements).forEach(([placeholder, value]) => {
       if (value && value.trim()) {
         // Handle both [PLACEHOLDER] and just PLACEHOLDER keys
-        const bracketedPlaceholder = placeholder.startsWith('[') ? placeholder : `[${placeholder}]`;
         const unbracketedPlaceholder = placeholder.startsWith('[') ? placeholder.slice(1, -1) : placeholder;
         
         result = result.replace(new RegExp(`\\[${this.escapeRegex(unbracketedPlaceholder)}\\]`, 'g'), value);

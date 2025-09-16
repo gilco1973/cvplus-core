@@ -18,8 +18,8 @@ const logger = {
   warn: (message: string, data?: any) => console.warn('[WARN]', message, data),
   debug: (message: string, data?: any) => console.debug('[DEBUG]', message, data)
 };
-const _loggerFactory = {
-  getLogger: (name: string) => logger
+export const loggerFactory = {
+  getLogger: (_name: string) => logger
 };
 // TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
 

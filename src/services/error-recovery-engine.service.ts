@@ -70,10 +70,19 @@ interface VideoGenerationResult {
   error?: string; 
 }
 
-interface ProviderSelectionCriteria { 
-  priority?: number; 
+interface ProviderSelectionCriteria {
+  priority?: number;
   reliability?: number;
   context?: any;
+  requirements?: any;
+  preferences?: {
+    speed?: number;
+    quality?: number;
+    cost?: number;
+    prioritizeSpeed?: boolean;
+    prioritizeQuality?: boolean;
+    prioritizeCost?: boolean;
+  };
 }
 import { ProviderSelectionEngine } from './provider-selection-engine.service';
 import { CircuitBreakerService } from './circuit-breaker.service';
@@ -511,7 +520,10 @@ export class ErrorRecoveryEngine {
       // Adjust options for retry if needed
       const adjustedOptions = this.adjustOptionsForRetry(context.options, strategy);
       
-      const result = await provider.generateVideo(context.script, adjustedOptions);
+      if (!provider.generateVideo) {
+        throw new Error('Provider does not support video generation');
+      }
+      const result = await provider.generateVideo(adjustedOptions);
       
       return {
         success: true,
@@ -551,11 +563,12 @@ export class ErrorRecoveryEngine {
       
       // Update selection criteria to exclude failed providers
       const updatedCriteria = {
-        ...context.originalCriteria,
+        requirements: context.originalCriteria?.requirements || { duration: 'medium' },
+        preferences: context.originalCriteria?.preferences,
         context: {
-          ...context.originalCriteria.context,
+          ...context.originalCriteria?.context,
           isRetry: true,
-          previousFailures: [...(context.originalCriteria.context.previousFailures || []), context.providerId]
+          previousFailures: [...(context.originalCriteria?.context?.previousFailures || []), context.providerId]
         }
       };
 
@@ -568,7 +581,10 @@ export class ErrorRecoveryEngine {
       const adjustedOptions = this.adjustOptionsForProvider(context.options, newProvider);
       
       // Generate video with new provider
-      const result = await newProvider.generateVideo(context.script, adjustedOptions);
+      if (!newProvider.generateVideo) {
+        throw new Error('New provider does not support video generation');
+      }
+      const result = await newProvider.generateVideo(adjustedOptions);
       
       return {
         success: true,
@@ -603,8 +619,11 @@ export class ErrorRecoveryEngine {
       const degradedOptions = this.getDegradedOptions(context.options, strategy);
       
       for (const provider of providers) {
+        if (!provider.generateVideo) {
+          continue;
+        }
         try {
-          const result = await provider.generateVideo(context.script, degradedOptions);
+          const result = await provider.generateVideo(degradedOptions);
           
           return {
             success: true,
@@ -747,7 +766,7 @@ export class ErrorRecoveryEngine {
 
   private getDegradedOptions(
     options: VideoGenerationOptions,
-    strategy: RecoveryStrategy
+    _strategy: RecoveryStrategy
   ): VideoGenerationOptions {
     const degradedOptions = { ...options };
     
@@ -848,8 +867,8 @@ export class ErrorRecoveryEngine {
 
       // Calculate recovery action distribution
       logs.forEach(log => {
-        stats.recoveryActions[log.recoveryAction] = (stats.recoveryActions[log.recoveryAction] || 0) + 1;
-        stats.errorCategories[log.errorCategory] = (stats.errorCategories[log.errorCategory] || 0) + 1;
+        (stats.recoveryActions as Record<string, number>)[log.recoveryAction] = ((stats.recoveryActions as Record<string, number>)[log.recoveryAction] || 0) + 1;
+        (stats.errorCategories as Record<string, number>)[log.errorCategory] = ((stats.errorCategories as Record<string, number>)[log.errorCategory] || 0) + 1;
       });
 
       // Calculate average recovery time

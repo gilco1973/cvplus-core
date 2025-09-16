@@ -37,8 +37,9 @@ export * from './firebase-logger';
 // ============================================================================
 // AUTHENTICATION UTILITIES
 // ============================================================================
-
-export * from './auth';
+// Auth utilities are available in @cvplus/auth/utils
+// Consumers should import directly from @cvplus/auth for authentication functions
+// export * from './auth'; // Moved to @cvplus/auth module
 
 // ============================================================================
 // ERROR HANDLING UTILITIES

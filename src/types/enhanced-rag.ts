@@ -76,8 +76,8 @@ export interface ChatSession {
   // Additional properties for service compatibility
   sessionId?: string; // For backward compatibility
   userId?: string; // CV owner
-  createdAt?: Date; // For backward compatibility
-  lastActivity?: Date; // For backward compatibility
+  createdAt?: number; // For backward compatibility
+  lastActivity?: number; // For backward compatibility
   metadata?: {
     source?: 'public' | 'private' | 'shared';
     referrer?: string;
@@ -92,7 +92,7 @@ export interface ChatMessage {
   sessionId: string;
   role: 'user' | 'assistant';
   content: string;
-  timestamp: Date;
+  timestamp: number;
   responseTime?: number;
   confidence?: number;
   sourceChunks?: string[];

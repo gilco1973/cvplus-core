@@ -8,7 +8,8 @@ import * as QRCode from 'qrcode';
 import { config } from '../config/environment';
 
 export class IntegrationsService {
-  private emailTransporter: nodemailer.Transporter | null = null;
+  // TODO: Add nodemailer dependency and import
+  private emailTransporter: any | null = null;
   private emailProvider: 'gmail' | 'sendgrid' | 'resend' = 'gmail';
 
   constructor() {
@@ -17,8 +18,12 @@ export class IntegrationsService {
 
   /**
    * Initialize email transporter with fallback options
+   * TODO: Implement when nodemailer dependency is added
    */
   private initializeEmailTransporter(): void {
+    // TODO: Implement email transporter initialization after adding nodemailer dependency
+    this.emailTransporter = null;
+    /*
     try {
       // Check for SendGrid configuration first (recommended for production)
       if (config.email?.sendgridApiKey || process.env.SENDGRID_API_KEY) {
@@ -65,6 +70,7 @@ export class IntegrationsService {
     } catch (error) {
       this.emailTransporter = null;
     }
+    */
   }
 
   /**

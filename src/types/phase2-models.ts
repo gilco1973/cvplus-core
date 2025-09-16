@@ -142,29 +142,29 @@ export class Phase2TypeValidator {
  * Factory functions for creating Phase 2 type instances with sensible defaults
  */
 export class Phase2TypeFactory {
-  static createEmptySuccessPrediction(userId: string, jobId: string): Partial<import('./success-prediction').SuccessPrediction> {
+  static createEmptySuccessPrediction(_userId: string, _jobId: string): Partial<import('./success-prediction').SuccessPrediction> {
     return {
       // predictionId: `pred_${Date.now()}`,
       // userId,
       // jobId,
-      timestamp: new Date(),
-      interviewProbability: 0,
-      offerProbability: 0,
-      hireProbability: 0,
-      competitivenessScore: 0,
+      score: 0,
       confidence: 0,
-      recommendations: []
+      factors: [],
+      recommendations: [],
+      timeline: {
+        shortTerm: { period: '1-3 months', probability: 0, outcomes: [] },
+        mediumTerm: { period: '3-6 months', probability: 0, outcomes: [] },
+        longTerm: { period: '6+ months', probability: 0, outcomes: [] }
+      }
     };
   }
 
-  static createEmptyAnalyticsEvent(userId: string, eventType: string): Partial<import('@cvplus/analytics').AnalyticsEvent> {
+  static createEmptyAnalyticsEvent(_userId: string, eventType: string): Partial<import('@cvplus/analytics').AnalyticsEvent> {
     return {
-      eventId: `evt_${Date.now()}`,
-      userId,
-      eventType: eventType as any,
-      eventCategory: 'usage',
+      id: `evt_${Date.now()}`,
+      type: eventType,
       timestamp: new Date(),
-      eventData: {
+      data: {
         action: 'unknown',
         properties: {}
       }

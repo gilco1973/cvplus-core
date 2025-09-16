@@ -101,5 +101,12 @@ export * from './utility';
 // export * from "./portal"; // TODO: Restore after portal migration
 export * from './regional-localization';
 
-// Template category alias for backward compatibility
-export { PortalTemplateCategory as TemplateCategory } from './portal';
+// Template category alias for backward compatibility - disabled due to missing portal.ts
+// export { PortalTemplateCategory as TemplateCategory } from './portal';
+
+// ============================================================================
+// BOOKING & PAYMENT TYPES - DISABLED (files missing)
+// ============================================================================
+
+// export * from './booking.types'; // File does not exist
+// export * from './payment.types'; // File does not exist

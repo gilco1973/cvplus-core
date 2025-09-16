@@ -25,7 +25,8 @@ export { cacheService } from './cache.service';
 // Premium cache services moved to @cvplus/premium submodule
 export { featureAccessCacheService } from './feature-access-cache.service';
 export { usageBatchCacheService } from './usage-batch-cache.service';
-export { analyticsCacheService } from './analytics-cache.service';
+// ARCHITECTURAL VIOLATION FIXED: Analytics cache moved to @cvplus/analytics
+// export { analyticsCacheService } from './analytics-cache.service';
 
 // Monitoring and performance
 export {
@@ -55,11 +56,12 @@ export type {
 } from './usage-batch-cache.service';
 
 // Analytics types
-export type {
-  AnalyticsQuery,
-  AnalyticsResult,
-  AnalyticsQueryType
-} from './analytics-cache.service';
+// ARCHITECTURAL VIOLATION FIXED: Analytics types moved to @cvplus/analytics
+// export type {
+//   AnalyticsQuery,
+//   AnalyticsResult,
+//   AnalyticsQueryType
+// } from './analytics-cache.service';
 export type {
   CacheAlert,
   CacheRecommendation
@@ -73,7 +75,8 @@ export async function initializeCacheServices(): Promise<void> {
     // Import services dynamically to avoid circular dependencies
     const { redisClient } = await import('./redis-client.service');
     const { featureAccessCacheService } = await import('./feature-access-cache.service');
-    const { analyticsCacheService } = await import('./analytics-cache.service');
+    // Analytics cache moved to @cvplus/analytics
+    // const { analyticsCacheService } = await import('./analytics-cache.service');
 
     // Initialize Redis client
     await redisClient.initialize();
@@ -81,7 +84,8 @@ export async function initializeCacheServices(): Promise<void> {
     // Warm critical caches (premium caches are handled by @cvplus/premium)
     await Promise.allSettled([
       featureAccessCacheService.warmCache(['common_user']),
-      analyticsCacheService.warmCache()
+      // Analytics cache moved to @cvplus/analytics
+      // analyticsCacheService.warmCache()
     ]);
 
     console.log('Cache services initialized successfully');

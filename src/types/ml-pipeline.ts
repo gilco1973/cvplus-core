@@ -1,76 +1,105 @@
-/**
- * ML Pipeline Types - Stub implementation
- * Note: These types should be moved to analytics or ml module
- */
-
 export interface MLPipeline {
   id: string;
   name: string;
-  status: 'idle' | 'running' | 'completed' | 'failed';
+  version: string;
+  stages: MLPipelineStage[];
+  configuration: MLPipelineConfig;
+  metrics: MLPipelineMetrics;
 }
 
-export interface MLModel {
+export interface MLPipelineStage {
   id: string;
   name: string;
-  version: string;
-  accuracy?: number;
+  type: 'preprocessing' | 'feature_extraction' | 'model_training' | 'prediction' | 'post_processing';
+  config: Record<string, any>;
+  dependencies: string[];
 }
 
-// Additional exports required by phase2 types
+export interface MLPipelineConfig {
+  batchSize: number;
+  maxExecutionTime: number;
+  retryAttempts: number;
+  parallelization: {
+    enabled: boolean;
+    maxWorkers: number;
+  };
+}
+
+export interface MLPipelineMetrics {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  executionTime: number;
+  lastTraining: Date;
+}
+
+export interface MLModelArtifact {
+  id: string;
+  version: string;
+  format: string;
+  size: number;
+  createdAt: Date;
+  metadata: Record<string, any>;
+}
+
 export interface MLModelMetadata {
   modelId: string;
   version: string;
   trainedAt: Date;
   accuracy: number;
-  features: string[];
+  precision: number;
+  recall: number;
+  f1Score: number;
 }
 
 export interface FeatureVector {
-  features: Record<string, number | string | boolean>;
-  metadata?: Record<string, any>;
+  id: string;
+  features: number[];
+  labels: string[];
+  metadata: Record<string, any>;
 }
 
-export interface Phase2APIResponse {
+export interface Phase2APIResponse<T = any> {
   success: boolean;
-  data?: any;
+  data?: T;
   error?: string;
   metadata?: Record<string, any>;
 }
 
 export interface PredictionResponse {
-  prediction: any;
+  predictionId: string;
   confidence: number;
-  modelUsed: string;
-  timestamp: Date;
+  result: any;
+  modelVersion: string;
 }
 
 export interface AnalyticsResponse {
-  metrics: Record<string, number>;
-  insights: string[];
-  recommendations?: string[];
+  eventId: string;
+  processed: boolean;
+  insights: Record<string, any>;
 }
 
 export interface IndustryOptimizationResponse {
+  optimizationId: string;
   industry: string;
-  optimizations: Array<{
-    field: string;
-    suggestion: string;
-    impact: number;
-  }>;
+  suggestions: string[];
+  score: number;
 }
 
 export interface RegionalOptimizationResponse {
+  optimizationId: string;
   region: string;
-  localizations: Array<{
-    field: string;
-    suggestion: string;
-    relevance: number;
-  }>;
+  adaptations: string[];
+  score: number;
 }
 
 export interface MLTrainingConfig {
   modelType: string;
-  features: string[];
   hyperparameters: Record<string, any>;
-  trainingDataPath?: string;
+  trainingData: {
+    source: string;
+    size: number;
+  };
+  validationSplit: number;
 }

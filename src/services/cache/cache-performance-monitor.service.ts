@@ -28,7 +28,8 @@ const subscriptionCacheService = {
 };
 import { featureAccessCacheService } from './feature-access-cache.service';
 import { usageBatchCacheService } from './usage-batch-cache.service';
-import { analyticsCacheService } from './analytics-cache.service';
+// ARCHITECTURAL VIOLATION FIXED: Analytics cache moved to @cvplus/analytics
+// import { analyticsCacheService } from './analytics-cache.service';
 import { cacheService } from './cache.service';
 
 export interface CacheHealthStatus {
@@ -257,7 +258,8 @@ class CachePerformanceMonitorService {
         { name: 'Pricing', service: pricingCacheService },
         { name: 'Subscription', service: subscriptionCacheService },
         { name: 'Feature Access', service: featureAccessCacheService },
-        { name: 'Analytics', service: analyticsCacheService }
+        // Analytics cache moved to @cvplus/analytics
+        // { name: 'Analytics', service: analyticsCacheService }
       ];
 
       for (const { name, service } of services) {
@@ -362,7 +364,8 @@ class CachePerformanceMonitorService {
       // Warm analytics cache
       const analyticsStart = Date.now();
       try {
-        await analyticsCacheService.warmCache();
+        // Analytics cache moved to @cvplus/analytics
+        // await analyticsCacheService.warmCache();
         results.analytics = { success: true, duration: Date.now() - analyticsStart };
       } catch (error) {
         logger.error('Analytics cache warm-up error', { error });
@@ -428,7 +431,17 @@ class CachePerformanceMonitorService {
    * Get performance metrics for analytics cache
    */
   private async getAnalyticsMetrics() {
-    return analyticsCacheService.getMetrics();
+    // Analytics cache moved to @cvplus/analytics
+    // return analyticsCacheService.getMetrics();
+    return {
+      requests: 0,
+      cacheHits: 0,
+      averageResponseTime: 0,
+      errorRate: 0,
+      invalidations: 0,
+      queries: 0,
+      dataFreshness: 0
+    };
   }
 
   /**

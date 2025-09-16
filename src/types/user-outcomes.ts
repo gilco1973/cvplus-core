@@ -1,20 +1,44 @@
-/**
- * User Outcomes Types - Stub implementation
- * Note: These types should be moved to analytics module
- */
-
 export interface UserOutcome {
   userId: string;
-  outcomeType: string;
+  outcome: OutcomeType;
   timestamp: Date;
-  metrics?: Record<string, any>;
+  context: OutcomeContext;
+  metrics: OutcomeMetrics;
 }
 
-// Additional exports required by phase2 types
+export enum OutcomeType {
+  JOB_APPLICATION = 'JOB_APPLICATION',
+  INTERVIEW_SCHEDULED = 'INTERVIEW_SCHEDULED',
+  JOB_OFFER = 'JOB_OFFER',
+  JOB_ACCEPTED = 'JOB_ACCEPTED',
+  PROFILE_VIEW = 'PROFILE_VIEW',
+  CONTACT_REQUEST = 'CONTACT_REQUEST'
+}
+
+export interface OutcomeContext {
+  source: string;
+  industry?: string;
+  jobTitle?: string;
+  company?: string;
+  location?: string;
+  salaryRange?: {
+    min: number;
+    max: number;
+    currency: string;
+  };
+}
+
+export interface OutcomeMetrics {
+  responseTime?: number;
+  conversionRate?: number;
+  qualityScore?: number;
+  userSatisfaction?: number;
+}
+
 export interface OutcomeEvent {
+  id: string;
+  outcomeId: string;
   eventType: string;
-  userId: string;
   timestamp: Date;
-  outcome: UserOutcome;
-  metadata?: Record<string, any>;
+  data: Record<string, any>;
 }

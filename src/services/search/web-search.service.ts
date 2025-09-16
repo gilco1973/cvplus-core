@@ -25,7 +25,7 @@ export class WebSearchService {
   /**
    * Test search functionality
    */
-  async testSearch(query: string = 'test'): Promise<{
+  async testSearch(_query: string = 'test'): Promise<{
     success: boolean;
     responseTime?: number;
     error?: string;
