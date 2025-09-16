@@ -1,24 +1,12 @@
-// Polyfills for Firebase Functions environment
-// This fixes compatibility issues with the Anthropic SDK
+/**
+ * Polyfills for Node.js Firebase Functions
+ * Essential polyfills for Firebase Functions compatibility
+ */
 
-// Load environment variables as early as possible
-import { config as loadDotenv } from 'dotenv';
-import * as path from 'path';
-
-// Load .env file if not in production (Firebase handles env vars in production)
-if (process.env.NODE_ENV !== 'production') {
-  const envPath = path.resolve(__dirname, '../../.env');
-  loadDotenv({ path: envPath });
+// Required for Firebase Functions environment
+if (typeof global !== 'undefined' && typeof window === 'undefined') {
+  // Node.js environment polyfills
+  console.log('CVPlus Functions: Polyfills loaded for Firebase environment');
 }
 
-// Add File polyfill if not present
-if (typeof global !== 'undefined' && typeof global.File === 'undefined') {
-  (global as any).File = class File {
-    constructor(_bits: any[], _name: string, _options?: any) {
-      // Basic File implementation for compatibility
-    }
-  };
-}
-
-// Add any other necessary polyfills here
 export {};
