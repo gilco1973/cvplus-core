@@ -2,7 +2,7 @@
  * Firestore Pre-write Validation Service
  * Comprehensive validation layer to ensure data integrity before Firestore operations
  * Phase 1.3 Implementation: Final safety net for timeline data
- */
+  */
 
 
 export interface ValidationResult {
@@ -48,7 +48,7 @@ export class FirestoreValidationService {
   
   /**
    * Comprehensive pre-write validation for Firestore operations
-   */
+    */
   static validateForFirestore(
     data: any, 
     path: string = 'root',
@@ -140,7 +140,7 @@ export class FirestoreValidationService {
 
   /**
    * Recursive data validation with sanitization
-   */
+    */
   private static validateDataRecursive(
     value: any,
     currentPath: string,
@@ -213,7 +213,7 @@ export class FirestoreValidationService {
 
   /**
    * Validate primitive values
-   */
+    */
   private static validatePrimitive(
     value: any,
     path: string,
@@ -254,7 +254,7 @@ export class FirestoreValidationService {
 
   /**
    * Validate array data
-   */
+    */
   private static validateArray(
     value: any[],
     path: string,
@@ -290,7 +290,7 @@ export class FirestoreValidationService {
 
   /**
    * Validate object data
-   */
+    */
   private static validateObject(
     value: Record<string, any>,
     path: string,
@@ -331,7 +331,7 @@ export class FirestoreValidationService {
 
   /**
    * Timeline-specific validation rules
-   */
+    */
   private static validateTimelineSpecific(
     data: any,
     errors: string[],
@@ -387,7 +387,7 @@ export class FirestoreValidationService {
 
   /**
    * Check if data contains dot-notation field paths (for update operations)
-   */
+    */
   private static isUpdateWithDotNotation(data: any): boolean {
     if (!data || typeof data !== 'object') return false;
     
@@ -396,7 +396,7 @@ export class FirestoreValidationService {
 
   /**
    * Validate update data with dot-notation field paths
-   */
+    */
   private static validateUpdateDataWithPaths(
     data: Record<string, any>,
     _path: string,
@@ -470,7 +470,7 @@ export class FirestoreValidationService {
 
   /**
    * Validate required fields are present
-   */
+    */
   private static validateRequiredFields(
     data: any,
     requiredFields: string[],
@@ -485,7 +485,7 @@ export class FirestoreValidationService {
 
   /**
    * Check if object has nested property using dot notation
-   */
+    */
   private static hasNestedProperty(obj: any, path: string): boolean {
     return path.split('.').reduce((current, prop) => {
       return current && current[prop] !== undefined;
@@ -494,7 +494,7 @@ export class FirestoreValidationService {
 
   /**
    * Check if value is primitive type
-   */
+    */
   private static isPrimitive(value: any): boolean {
     const type = typeof value;
     return type === 'string' || 
@@ -505,7 +505,7 @@ export class FirestoreValidationService {
 
   /**
    * Check if data appears to be timeline-related
-   */
+    */
   private static isTimelineData(data: any): boolean {
     if (!data || typeof data !== 'object') return false;
     
@@ -520,7 +520,7 @@ export class FirestoreValidationService {
 
   /**
    * Create comprehensive validation report
-   */
+    */
   static createValidationReport(result: ValidationResult): string {
     const { isValid, errors, warnings, validationContext } = result;
     

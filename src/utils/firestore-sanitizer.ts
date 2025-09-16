@@ -3,7 +3,7 @@
  * 
  * Prevents "Unsupported field value: undefined" errors by sanitizing data before Firestore writes.
  * Handles nested objects, arrays, and complex data structures safely.
- */
+  */
 
 export interface SanitizationOptions {
   removeUndefined?: boolean;
@@ -31,7 +31,7 @@ export class FirestoreSanitizer {
   
   /**
    * Sanitize data for safe Firestore write operations
-   */
+    */
   static sanitize(data: any, options: SanitizationOptions = {}): any {
     const opts = { ...DEFAULT_OPTIONS, ...options };
     return this.sanitizeRecursive(data, opts, 0);
@@ -39,7 +39,7 @@ export class FirestoreSanitizer {
   
   /**
    * Sanitize data specifically for error logging contexts
-   */
+    */
   static sanitizeForErrorLogging(errorData: any): any {
     return this.sanitize(errorData, {
       removeUndefined: true,
@@ -53,7 +53,7 @@ export class FirestoreSanitizer {
   
   /**
    * Sanitize data specifically for performance metrics
-   */
+    */
   static sanitizeForMetrics(metricsData: any): any {
     return this.sanitize(metricsData, {
       removeUndefined: true,
@@ -67,7 +67,7 @@ export class FirestoreSanitizer {
   
   /**
    * Recursive sanitization with depth protection
-   */
+    */
   private static sanitizeRecursive(
     value: any, 
     options: SanitizationOptions, 
@@ -167,7 +167,7 @@ export class FirestoreSanitizer {
   
   /**
    * Check if value is a primitive type
-   */
+    */
   private static isPrimitive(value: any): boolean {
     const type = typeof value;
     return type === 'string' || 
@@ -178,7 +178,7 @@ export class FirestoreSanitizer {
   
   /**
    * Validate that data is safe for Firestore operations
-   */
+    */
   static validate(data: any): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
     
@@ -192,7 +192,7 @@ export class FirestoreSanitizer {
   
   /**
    * Recursive validation with path tracking
-   */
+    */
   private static validateRecursive(
     value: any, 
     path: string, 
@@ -233,7 +233,7 @@ export class FirestoreSanitizer {
   
   /**
    * Create a safe update object by removing undefined values
-   */
+    */
   static createSafeUpdateObject(updates: Record<string, any>): Record<string, any> {
     const safeUpdates: Record<string, any> = {};
     
@@ -249,7 +249,7 @@ export class FirestoreSanitizer {
   
   /**
    * Log sanitization results for debugging
-   */
+    */
   static sanitizeWithLogging(data: any, context: string = 'unknown'): any {
     const originalValidation = this.validate(data);
     const sanitized = this.sanitize(data);
@@ -268,7 +268,7 @@ export class FirestoreSanitizer {
 
 /**
  * Convenience functions for common sanitization patterns
- */
+  */
 
 export function sanitizeForFirestore(data: any, options?: SanitizationOptions): any {
   return FirestoreSanitizer.sanitize(data, options);

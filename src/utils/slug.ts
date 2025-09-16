@@ -1,6 +1,6 @@
 /**
  * Utility functions for generating URL-safe slugs
- */
+  */
 
 import { customAlphabet } from 'nanoid';
 
@@ -9,7 +9,7 @@ const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 8);
 
 /**
  * Generate a random slug for public profiles
- */
+  */
 export function generateSlug(): string {
   const adjectives = [
     'smart', 'dynamic', 'creative', 'innovative', 'skilled',
@@ -32,7 +32,7 @@ export function generateSlug(): string {
 
 /**
  * Sanitize text to create a URL-safe slug
- */
+  */
 export function sanitizeSlug(text: string): string {
   return text
     .toLowerCase()
@@ -43,7 +43,7 @@ export function sanitizeSlug(text: string): string {
 
 /**
  * Create a slug from user's name
- */
+  */
 export function createSlugFromName(name: string): string {
   const sanitized = sanitizeSlug(name);
   const random = nanoid();

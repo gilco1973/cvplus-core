@@ -1,6 +1,6 @@
 /**
  * Enhanced database service for new CV features
- */
+  */
 
 import * as admin from 'firebase-admin';
 import { 
@@ -22,7 +22,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Create or update enhanced job features
-   */
+    */
   async updateEnhancedFeatures(
     jobId: string, 
     features: Partial<EnhancedJob['enhancedFeatures']>
@@ -44,7 +44,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Create public CV profile
-   */
+    */
   async createPublicProfile(jobId: string, userId: string): Promise<PublicCVProfile> {
     const slug = await this.generateUniqueSlug(jobId);
     
@@ -97,7 +97,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Generate unique slug for public profile
-   */
+    */
   private async generateUniqueSlug(jobId: string): Promise<string> {
     let slug = generateSlug();
     let attempts = 0;
@@ -123,7 +123,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Track feature analytics
-   */
+    */
   async trackFeatureInteraction(
     jobId: string,
     featureId: string,
@@ -177,7 +177,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Create or update RAG profile
-   */
+    */
   async upsertRAGProfile(profile: UserRAGProfile): Promise<void> {
     const docId = `${profile.userId}_${profile.jobId}`;
     await this.db.collection('ragProfiles').doc(docId).set(profile, { merge: true });
@@ -185,7 +185,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Create chat session
-   */
+    */
   async createChatSession(session: Omit<ChatSession, 'sessionId'>): Promise<string> {
     const sessionRef = this.db.collection('chatSessions').doc();
     const sessionId = sessionRef.id;
@@ -210,7 +210,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Add message to chat session
-   */
+    */
   async addChatMessage(sessionId: string, message: ChatMessage): Promise<void> {
     const sessionRef = this.db.collection('chatSessions').doc(sessionId);
     
@@ -231,7 +231,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Store contact form submission
-   */
+    */
   async storeContactFormSubmission(
     submission: Omit<ContactFormSubmission, 'id' | 'timestamp'>
   ): Promise<string> {
@@ -259,7 +259,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Track QR code scan
-   */
+    */
   async trackQRCodeScan(scan: Omit<QRCodeScan, 'scanId' | 'timestamp'>): Promise<void> {
     const scanRef = this.db.collection('qrScans').doc();
     
@@ -281,7 +281,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Increment job analytics
-   */
+    */
   private async incrementJobAnalytics(
     jobId: string, 
     increments: Record<string, number>
@@ -298,7 +298,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Get public profile by slug
-   */
+    */
   async getPublicProfileBySlug(slug: string): Promise<PublicCVProfile | null> {
     const profiles = await this.db
       .collection('publicProfiles')
@@ -315,7 +315,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Update privacy settings
-   */
+    */
   async updatePrivacySettings(jobId: string, settings: any): Promise<void> {
     await this.db.collection('jobs').doc(jobId).update({
       'privacySettings': settings
@@ -324,7 +324,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Get feature analytics
-   */
+    */
   async getFeatureAnalytics(jobId: string): Promise<FeatureAnalytics[]> {
     const analytics = await this.db
       .collection('featureAnalytics')
@@ -336,7 +336,7 @@ export class EnhancedDatabaseService {
 
   /**
    * Clean up expired sessions
-   */
+    */
   async cleanupExpiredSessions(): Promise<void> {
     const cutoffDate = new Date();
     cutoffDate.setHours(cutoffDate.getHours() - 24); // 24 hour expiry

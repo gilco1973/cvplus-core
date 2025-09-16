@@ -10,7 +10,7 @@
  *
  * MIGRATION PHASE 4B: Analytics & Premium Services Migration
  * Staging areas prepared for domain services migration
- */
+  */
 
 // Import for internal use
 import { ServiceRegistry } from "./service-registry";
@@ -68,7 +68,7 @@ export function createServiceRegistry(): ServiceRegistry {
 
 /**
  * Initialize enhanced services with common patterns
- */
+  */
 export async function initializeEnhancedServices(): Promise<void> {
   const registry = createServiceRegistry();
 
@@ -81,7 +81,7 @@ export async function initializeEnhancedServices(): Promise<void> {
 
 /**
  * Perform health check on all registered services
- */
+  */
 export async function performServicesHealthCheck(): Promise<Record<string, ServiceHealth>> {
   const registry = ServiceRegistry.getInstance();
   return await registry.getHealthStatus();
@@ -89,7 +89,7 @@ export async function performServicesHealthCheck(): Promise<Record<string, Servi
 
 /**
  * Cleanup all services (for graceful shutdown)
- */
+  */
 export async function cleanupAllServices(): Promise<void> {
   const registry = ServiceRegistry.getInstance();
   await registry.cleanupAll();

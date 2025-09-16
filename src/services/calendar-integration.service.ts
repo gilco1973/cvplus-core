@@ -1,7 +1,7 @@
 /**
  * Stub Calendar Integration Service
  * Temporary stub for deployment
- */
+  */
 
 export interface CalendarEvent {
   id: string;

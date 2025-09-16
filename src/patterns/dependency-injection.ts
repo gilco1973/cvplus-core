@@ -1,7 +1,7 @@
 /**
  * CVPlus Dependency Injection Container
  * Enables proper cross-layer communication without violating architecture rules
- */
+  */
 
 export interface ServiceContainer {
   register<T>(key: string, implementation: T): void;

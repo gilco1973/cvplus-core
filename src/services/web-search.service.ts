@@ -1,7 +1,7 @@
 /**
  * Web Search Service using Serper API
  * Provides web search capabilities for CV enhancement
- */
+  */
 
 import axios from 'axios';
 import { environment as config } from '../config/environment';
@@ -35,7 +35,7 @@ export class WebSearchService {
 
   /**
    * Search the web for information about a company or technology
-   */
+    */
   async searchCompanyInfo(companyName: string): Promise<SerperSearchResult[]> {
     if (!this.serperApiKey) {
       return [];
@@ -67,7 +67,7 @@ export class WebSearchService {
 
   /**
    * Search for technology or skill information
-   */
+    */
   async searchTechnologyInfo(technology: string): Promise<SerperSearchResult[]> {
     if (!this.serperApiKey) {
       return [];
@@ -99,7 +99,7 @@ export class WebSearchService {
 
   /**
    * Search for industry trends and insights
-   */
+    */
   async searchIndustryTrends(industry: string): Promise<SerperSearchResult[]> {
     if (!this.serperApiKey) {
       return [];
@@ -131,7 +131,7 @@ export class WebSearchService {
 
   /**
    * Generic web search
-   */
+    */
   async search(query: string, numResults: number = 5): Promise<SerperSearchResult[]> {
     if (!this.serperApiKey) {
       return [];
@@ -162,7 +162,7 @@ export class WebSearchService {
 
   /**
    * Check if web search is available
-   */
+    */
   isAvailable(): boolean {
     return !!this.serperApiKey;
   }

@@ -1,7 +1,7 @@
 /**
  * Firebase Admin SDK Configuration
  * Provides centralized access to Firebase Admin services
- */
+  */
 
 import * as admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -30,4 +30,4 @@ export const auth = admin.auth();
 export { admin };
 
 // Export specific admin modules
-export { FieldValue } from 'firebase-admin/firestore';
+export { FieldValue, Timestamp } from 'firebase-admin/firestore';

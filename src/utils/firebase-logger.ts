@@ -6,18 +6,18 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { logger as firebaseLogger } from 'firebase-functions';
 
 /**
  * Log levels supported by Firebase Functions
- */
+  */
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 /**
  * Structured log entry interface
- */
+  */
 export interface LogEntry {
   message: string;
   level: LogLevel;
@@ -32,7 +32,7 @@ export interface LogEntry {
 
 /**
  * Performance tracking interface
- */
+  */
 export interface PerformanceLog {
   operation: string;
   duration: number;
@@ -43,23 +43,23 @@ export interface PerformanceLog {
 
 /**
  * Logger configuration
- */
+  */
 export interface LoggerConfig {
-  /** Default log level */
+  /** Default log level  */
   defaultLevel: LogLevel;
-  /** Include timestamps in logs */
+  /** Include timestamps in logs  */
   includeTimestamp: boolean;
-  /** Maximum metadata size (in characters) */
+  /** Maximum metadata size (in characters)  */
   maxMetadataSize: number;
-  /** Sanitize sensitive data */
+  /** Sanitize sensitive data  */
   sanitizeData: boolean;
-  /** Additional context to include in all logs */
+  /** Additional context to include in all logs  */
   globalContext?: Record<string, any>;
 }
 
 /**
  * Default logger configuration
- */
+  */
 const DEFAULT_CONFIG: LoggerConfig = {
   defaultLevel: 'info',
   includeTimestamp: true,
@@ -70,12 +70,12 @@ const DEFAULT_CONFIG: LoggerConfig = {
 
 /**
  * Current logger configuration
- */
+  */
 let loggerConfig: LoggerConfig = { ...DEFAULT_CONFIG };
 
 /**
  * Sensitive data keys to sanitize
- */
+  */
 const SENSITIVE_KEYS = [
   'password', 'token', 'apiKey', 'secret', 'authorization', 
   'auth', 'credential', 'key', 'privateKey', 'passphrase',
@@ -86,7 +86,7 @@ const SENSITIVE_KEYS = [
  * Configure the logger
  * 
  * @param config - Logger configuration options
- */
+  */
 export function configureLogger(config: Partial<LoggerConfig>): void {
   loggerConfig = { ...loggerConfig, ...config };
 }
@@ -96,7 +96,7 @@ export function configureLogger(config: Partial<LoggerConfig>): void {
  * 
  * @param data - Data to sanitize
  * @returns Sanitized data object
- */
+  */
 function sanitizeLogData(data: any): any {
   if (!loggerConfig.sanitizeData) {
     return data;
@@ -131,7 +131,7 @@ function sanitizeLogData(data: any): any {
  * 
  * @param metadata - Metadata object
  * @returns Truncated metadata
- */
+  */
 function truncateMetadata(metadata: any): any {
   const jsonString = JSON.stringify(metadata);
   
@@ -152,7 +152,7 @@ function truncateMetadata(metadata: any): any {
  * 
  * @param entry - Log entry to format
  * @returns Formatted log entry
- */
+  */
 function formatLogEntry(entry: LogEntry): [string, any?] {
   const { message, level: _level, ...restEntry } = entry;
   
@@ -181,7 +181,7 @@ function formatLogEntry(entry: LogEntry): [string, any?] {
 
 /**
  * Enhanced Firebase logger with structured logging
- */
+  */
 export class CVPlusLogger {
   private functionName?: string;
   
@@ -191,7 +191,7 @@ export class CVPlusLogger {
 
   /**
    * Debug level logging
-   */
+    */
   debug(message: string, metadata?: Record<string, any>): void {
     const entry: LogEntry = {
       message,
@@ -207,7 +207,7 @@ export class CVPlusLogger {
 
   /**
    * Info level logging
-   */
+    */
   info(message: string, metadata?: Record<string, any>): void {
     const entry: LogEntry = {
       message,
@@ -223,7 +223,7 @@ export class CVPlusLogger {
 
   /**
    * Warning level logging
-   */
+    */
   warn(message: string, metadata?: Record<string, any>): void {
     const entry: LogEntry = {
       message,
@@ -239,7 +239,7 @@ export class CVPlusLogger {
 
   /**
    * Error level logging
-   */
+    */
   error(message: string, error?: Error | string, metadata?: Record<string, any>): void {
     const entry: LogEntry = {
       message,
@@ -256,7 +256,7 @@ export class CVPlusLogger {
 
   /**
    * Log performance metrics
-   */
+    */
   performance(operation: string, duration: number, metadata?: Record<string, any>): void {
     this.info(`Performance: ${operation}`, {
       operation,
@@ -268,7 +268,7 @@ export class CVPlusLogger {
 
   /**
    * Log function start
-   */
+    */
   functionStart(functionName?: string, requestData?: Record<string, any>): void {
     this.info(`Function started: ${functionName || this.functionName}`, {
       event: 'function_start',
@@ -278,7 +278,7 @@ export class CVPlusLogger {
 
   /**
    * Log function completion
-   */
+    */
   functionEnd(functionName?: string, duration?: number, metadata?: Record<string, any>): void {
     this.info(`Function completed: ${functionName || this.functionName}`, {
       event: 'function_end',
@@ -289,7 +289,7 @@ export class CVPlusLogger {
 
   /**
    * Log authentication events
-   */
+    */
   auth(event: 'success' | 'failure' | 'attempt', userId?: string, metadata?: Record<string, any>): void {
     const level = event === 'failure' ? 'warn' : 'info';
     const message = `Authentication ${event}${userId ? ` for user ${userId.substring(0, 8)}***` : ''}`;
@@ -304,7 +304,7 @@ export class CVPlusLogger {
 
   /**
    * Log business logic events
-   */
+    */
   business(event: string, metadata?: Record<string, any>): void {
     this.info(`Business event: ${event}`, {
       event: 'business_logic',
@@ -315,7 +315,7 @@ export class CVPlusLogger {
 
   /**
    * Log external API calls
-   */
+    */
   externalApi(
     service: string, 
     operation: string, 
@@ -342,23 +342,23 @@ export class CVPlusLogger {
  * 
  * @param functionName - Name of the Firebase Function
  * @returns Logger instance
- */
+  */
 export function createLogger(functionName: string): CVPlusLogger {
   return new CVPlusLogger(functionName);
 }
 
 /**
  * Default logger instance
- */
+  */
 export const logger = new CVPlusLogger();
 
 /**
  * Quick logging functions for common patterns
- */
+  */
 export const quickLog = {
   /**
    * Log function execution with automatic timing
-   */
+    */
   withTiming: async <T>(
     operation: string,
     fn: () => Promise<T>,
@@ -379,7 +379,7 @@ export const quickLog = {
 
   /**
    * Log user action
-   */
+    */
   userAction: (action: string, userId: string, metadata?: Record<string, any>): void => {
     logger.info(`User action: ${action}`, {
       event: 'user_action',
@@ -391,7 +391,7 @@ export const quickLog = {
 
   /**
    * Log security event
-   */
+    */
   security: (event: string, severity: 'low' | 'medium' | 'high' | 'critical', metadata?: Record<string, any>): void => {
     const level = severity === 'critical' || severity === 'high' ? 'error' : 'warn';
     const securityMetadata = {
@@ -412,5 +412,5 @@ export const quickLog = {
 /**
  * Legacy compatibility - direct Firebase logger re-export
  * For gradual migration from existing logging
- */
+  */
 export { firebaseLogger };

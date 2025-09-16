@@ -18,7 +18,7 @@ interface ValidationCriteria {
  * 
  * Centralized configuration for the LLM verification system with
  * environment-specific settings and service-specific validation criteria.
- */
+  */
 
 export interface LLMVerificationConfig {
   // Core settings

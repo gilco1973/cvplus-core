@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import * as admin from 'firebase-admin';
 
@@ -54,7 +54,7 @@ interface HealthCheck {
 
 /**
  * Circuit Breaker Service Implementation
- */
+  */
 export class CircuitBreakerService {
   private circuits: Map<string, CircuitBreakerState> = new Map();
   private db: admin.firestore.Firestore;
@@ -78,7 +78,7 @@ export class CircuitBreakerService {
 
   /**
    * Register a provider with the circuit breaker
-   */
+    */
   registerProvider(
     providerId: string, 
     config?: Partial<CircuitBreakerConfig>
@@ -109,7 +109,7 @@ export class CircuitBreakerService {
 
   /**
    * Check if circuit is open (provider blocked)
-   */
+    */
   isOpen(providerId: string): boolean {
     const circuit = this.circuits.get(providerId);
     if (!circuit) {
@@ -128,7 +128,7 @@ export class CircuitBreakerService {
 
   /**
    * Check if circuit is half-open and if call should be allowed
-   */
+    */
   shouldAllowCall(providerId: string): boolean {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return true;
@@ -142,7 +142,7 @@ export class CircuitBreakerService {
 
   /**
    * Record a successful operation
-   */
+    */
   recordSuccess(providerId: string, responseTime: number = 0): void {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return;
@@ -185,7 +185,7 @@ export class CircuitBreakerService {
 
   /**
    * Record a failed operation
-   */
+    */
   recordFailure(providerId: string, responseTime: number = 0, _error?: string): void {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return;
@@ -227,7 +227,7 @@ export class CircuitBreakerService {
 
   /**
    * Record a timeout
-   */
+    */
   recordTimeout(providerId: string, responseTime: number): void {
     const circuit = this.circuits.get(providerId);
     if (circuit && responseTime >= circuit.config.timeoutThreshold) {
@@ -239,21 +239,21 @@ export class CircuitBreakerService {
 
   /**
    * Get current circuit state
-   */
+    */
   getCircuitState(providerId: string): CircuitBreakerState | null {
     return this.circuits.get(providerId) || null;
   }
 
   /**
    * Get all circuit states
-   */
+    */
   getAllCircuitStates(): CircuitBreakerState[] {
     return Array.from(this.circuits.values());
   }
 
   /**
    * Manually open a circuit (for maintenance, etc.)
-   */
+    */
   openCircuit(providerId: string, _reason: string = 'Manual'): boolean {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return false;
@@ -264,7 +264,7 @@ export class CircuitBreakerService {
 
   /**
    * Manually close a circuit (force recovery)
-   */
+    */
   closeCircuit(providerId: string, _reason: string = 'Manual'): boolean {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return false;
@@ -275,7 +275,7 @@ export class CircuitBreakerService {
 
   /**
    * Reset circuit state
-   */
+    */
   resetCircuit(providerId: string): boolean {
     const circuit = this.circuits.get(providerId);
     if (!circuit) return false;
@@ -293,7 +293,7 @@ export class CircuitBreakerService {
 
   /**
    * Get health check results
-   */
+    */
   async performHealthCheck(providerId: string): Promise<HealthCheck> {
     const circuit = this.circuits.get(providerId);
     if (!circuit) {
@@ -348,7 +348,7 @@ export class CircuitBreakerService {
 
   /**
    * Get circuit breaker statistics
-   */
+    */
   getStatistics(providerId?: string): any {
     if (providerId) {
       const circuit = this.circuits.get(providerId);
@@ -466,7 +466,7 @@ export class CircuitBreakerService {
 
   /**
    * Cleanup method for proper service shutdown
-   */
+    */
   cleanup(): void {
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);

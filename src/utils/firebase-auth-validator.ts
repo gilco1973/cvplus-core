@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { logger } from 'firebase-functions';
 import type { CallableRequest } from 'firebase-functions/v2/https';
@@ -15,7 +15,7 @@ import { throwFirebaseError, requireAuthentication, validateUserAccess } from '.
 
 /**
  * Enhanced Auth Context with user data
- */
+  */
 export interface EnhancedAuthContext extends FirebaseAuthContext {
   userData?: {
     displayName?: string;
@@ -28,25 +28,25 @@ export interface EnhancedAuthContext extends FirebaseAuthContext {
 
 /**
  * Auth validation options
- */
+  */
 export interface AuthValidationOptions {
-  /** Require email verification */
+  /** Require email verification  */
   requireEmailVerification?: boolean;
-  /** Required user roles */
+  /** Required user roles  */
   requiredRoles?: string[];
-  /** Required permissions */
+  /** Required permissions  */
   requiredPermissions?: string[];
-  /** Minimum subscription tier */
+  /** Minimum subscription tier  */
   minimumSubscriptionTier?: string;
-  /** Allow service accounts */
+  /** Allow service accounts  */
   allowServiceAccounts?: boolean;
-  /** Custom validation function */
+  /** Custom validation function  */
   customValidator?: (auth: FirebaseAuthContext) => Promise<boolean> | boolean;
 }
 
 /**
  * Result of authentication validation
- */
+  */
 export interface AuthValidationResult {
   isValid: boolean;
   auth: FirebaseAuthContext;
@@ -61,7 +61,7 @@ export interface AuthValidationResult {
  * @param request - Firebase callable request
  * @param functionName - Name of calling function (for logging)
  * @returns Validated auth context
- */
+  */
 export function validateBasicAuth(
   request: CallableRequest,
   functionName?: string
@@ -94,7 +94,7 @@ export function validateBasicAuth(
  * @param auth - Auth context from validateBasicAuth
  * @param requestedUserId - User ID from request data
  * @param functionName - Name of calling function (for logging)
- */
+  */
 export function validateUserIdMatch(
   auth: FirebaseAuthContext,
   requestedUserId: string,
@@ -109,7 +109,7 @@ export function validateUserIdMatch(
  * 
  * @param auth - Auth context
  * @param functionName - Function name for logging
- */
+  */
 export function validateEmailVerification(
   auth: FirebaseAuthContext,
   functionName?: string
@@ -136,7 +136,7 @@ export function validateEmailVerification(
  * @param auth - Auth context with user data
  * @param requiredRoles - Array of required roles
  * @param functionName - Function name for logging
- */
+  */
 export function validateUserRoles(
   auth: EnhancedAuthContext,
   requiredRoles: string[],
@@ -167,7 +167,7 @@ export function validateUserRoles(
  * @param auth - Auth context with user data
  * @param requiredPermissions - Array of required permissions
  * @param functionName - Function name for logging
- */
+  */
 export function validateUserPermissions(
   auth: EnhancedAuthContext,
   requiredPermissions: string[],
@@ -205,7 +205,7 @@ export function validateUserPermissions(
  * @param auth - Auth context with user data
  * @param minimumTier - Minimum required subscription tier
  * @param functionName - Function name for logging
- */
+  */
 export function validateSubscriptionTier(
   auth: EnhancedAuthContext,
   minimumTier: string,
@@ -242,7 +242,7 @@ export function validateSubscriptionTier(
  * @param options - Validation options
  * @param functionName - Function name for logging
  * @returns Enhanced auth context with validation results
- */
+  */
 export async function validateAuthentication(
   request: CallableRequest,
   options: AuthValidationOptions = {},
@@ -358,7 +358,7 @@ export async function validateAuthentication(
  * @param requestedUserId - User ID from request data
  * @param functionName - Function name for logging
  * @returns Validated auth context
- */
+  */
 export function validateUserEndpoint(
   request: CallableRequest,
   requestedUserId: string,
@@ -375,7 +375,7 @@ export function validateUserEndpoint(
  * 
  * @param auth - Auth context
  * @param functionName - Function name for logging
- */
+  */
 export function validateServiceAccount(
   auth: FirebaseAuthContext,
   functionName?: string

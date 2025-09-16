@@ -41,7 +41,7 @@ export interface LogEntry {
 
 /**
  * Structured logger class
- */
+  */
 export class Logger {
   private context: LogContext;
   private minLevel: LogLevel;
@@ -53,7 +53,7 @@ export class Logger {
 
   /**
    * Create child logger with additional context
-   */
+    */
   child(additionalContext: LogContext): Logger {
     return new Logger(
       { ...this.context, ...additionalContext },
@@ -63,49 +63,49 @@ export class Logger {
 
   /**
    * Set minimum log level
-   */
+    */
   setLevel(level: LogLevel): void {
     this.minLevel = level;
   }
 
   /**
    * Log error message
-   */
+    */
   error(message: string, error?: Error, metadata?: Record<string, any>): void {
     this.log(LogLevel.ERROR, message, { error, metadata });
   }
 
   /**
    * Log warning message
-   */
+    */
   warn(message: string, metadata?: Record<string, any>): void {
     this.log(LogLevel.WARN, message, { metadata });
   }
 
   /**
    * Log info message
-   */
+    */
   info(message: string, metadata?: Record<string, any>): void {
     this.log(LogLevel.INFO, message, { metadata });
   }
 
   /**
    * Log debug message
-   */
+    */
   debug(message: string, metadata?: Record<string, any>): void {
     this.log(LogLevel.DEBUG, message, { metadata });
   }
 
   /**
    * Log trace message
-   */
+    */
   trace(message: string, metadata?: Record<string, any>): void {
     this.log(LogLevel.TRACE, message, { metadata });
   }
 
   /**
    * Log with performance metrics
-   */
+    */
   performance(
     message: string,
     duration: number,
@@ -122,7 +122,7 @@ export class Logger {
 
   /**
    * Log API request
-   */
+    */
   apiRequest(
     method: string,
     endpoint: string,
@@ -142,7 +142,7 @@ export class Logger {
 
   /**
    * Log user action
-   */
+    */
   userAction(
     action: string,
     userId: string,
@@ -162,7 +162,7 @@ export class Logger {
 
   /**
    * Log system event
-   */
+    */
   systemEvent(
     event: string,
     severity: 'low' | 'medium' | 'high' | 'critical',
@@ -185,7 +185,7 @@ export class Logger {
 
   /**
    * Core logging method
-   */
+    */
   private log(
     level: LogLevel,
     message: string,
@@ -233,7 +233,7 @@ export class Logger {
 
   /**
    * Output log to console with proper formatting
-   */
+    */
   private outputToConsole(entry: LogEntry): void {
     const levelNames = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
     const levelName = levelNames[entry.level];
@@ -260,7 +260,7 @@ export class Logger {
 
   /**
    * Persist log entry to Firestore
-   */
+    */
   private async persistToFirestore(entry: LogEntry): Promise<void> {
     try {
       const firestore = admin.firestore();
@@ -299,7 +299,7 @@ export class Logger {
 
   /**
    * Determine if log should be persisted based on context
-   */
+    */
   private shouldPersistLog(entry: LogEntry): boolean {
     // Always persist errors
     if (entry.level === LogLevel.ERROR) return true;
@@ -327,7 +327,7 @@ export class Logger {
 
 /**
  * Global logger instance
- */
+  */
 export const logger = new Logger(
   {
     service: 'cvplus-functions',
@@ -342,7 +342,7 @@ export const logger = new Logger(
 
 /**
  * Create logger for specific function
- */
+  */
 export function createFunctionLogger(functionName: string, context: LogContext = {}): Logger {
   return logger.child({
     functionName,
@@ -352,7 +352,7 @@ export function createFunctionLogger(functionName: string, context: LogContext =
 
 /**
  * Create logger for API request
- */
+  */
 export function createRequestLogger(
   requestId: string,
   method: string,
@@ -369,7 +369,7 @@ export function createRequestLogger(
 
 /**
  * Performance timing decorator
- */
+  */
 export function withTiming<T>(
   operation: () => Promise<T>,
   operationName: string,
@@ -393,7 +393,7 @@ export function withTiming<T>(
 
 /**
  * Log cleanup function for scheduled cleanup
- */
+  */
 export async function cleanupLogs(): Promise<void> {
   try {
     const firestore = admin.firestore();
@@ -441,7 +441,7 @@ export async function cleanupLogs(): Promise<void> {
 
 /**
  * Log aggregation for analytics
- */
+  */
 export async function aggregateLogs(
   startDate: Date,
   endDate: Date
@@ -526,7 +526,7 @@ export async function aggregateLogs(
 
 /**
  * Export logs for external analysis
- */
+  */
 export async function exportLogs(
   collection: string,
   startDate: Date,

@@ -6,11 +6,11 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 /**
  * Function timeout configurations (in seconds)
- */
+  */
 export const FUNCTION_TIMEOUTS = {
   SHORT: 60,        // 1 minute - for quick operations
   MEDIUM: 300,      // 5 minutes - for moderate processing
@@ -20,7 +20,7 @@ export const FUNCTION_TIMEOUTS = {
 
 /**
  * Memory allocation configurations
- */
+  */
 export const MEMORY_ALLOCATIONS = {
   SMALL: '256MB',   // For lightweight operations
   MEDIUM: '512MB',  // For moderate processing
@@ -31,7 +31,7 @@ export const MEMORY_ALLOCATIONS = {
 
 /**
  * Firebase regions
- */
+  */
 export const REGIONS = {
   US_CENTRAL: 'us-central1',
   US_EAST: 'us-east1',
@@ -42,7 +42,7 @@ export const REGIONS = {
 
 /**
  * Default CORS origins for different environments
- */
+  */
 export const FIREBASE_CORS_ORIGINS = {
   DEVELOPMENT: [
     'http://localhost:3000',
@@ -65,7 +65,7 @@ export const FIREBASE_CORS_ORIGINS = {
 
 /**
  * Premium feature definitions and requirements
- */
+  */
 export const PREMIUM_FEATURES = {
   ADVANCED_ANALYTICS: {
     key: 'advanced-analytics',
@@ -107,7 +107,7 @@ export const PREMIUM_FEATURES = {
 
 /**
  * Subscription tiers hierarchy
- */
+  */
 export const SUBSCRIPTION_TIERS = {
   FREE: {
     name: 'free',
@@ -152,7 +152,7 @@ export const SUBSCRIPTION_TIERS = {
 
 /**
  * Rate limiting configurations
- */
+  */
 export const FIREBASE_RATE_LIMITS = {
   FREE_TIER: {
     requestsPerMinute: 10,
@@ -178,7 +178,7 @@ export const FIREBASE_RATE_LIMITS = {
 
 /**
  * File upload limits
- */
+  */
 export const FILE_LIMITS = {
   MAX_SIZE_MB: {
     FREE: 5,
@@ -195,7 +195,7 @@ export const FILE_LIMITS = {
 
 /**
  * Cache TTL values (in seconds)
- */
+  */
 export const CACHE_TTL = {
   SHORT: 300,       // 5 minutes
   MEDIUM: 1800,     // 30 minutes
@@ -205,7 +205,7 @@ export const CACHE_TTL = {
 
 /**
  * Common error messages
- */
+  */
 export const FIREBASE_ERROR_MESSAGES = {
   AUTHENTICATION: {
     REQUIRED: 'User must be authenticated',
@@ -234,7 +234,7 @@ export const FIREBASE_ERROR_MESSAGES = {
 
 /**
  * HTTP status codes commonly used in Firebase Functions
- */
+  */
 export const HTTP_STATUS_CODES = {
   OK: 200,
   CREATED: 201,
@@ -255,7 +255,7 @@ export const HTTP_STATUS_CODES = {
 
 /**
  * Default pagination settings
- */
+  */
 export const FIREBASE_PAGINATION_DEFAULTS = {
   PAGE: 1,
   LIMIT: 20,
@@ -264,7 +264,7 @@ export const FIREBASE_PAGINATION_DEFAULTS = {
 
 /**
  * Processing status constants
- */
+  */
 export const PROCESSING_STATUS = {
   PENDING: 'pending',
   PROCESSING: 'processing',
@@ -277,7 +277,7 @@ export const PROCESSING_STATUS = {
 
 /**
  * Supported languages for i18n
- */
+  */
 export const SUPPORTED_LANGUAGES = {
   ENGLISH: 'en',
   SPANISH: 'es',
@@ -289,7 +289,7 @@ export const SUPPORTED_LANGUAGES = {
 
 /**
  * Analytics event categories
- */
+  */
 export const ANALYTICS_CATEGORIES = {
   USER: 'user',
   CV: 'cv',
@@ -301,7 +301,7 @@ export const ANALYTICS_CATEGORIES = {
 
 /**
  * Queue priorities for background tasks
- */
+  */
 export const QUEUE_PRIORITIES = {
   LOW: 1,
   NORMAL: 5,
@@ -311,7 +311,7 @@ export const QUEUE_PRIORITIES = {
 
 /**
  * External API timeouts (in milliseconds)
- */
+  */
 export const EXTERNAL_API_TIMEOUTS = {
   CLAUDE: 30000,
   OPENAI: 30000,
@@ -323,7 +323,7 @@ export const EXTERNAL_API_TIMEOUTS = {
 
 /**
  * Security constants
- */
+  */
 export const SECURITY = {
   TOKEN_EXPIRY_BUFFER: 300, // 5 minutes buffer for token expiry
   MAX_LOGIN_ATTEMPTS: 5,

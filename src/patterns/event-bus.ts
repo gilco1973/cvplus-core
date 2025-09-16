@@ -1,7 +1,7 @@
 /**
  * CVPlus Event Bus for Cross-Layer Communication
  * Enables decoupled communication between modules without direct imports
- */
+  */
 
 export interface EventHandler<T = any> {
   (data: T): void | Promise<void>;

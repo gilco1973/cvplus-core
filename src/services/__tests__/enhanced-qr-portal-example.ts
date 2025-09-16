@@ -7,7 +7,7 @@
  * @author Gil Klainert
  * @created 2025-08-19
  * @disabled 2025-09-14
- */
+  */
 
 // TEMPORARILY DISABLED: Import from staging area not available
 // import { EnhancedQRService } from '../../staging-for-submodules/multimedia/services/enhanced-qr.service';

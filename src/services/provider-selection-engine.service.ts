@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import {
   VideoGenerationProvider,
@@ -71,7 +71,7 @@ interface ProviderUsageHistory {
 
 /**
  * AI-Driven Provider Selection Algorithm
- */
+  */
 class AIProviderScorer {
   private metricsCache: Map<string, { metrics: ProviderPerformanceMetrics; timestamp: Date }> = new Map();
   private healthCache: Map<string, { health: ProviderHealthStatus; timestamp: Date }> = new Map();
@@ -337,7 +337,7 @@ class AIProviderScorer {
 
 /**
  * Enhanced Provider Selection Engine
- */
+  */
 export class ProviderSelectionEngine {
   private providers: Map<string, VideoGenerationProvider> = new Map();
   private aiScorer: AIProviderScorer;
@@ -552,28 +552,28 @@ export class ProviderSelectionEngine {
 
   /**
    * Get provider by name
-   */
+    */
   getProvider(name: string): VideoGenerationProvider | undefined {
     return this.providers.get(name);
   }
 
   /**
    * Get all registered providers
-   */
+    */
   getAllProviders(): VideoGenerationProvider[] {
     return Array.from(this.providers.values());
   }
 
   /**
    * Remove a provider from the registry
-   */
+    */
   unregisterProvider(name: string): boolean {
     return this.providers.delete(name);
   }
 
   /**
    * Get provider performance analytics
-   */
+    */
   async getProviderAnalytics(period: '24h' | '7d' | '30d' = '24h'): Promise<any> {
     try {
       const providers = Array.from(this.providers.values());

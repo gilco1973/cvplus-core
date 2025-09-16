@@ -6,7 +6,7 @@
  * 
  * Author: Gil Klainert
  * Date: 2025-08-29
- */
+  */
 
 import type { UserSubscription, UserContext } from '../types/middleware';
 
@@ -17,78 +17,78 @@ import type { UserSubscription, UserContext } from '../types/middleware';
 /**
  * Base authentication service interface
  * To be implemented by the Auth module
- */
+  */
 export interface IAuthService {
   /**
    * Authenticate a user with credentials
-   */
+    */
   authenticate(credentials: AuthCredentials): Promise<AuthResult>;
   
   /**
    * Validate an authentication token
-   */
+    */
   validateToken(token: string): Promise<AuthValidationResult>;
   
   /**
    * Sign out a user
-   */
+    */
   signOut(userId: string): Promise<void>;
   
   /**
    * Refresh an authentication token
-   */
+    */
   refreshToken(refreshToken: string): Promise<AuthResult>;
 }
 
 /**
  * Permission service interface
  * To be implemented by the Auth module
- */
+  */
 export interface IPermissionService {
   /**
    * Check if user has specific permission
-   */
+    */
   hasPermission(userId: string, permission: string): Promise<boolean>;
   
   /**
    * Check if user has any of the specified roles
-   */
+    */
   hasAnyRole(userId: string, roles: string[]): Promise<boolean>;
   
   /**
    * Get user's roles
-   */
+    */
   getUserRoles(userId: string): Promise<string[]>;
   
   /**
    * Check premium feature access
-   */
+    */
   hasPremiumFeature(userId: string, feature: string): Promise<boolean>;
 }
 
 /**
  * Session service interface
  * To be implemented by the Auth module
- */
+  */
 export interface ISessionService {
   /**
    * Create a new session
-   */
+    */
   createSession(userId: string, metadata?: Record<string, any>): Promise<SessionData>;
   
   /**
    * Validate an existing session
-   */
+    */
   validateSession(sessionId: string): Promise<SessionValidationResult>;
   
   /**
    * Terminate a session
-   */
+    */
   terminateSession(sessionId: string): Promise<void>;
   
   /**
    * Clean up expired sessions
-   */
+    */
   cleanupExpiredSessions(): Promise<void>;
 }
 
@@ -99,7 +99,7 @@ export interface ISessionService {
 /**
  * Authentication credentials
  * Used by multiple modules for auth operations
- */
+  */
 export interface AuthCredentials {
   email?: string;
   password?: string;
@@ -111,7 +111,7 @@ export interface AuthCredentials {
 /**
  * Authentication result
  * Returned by auth operations across modules
- */
+  */
 export interface AuthResult {
   success: boolean;
   user?: AuthenticatedUser;
@@ -125,7 +125,7 @@ export interface AuthResult {
 /**
  * Authenticated user (shared across modules)
  * Basic user information available to all modules
- */
+  */
 export interface AuthenticatedUser {
   uid: string;
   email: string;
@@ -142,7 +142,7 @@ export interface AuthenticatedUser {
 /**
  * Auth validation result
  * Used by middleware and other modules
- */
+  */
 export interface AuthValidationResult {
   valid: boolean;
   user?: AuthenticatedUser;
@@ -154,7 +154,7 @@ export interface AuthValidationResult {
 /**
  * Session data (shared across modules)
  * Basic session information for other modules to use
- */
+  */
 export interface SessionData {
   sessionId: string;
   userId: string;
@@ -167,7 +167,7 @@ export interface SessionData {
 /**
  * Session validation result
  * Used by middleware and other modules
- */
+  */
 export interface SessionValidationResult {
   valid: boolean;
   session?: SessionData;
@@ -183,7 +183,7 @@ export interface SessionValidationResult {
 /**
  * Permission definition (shared across modules)
  * Standard permission structure for RBAC
- */
+  */
 export interface Permission {
   id: string;
   name: string;
@@ -196,7 +196,7 @@ export interface Permission {
 /**
  * Role definition (shared across modules)
  * Standard role structure for RBAC
- */
+  */
 export interface Role {
   id: string;
   name: string;
@@ -209,7 +209,7 @@ export interface Role {
 /**
  * Permission check result
  * Used by authorization middleware and other modules
- */
+  */
 export interface PermissionCheckResult {
   allowed: boolean;
   reason?: string;
@@ -225,7 +225,7 @@ export interface PermissionCheckResult {
 /**
  * Premium status (shared across modules)
  * Used by premium features throughout the platform
- */
+  */
 export interface PremiumStatus {
   tier: 'free' | 'premium' | 'enterprise';
   isActive: boolean;
@@ -239,7 +239,7 @@ export interface PremiumStatus {
 /**
  * Feature access result
  * Used by premium-gated features across modules
- */
+  */
 export interface FeatureAccessResult {
   allowed: boolean;
   reason?: string;
@@ -256,7 +256,7 @@ export interface FeatureAccessResult {
 /**
  * Authentication error codes (shared across modules)
  * Standardized error codes for auth-related failures
- */
+  */
 export type AuthErrorCode = 
   | 'invalid-credentials'
   | 'user-not-found'
@@ -275,7 +275,7 @@ export type AuthErrorCode =
 /**
  * Authentication error (shared across modules)
  * Standardized error structure for auth failures
- */
+  */
 export interface AuthError {
   code: AuthErrorCode;
   message: string;

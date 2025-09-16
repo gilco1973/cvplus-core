@@ -15,7 +15,7 @@
  *
  * NOTE: Services have been COPIED to staging areas but we continue to export
  * from original locations to avoid breaking changes during migration preparation.
- */
+  */
 
 // Core cache infrastructure (REMAINS IN CORE)
 export { redisClient } from './redis-client.service';
@@ -69,7 +69,7 @@ export type {
 
 /**
  * Initialize all cache services
- */
+  */
 export async function initializeCacheServices(): Promise<void> {
   try {
     // Import services dynamically to avoid circular dependencies
@@ -97,7 +97,7 @@ export async function initializeCacheServices(): Promise<void> {
 
 /**
  * Perform comprehensive health check on all cache services
- */
+  */
 export async function performCacheHealthCheck() {
   const { cachePerformanceMonitor } = await import('./cache-performance-monitor.service');
   return await cachePerformanceMonitor.performHealthCheck();
@@ -105,7 +105,7 @@ export async function performCacheHealthCheck() {
 
 /**
  * Generate performance report for all cache services
- */
+  */
 export async function generateCachePerformanceReport() {
   const { cachePerformanceMonitor } = await import('./cache-performance-monitor.service');
   return await cachePerformanceMonitor.generatePerformanceReport();
@@ -113,7 +113,7 @@ export async function generateCachePerformanceReport() {
 
 /**
  * Warm all cache services with common data
- */
+  */
 export async function warmAllCaches(): Promise<any> {
   const { cachePerformanceMonitor } = await import('./cache-performance-monitor.service');
   return await cachePerformanceMonitor.warmAllCaches();

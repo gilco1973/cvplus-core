@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 // TEMPORARILY DISABLED: Import from staging area not available
 // Placeholder types for video provider interfaces
@@ -167,7 +167,7 @@ interface RecoveryResult {
 
 /**
  * Exponential Backoff Calculator
- */
+  */
 class BackoffCalculator {
   static calculateDelay(
     strategy: BackoffStrategy,
@@ -219,7 +219,7 @@ class BackoffCalculator {
 
 /**
  * Error Recovery Engine
- */
+  */
 export class ErrorRecoveryEngine {
   private recoveryStrategies: Map<ErrorCategory, RecoveryStrategy> = new Map();
   private providerSelectionEngine: ProviderSelectionEngine;
@@ -363,7 +363,7 @@ export class ErrorRecoveryEngine {
 
   /**
    * Handle provider error with intelligent recovery
-   */
+    */
   async handleError(
     error: VideoProviderError,
     context: RecoveryContext
@@ -820,7 +820,7 @@ export class ErrorRecoveryEngine {
 
   /**
    * Create recovery context for a failed operation
-   */
+    */
   createRecoveryContext(
     jobId: string,
     providerId: string,
@@ -843,7 +843,7 @@ export class ErrorRecoveryEngine {
 
   /**
    * Get recovery statistics
-   */
+    */
   async getRecoveryStatistics(period: '24h' | '7d' | '30d' = '24h'): Promise<any> {
     try {
       const cutoffDate = new Date();

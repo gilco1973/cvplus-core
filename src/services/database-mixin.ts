@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { db } from '../config/firebase';
 import * as admin from 'firebase-admin';
@@ -34,7 +34,7 @@ export interface DatabaseError {
 
 /**
  * Database Mixin - Provides standardized database operations
- */
+  */
 export class DatabaseMixin {
   protected readonly dbOptions: Required<DatabaseOptions>;
   protected queryCache: Map<string, { data: any; expires: number }> = new Map();
@@ -54,7 +54,7 @@ export class DatabaseMixin {
 
   /**
    * Get document by ID with optional caching
-   */
+    */
   protected async getDocument<T>(
     collection: string,
     documentId: string,
@@ -95,7 +95,7 @@ export class DatabaseMixin {
 
   /**
    * Create document with auto-generated or custom ID
-   */
+    */
   protected async createDocument<T>(
     collection: string,
     data: Partial<T>,
@@ -140,7 +140,7 @@ export class DatabaseMixin {
 
   /**
    * Update document with optimistic locking
-   */
+    */
   protected async updateDocument<T>(
     collection: string,
     documentId: string,
@@ -186,7 +186,7 @@ export class DatabaseMixin {
 
   /**
    * Delete document
-   */
+    */
   protected async deleteDocument(
     collection: string,
     documentId: string,
@@ -223,7 +223,7 @@ export class DatabaseMixin {
 
   /**
    * Query documents with pagination
-   */
+    */
   protected async queryDocuments<T>(
     collection: string,
     filters?: QueryFilter[],
@@ -298,7 +298,7 @@ export class DatabaseMixin {
 
   /**
    * Batch operations
-   */
+    */
   protected async batchOperations(
     operations: DatabaseOperation[]
   ): Promise<void> {
@@ -354,7 +354,7 @@ export class DatabaseMixin {
 
   /**
    * Count documents matching query
-   */
+    */
   protected async countDocuments(
     collection: string,
     filters?: QueryFilter[]
@@ -382,7 +382,7 @@ export class DatabaseMixin {
 
   /**
    * Execute transaction
-   */
+    */
   protected async executeTransaction<T>(
     operation: (transaction: admin.firestore.Transaction) => Promise<T>
   ): Promise<T> {
@@ -463,7 +463,7 @@ export interface DatabaseOperation {
 
 /**
  * Factory function to create database mixin
- */
+  */
 export function createDatabaseMixin(
   logger: Logger,
   options?: DatabaseOptions

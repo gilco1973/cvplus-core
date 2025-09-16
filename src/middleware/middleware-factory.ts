@@ -3,7 +3,7 @@
  * Provides dependency injection and factory patterns for middleware creation
  * Author: Gil Klainert
  * Date: 2025-08-29
- */
+  */
 
 import { Request, Response, NextFunction } from 'express';
 import { HttpsError } from 'firebase-functions/v2/https';
@@ -25,13 +25,13 @@ import {
 /**
  * Core Middleware Factory Implementation
  * Uses dependency injection to create middleware without external dependencies
- */
+  */
 export class CoreMiddlewareFactory implements IMiddlewareFactory {
   private config: MiddlewareFactoryConfig = {};
 
   /**
    * Configure the factory with service implementations
-   */
+    */
   configure(config: MiddlewareFactoryConfig): void {
     this.config = { ...this.config, ...config };
   }
@@ -39,7 +39,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
   /**
    * Create authentication middleware
    * Always available in Core module
-   */
+    */
   createAuthGuard(): IPreAuthMiddleware {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -61,7 +61,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
   /**
    * Create premium feature guard
    * Requires premium service injection
-   */
+    */
   createPremiumGuard(featureId: string, options: PremiumGuardOptions = {}): IMiddleware {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -108,7 +108,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
   /**
    * Create rate limiting middleware
    * Requires rate limit service injection
-   */
+    */
   createRateLimitGuard(featureId: string, options: RateLimitOptions): IMiddleware {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -150,7 +150,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
 
   /**
    * Create combined feature guard (auth + premium + rate limit)
-   */
+    */
   createFeatureGuard(featureId: string, options: PremiumGuardOptions = {}): IMiddleware {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -199,7 +199,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
 
   /**
    * Basic authentication check fallback
-   */
+    */
   private basicAuthCheck(req: Request, res: Response, next: NextFunction): void {
     // Check for Firebase auth token in request
     const authHeader = req.headers.authorization;
@@ -237,7 +237,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
 
   /**
    * Basic in-memory rate limiting fallback
-   */
+    */
   private basicRateLimit(
     req: Request,
     featureId: string,
@@ -284,7 +284,7 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
 
   /**
    * Error handlers
-   */
+    */
   private handleAuthError(error: any, res: Response): void {
     logger.error('Authentication error:', error);
 
@@ -384,12 +384,12 @@ export class CoreMiddlewareFactory implements IMiddlewareFactory {
 
 /**
  * Global factory instance
- */
+  */
 export const middlewareFactory = new CoreMiddlewareFactory();
 
 /**
  * Convenience functions for creating common middleware
- */
+  */
 export const requireAuth = () => middlewareFactory.createAuthGuard();
 
 export const requirePremiumFeature = (featureId: string, options?: PremiumGuardOptions) =>
@@ -403,14 +403,14 @@ export const requireFeatureAccess = (featureId: string, options?: PremiumGuardOp
 
 /**
  * Configuration helper for dependency injection
- */
+  */
 export const configureMiddleware = (config: MiddlewareFactoryConfig) => {
   middlewareFactory.configure(config);
 };
 
 /**
  * Type exports for external modules
- */
+  */
 export type { 
   IMiddlewareFactory,
   MiddlewareFactoryConfig,

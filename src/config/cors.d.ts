@@ -1,7 +1,7 @@
 /**
  * CORS Configuration
  * Provides Cross-Origin Resource Sharing settings
- */
+  */
 export interface CorsConfig {
     origin: string[] | string;
     methods: string[];

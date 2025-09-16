@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import type { BaseError } from './error';
 import type { PaginatedResult } from './utility';

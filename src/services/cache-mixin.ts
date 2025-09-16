@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { redisClient } from './cache/redis-client.service';
 // TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
@@ -34,7 +34,7 @@ export interface CacheMetricsData {
 
 /**
  * Cacheable Mixin - Provides standardized caching functionality
- */
+  */
 export class CacheableMixin {
   protected readonly cacheOptions: Required<CacheOptions>;
   protected cacheMetrics: CacheMetricsData;
@@ -62,7 +62,7 @@ export class CacheableMixin {
 
   /**
    * Get cached value with automatic JSON parsing
-   */
+    */
   protected async getCached<T>(
     key: string,
     defaultValue?: T
@@ -113,7 +113,7 @@ export class CacheableMixin {
 
   /**
    * Set cached value with automatic JSON serialization
-   */
+    */
   protected async setCached<T>(
     key: string,
     value: T,
@@ -145,7 +145,7 @@ export class CacheableMixin {
 
   /**
    * Delete cached value
-   */
+    */
   protected async deleteCached(key: string): Promise<boolean> {
     try {
       const fullKey = this.buildCacheKey(key);
@@ -167,7 +167,7 @@ export class CacheableMixin {
 
   /**
    * Get or set cached value with factory function
-   */
+    */
   protected async getCachedOrFetch<T>(
     key: string,
     factory: () => Promise<T>,
@@ -200,7 +200,7 @@ export class CacheableMixin {
 
   /**
    * Batch cache operations
-   */
+    */
   protected async getCachedBatch<T>(
     keys: string[]
   ): Promise<{ [key: string]: CacheResult<T> }> {
@@ -257,7 +257,7 @@ export class CacheableMixin {
 
   /**
    * Invalidate cache by pattern
-   */
+    */
   protected async invalidateCachePattern(pattern: string): Promise<number> {
     try {
       const fullPattern = this.buildCacheKey(pattern);
@@ -279,7 +279,7 @@ export class CacheableMixin {
 
   /**
    * Check if key exists in cache
-   */
+    */
   protected async cacheExists(key: string): Promise<boolean> {
     try {
       const fullKey = this.buildCacheKey(key);
@@ -293,7 +293,7 @@ export class CacheableMixin {
 
   /**
    * Set TTL for existing key
-   */
+    */
   protected async setCacheTTL(key: string, ttlSeconds: number): Promise<boolean> {
     try {
       const fullKey = this.buildCacheKey(key);
@@ -307,14 +307,14 @@ export class CacheableMixin {
 
   /**
    * Get cache performance metrics
-   */
+    */
   protected getCacheMetrics(): CacheMetricsData {
     return { ...this.cacheMetrics };
   }
 
   /**
    * Get cache hit rate
-   */
+    */
   protected getCacheHitRate(): number {
     if (this.cacheMetrics.totalRequests === 0) return 0;
     return this.cacheMetrics.hits / this.cacheMetrics.totalRequests;
@@ -322,7 +322,7 @@ export class CacheableMixin {
 
   /**
    * Reset cache metrics
-   */
+    */
   protected resetCacheMetrics(): void {
     this.cacheMetrics = {
       hits: 0,
@@ -369,7 +369,7 @@ export class CacheableMixin {
 
 /**
  * Factory function to create cacheable mixin
- */
+  */
 export function createCacheableMixin(
   logger: Logger,
   options?: CacheOptions

@@ -7,7 +7,7 @@
  * @author Gil Klainert
  * @version 1.0.0
  * @created 2025-08-28
- */
+  */
 
 import { logger } from 'firebase-functions';
 
@@ -48,7 +48,7 @@ class RedisConfigurationManager {
 
   /**
    * Load Redis configuration from environment variables
-   */
+    */
   private loadRedisConfiguration(): RedisEnvironmentConfig {
     const baseConfig = {
       retryDelayOnFailover: 100,
@@ -89,7 +89,7 @@ class RedisConfigurationManager {
 
   /**
    * Get Redis configuration for current environment
-   */
+    */
   getConfig(environment?: string): RedisConfig {
     const env = environment || process.env.NODE_ENV || 'development';
     
@@ -121,7 +121,7 @@ class RedisConfigurationManager {
 
   /**
    * Get connection URL for Redis (useful for some clients)
-   */
+    */
   getConnectionUrl(environment?: string): string {
     const config = this.getConfig(environment);
     
@@ -142,7 +142,7 @@ class RedisConfigurationManager {
 
   /**
    * Validate Redis configuration
-   */
+    */
   validateConfiguration(environment?: string): {
     isValid: boolean;
     errors: string[];
@@ -182,7 +182,7 @@ class RedisConfigurationManager {
 
   /**
    * Get performance-optimized configuration
-   */
+    */
   getPerformanceConfig(environment?: string): RedisConfig {
     const baseConfig = this.getConfig(environment);
     
@@ -199,7 +199,7 @@ class RedisConfigurationManager {
 
   /**
    * Get high-availability configuration
-   */
+    */
   getHAConfig(environment?: string): RedisConfig & {
     enableOfflineQueue: boolean;
     maxLoadingTimeout: number;
@@ -221,7 +221,7 @@ class RedisConfigurationManager {
 
   /**
    * Test Redis connection configuration
-   */
+    */
   async testConnection(environment?: string): Promise<{
     success: boolean;
     responseTime: number;

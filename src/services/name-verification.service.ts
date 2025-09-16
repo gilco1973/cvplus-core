@@ -33,7 +33,7 @@ export class NameVerificationService {
 
   /**
    * Extract name from CV content using multiple strategies
-   */
+    */
   async extractNameFromCV(cvContent: string): Promise<NameExtractionResult> {
     try {
       // Strategy 1: Header detection (highest confidence)
@@ -87,7 +87,7 @@ export class NameVerificationService {
 
   /**
    * Verify if extracted name matches account name
-   */
+    */
   async verifyNameMatch(
     extractedResult: NameExtractionResult,
     accountData: AccountNameData
@@ -170,7 +170,7 @@ export class NameVerificationService {
 
   /**
    * Extract names from CV header (first 300 characters)
-   */
+    */
   private extractFromHeader(content: string): string[] {
     const header = content.substring(0, 300);
     const names: string[] = [];
@@ -200,7 +200,7 @@ export class NameVerificationService {
 
   /**
    * Extract names from email addresses
-   */
+    */
   private extractFromEmail(content: string): string[] {
     const names: string[] = [];
     const emailPattern = /([a-zA-Z0-9._%+-]+)@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
@@ -224,7 +224,7 @@ export class NameVerificationService {
 
   /**
    * Extract names using pattern matching
-   */
+    */
   private extractFromPatterns(content: string): string[] {
     const names: string[] = [];
 
@@ -253,7 +253,7 @@ export class NameVerificationService {
 
   /**
    * Fallback name extraction - first capitalized words
-   */
+    */
   private extractFallbackNames(content: string): string[] {
     const words = content.split(/\s+/).slice(0, 50); // First 50 words only
     const names: string[] = [];
@@ -275,7 +275,7 @@ export class NameVerificationService {
 
   /**
    * Calculate similarity between extracted and account names
-   */
+    */
   private calculateNameMatch(extractedName: string, accountName: string): NameVerificationResult {
     const normalizedAccount = this.normalizeName(accountName);
     
@@ -329,7 +329,7 @@ export class NameVerificationService {
 
   /**
    * Calculate partial name match (words overlap)
-   */
+    */
   private calculatePartialMatch(name1: string, name2: string): number {
     const words1 = name1.toLowerCase().split(/\s+/);
     const words2 = name2.toLowerCase().split(/\s+/);
@@ -344,7 +344,7 @@ export class NameVerificationService {
 
   /**
    * Calculate string similarity using Levenshtein distance
-   */
+    */
   private calculateStringSimilarity(str1: string, str2: string): number {
     if (str1 === str2) return 1.0;
     
@@ -359,7 +359,7 @@ export class NameVerificationService {
 
   /**
    * Calculate Levenshtein distance
-   */
+    */
   private levenshteinDistance(str1: string, str2: string): number {
     const matrix: number[][] = [];
 
@@ -390,7 +390,7 @@ export class NameVerificationService {
 
   /**
    * Generate name suggestions for user correction
-   */
+    */
   private generateNameSuggestions(extractedName: string, accountData: AccountNameData): string[] {
     return [
       accountData.fullName,
@@ -405,7 +405,7 @@ export class NameVerificationService {
 
   /**
    * Normalize name for comparison
-   */
+    */
   private normalizeName(name: string): string {
     return name
       .trim()
@@ -416,7 +416,7 @@ export class NameVerificationService {
 
   /**
    * Clean extracted name
-   */
+    */
   private cleanExtractedName(name: string): string {
     return name
       .trim()
@@ -427,7 +427,7 @@ export class NameVerificationService {
 
   /**
    * Check if string is a valid name
-   */
+    */
   private isValidName(name: string): boolean {
     if (!name || name.length < 3 || name.length > 100) return false;
     
@@ -444,7 +444,7 @@ export class NameVerificationService {
 
   /**
    * Check if word is capitalized
-   */
+    */
   private isCapitalizedWord(word: string): boolean {
     return Boolean(word && word.length > 1 &&
            word[0] && word[0] === word[0].toUpperCase() &&
@@ -453,7 +453,7 @@ export class NameVerificationService {
 
   /**
    * Check if email local part is generic
-   */
+    */
   private isGenericEmail(localPart: string): boolean {
     const genericPrefixes = [
       'admin', 'info', 'support', 'contact', 'help', 'no-reply', 'noreply',
@@ -467,7 +467,7 @@ export class NameVerificationService {
 
   /**
    * Extract name from email local part
-   */
+    */
   private extractNameFromEmailLocal(localPart: string): string | null {
     // Handle common email formats: first.last, firstname.lastname, firstnamelastname
     const withDots = localPart.replace(/[._-]/g, ' ');
@@ -484,7 +484,7 @@ export class NameVerificationService {
 
   /**
    * Check if phrase is common and not a name
-   */
+    */
   private isCommonPhrase(phrase: string): boolean {
     const commonPhrases = [
       'Curriculum Vitae', 'Cover Letter', 'Personal Statement', 'Professional Summary',

@@ -9,7 +9,7 @@
  *
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { ParsedCV } from '../types/job';
 import { PortalConfig } from '../types/portal';
@@ -29,7 +29,7 @@ import {
  *
  * Provides backward compatibility interface while delegating
  * to the new modular validation system.
- */
+  */
 export class ValidationService {
   private modularService: ModularValidationService;
 
@@ -43,7 +43,7 @@ export class ValidationService {
    * @param cv Parsed CV data to validate
    * @param options Validation options
    * @returns Validation result with errors and sanitized data
-   */
+    */
   validateCV(cv: ParsedCV, _options: ValidationOptions = {}): ValidationResult {
     return this.modularService.validateCV(cv);
   }
@@ -54,7 +54,7 @@ export class ValidationService {
    * @param config Portal configuration to validate
    * @param options Validation options
    * @returns Validation result with errors and sanitized data
-   */
+    */
   validatePortalConfig(config: PortalConfig, _options: ValidationOptions = {}): ValidationResult {
     return this.modularService.validatePortalConfig(config);
   }
@@ -66,7 +66,7 @@ export class ValidationService {
    * @param fieldName Name of the field for error reporting
    * @param maxLength Maximum allowed length
    * @returns Validation result
-   */
+    */
   validateText(text: string, _fieldName: string, _maxLength: number = 1000): ValidationResult {
     return this.modularService.validateText(text);
   }
@@ -76,7 +76,7 @@ export class ValidationService {
    *
    * @param email Email address to validate
    * @returns Validation result
-   */
+    */
   validateEmail(email: string): ValidationResult {
     return this.modularService.validateEmail(email);
   }
@@ -87,7 +87,7 @@ export class ValidationService {
    * @param url URL to validate
    * @param fieldName Field name for error reporting
    * @returns Validation result
-   */
+    */
   validateUrl(url: string, _fieldName: string = 'url'): ValidationResult {
     return this.modularService.validateUrl(url);
   }
@@ -98,7 +98,7 @@ export class ValidationService {
    * @param date Date string to validate
    * @param fieldName Field name for error reporting
    * @returns Validation result
-   */
+    */
   validateDate(date: string, _fieldName: string = 'date'): ValidationResult {
     return this.modularService.validateDate(date);
   }
@@ -110,7 +110,7 @@ export class ValidationService {
    *
    * @param result Validation result to check
    * @returns True if validation passed (no errors)
-   */
+    */
   isValid(result: ValidationResult): boolean {
     return result.isValid;
   }
@@ -120,7 +120,7 @@ export class ValidationService {
    *
    * @param result Validation result
    * @returns Array of error messages
-   */
+    */
   getErrorMessages(result: ValidationResult): string[] {
     return result.errors.map((error: ValidationError) => error.message);
   }
@@ -131,7 +131,7 @@ export class ValidationService {
    * @param result Validation result
    * @param severity Severity level to filter by
    * @returns Array of errors with specified severity
-   */
+    */
   getErrorsBySeverity(result: ValidationResult, severity: 'error' | 'warning'): ValidationError[] {
     return result.errors.filter((error: ValidationError) => (error as any).severity === severity);
   }
@@ -144,7 +144,7 @@ export class ValidationService {
    * @param message Error message
    * @param severity Error severity
    * @returns Validation error object
-   */
+    */
   createError(
     field: string,
     code: ValidationErrorCode,

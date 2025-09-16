@@ -1,7 +1,7 @@
 /**
  * Security Monitor Configuration
  * Provides security monitoring and threat detection settings
- */
+  */
 
 export interface SecurityConfig {
   rateLimiting: {

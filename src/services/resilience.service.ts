@@ -11,70 +11,70 @@
  * @author Gil Klainert
  * @created 2025-08-20
  * @version 1.0
- */
+  */
 
 import { logger } from 'firebase-functions';
 
 /**
  * Retry configuration options
- */
+  */
 export interface RetryConfig {
-  /** Maximum number of retry attempts */
+  /** Maximum number of retry attempts  */
   maxAttempts: number;
   
-  /** Initial delay between retries in milliseconds */
+  /** Initial delay between retries in milliseconds  */
   initialDelayMs: number;
   
-  /** Maximum delay between retries in milliseconds */
+  /** Maximum delay between retries in milliseconds  */
   maxDelayMs: number;
   
-  /** Exponential backoff multiplier */
+  /** Exponential backoff multiplier  */
   backoffMultiplier: number;
   
-  /** Jitter factor to randomize delays (0-1) */
+  /** Jitter factor to randomize delays (0-1)  */
   jitterFactor: number;
   
-  /** HTTP status codes that should trigger retries */
+  /** HTTP status codes that should trigger retries  */
   retryableStatusCodes: number[];
   
-  /** Error types that should trigger retries */
+  /** Error types that should trigger retries  */
   retryableErrors: string[];
 }
 
 /**
  * Circuit breaker configuration
- */
+  */
 export interface CircuitBreakerConfig {
-  /** Number of failures before opening circuit */
+  /** Number of failures before opening circuit  */
   failureThreshold: number;
   
-  /** Time to wait before attempting to close circuit (ms) */
+  /** Time to wait before attempting to close circuit (ms)  */
   resetTimeoutMs: number;
   
-  /** Time window for counting failures (ms) */
+  /** Time window for counting failures (ms)  */
   failureWindowMs: number;
   
-  /** Minimum number of requests before circuit can open */
+  /** Minimum number of requests before circuit can open  */
   minimumRequestCount: number;
 }
 
 /**
  * Rate limiting configuration
- */
+  */
 export interface RateLimitConfig {
-  /** Maximum requests per time window */
+  /** Maximum requests per time window  */
   maxRequests: number;
   
-  /** Time window in milliseconds */
+  /** Time window in milliseconds  */
   windowMs: number;
   
-  /** Delay between requests in milliseconds */
+  /** Delay between requests in milliseconds  */
   delayMs?: number;
 }
 
 /**
  * Circuit breaker states
- */
+  */
 enum CircuitState {
   CLOSED = 'closed',
   OPEN = 'open',
@@ -83,7 +83,7 @@ enum CircuitState {
 
 /**
  * Circuit breaker implementation
- */
+  */
 class CircuitBreaker {
   private state: CircuitState = CircuitState.CLOSED;
   private failureCount = 0;
@@ -170,7 +170,7 @@ class CircuitBreaker {
 
 /**
  * Rate limiter implementation
- */
+  */
 class RateLimiter {
   private requests: number[] = [];
 
@@ -225,7 +225,7 @@ class RateLimiter {
 
 /**
  * Main resilience service
- */
+  */
 export class ResilienceService {
   private circuitBreakers = new Map<string, CircuitBreaker>();
   private rateLimiters = new Map<string, RateLimiter>();
@@ -236,7 +236,7 @@ export class ResilienceService {
 
   /**
    * Execute operation with exponential backoff retry
-   */
+    */
   async withRetry<T>(
     operation: () => Promise<T>,
     config: Partial<RetryConfig> = {}
@@ -302,7 +302,7 @@ export class ResilienceService {
 
   /**
    * Execute operation with circuit breaker protection
-   */
+    */
   async withCircuitBreaker<T>(
     operation: () => Promise<T>,
     circuitName: string,
@@ -327,7 +327,7 @@ export class ResilienceService {
 
   /**
    * Execute operation with rate limiting
-   */
+    */
   async withRateLimit<T>(
     operation: () => Promise<T>,
     limiterName: string,
@@ -349,7 +349,7 @@ export class ResilienceService {
 
   /**
    * Execute operation with full resilience (retry + circuit breaker + rate limiting)
-   */
+    */
   async withFullResilience<T>(
     operation: () => Promise<T>,
     options: {
@@ -376,7 +376,7 @@ export class ResilienceService {
 
   /**
    * Execute operation with timeout
-   */
+    */
   async withTimeout<T>(
     operation: () => Promise<T>,
     timeoutMs: number,
@@ -401,7 +401,7 @@ export class ResilienceService {
 
   /**
    * Get metrics for all circuit breakers and rate limiters
-   */
+    */
   getMetrics() {
     const circuitMetrics = Array.from(this.circuitBreakers.entries()).map(([name, breaker]) => ({
       name,
@@ -424,7 +424,7 @@ export class ResilienceService {
 
   /**
    * Reset specific circuit breaker
-   */
+    */
   resetCircuitBreaker(circuitName: string): boolean {
     const breaker = this.circuitBreakers.get(circuitName);
     if (breaker) {
@@ -438,7 +438,7 @@ export class ResilienceService {
 
   /**
    * Create predefined configurations for common external services
-   */
+    */
   static createHuggingFaceConfig() {
     return {
       retryConfig: {

@@ -1,13 +1,13 @@
 /**
  * Privacy utilities for PII masking
- */
+  */
 
 import { ParsedCV } from '../types/job';
 import { PrivacySettings } from '../types/enhanced-models';
 
 /**
  * Mask PII in CV data based on privacy settings
- */
+  */
 export function maskPII(cv: ParsedCV, settings: PrivacySettings): ParsedCV {
   const masked = JSON.parse(JSON.stringify(cv)); // Deep clone
 
@@ -65,7 +65,7 @@ export function maskPII(cv: ParsedCV, settings: PrivacySettings): ParsedCV {
 
 /**
  * Mask a name while keeping initials
- */
+  */
 function maskName(name: string): string {
   const parts = name.split(' ');
   if (parts.length === 1) {
@@ -77,7 +77,7 @@ function maskName(name: string): string {
 
 /**
  * Mask address keeping only city/country
- */
+  */
 function maskAddress(address: string): string {
   // Try to extract city and country
   const parts = address.split(',').map(p => p.trim());
@@ -90,7 +90,7 @@ function maskAddress(address: string): string {
 
 /**
  * Mask company name based on size/type
- */
+  */
 function maskCompany(company: string): string {
   const lowerCompany = company.toLowerCase();
   
@@ -115,7 +115,7 @@ function maskCompany(company: string): string {
 
 /**
  * Mask specific dates but keep duration
- */
+  */
 function maskDate(date: string): string {
   const year = new Date(date).getFullYear();
   const currentYear = new Date().getFullYear();
@@ -128,7 +128,7 @@ function maskDate(date: string): string {
 
 /**
  * Mask year to show relative time
- */
+  */
 function maskYear(year: string): string {
   const numYear = parseInt(year);
   const currentYear = new Date().getFullYear();
@@ -142,7 +142,7 @@ function maskYear(year: string): string {
 
 /**
  * Calculate duration string from dates
- */
+  */
 function calculateDurationString(startDate: string, endDate?: string): string {
   const start = new Date(startDate);
   const end = endDate ? new Date(endDate) : new Date();
@@ -160,7 +160,7 @@ function calculateDurationString(startDate: string, endDate?: string): string {
 
 /**
  * Check if data contains PII
- */
+  */
 export function detectPII(text: string): {
   hasPII: boolean;
   types: string[];

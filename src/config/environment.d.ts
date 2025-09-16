@@ -1,7 +1,7 @@
 /**
  * Secure Environment Configuration System
  * Provides comprehensive validation, sanitization, and security for environment variables
- */
+  */
 export declare enum SecurityEventType {
     MISSING_REQUIRED_VAR = "MISSING_REQUIRED_VAR",
     INVALID_FORMAT = "INVALID_FORMAT",

@@ -11,7 +11,7 @@ import { llmVerificationConfig, validateLLMConfig, performConfigHealthCheck } fr
  * - Configuration validation and health checks
  * - Migration utilities for existing deployments
  * - Performance optimization recommendations
- */
+  */
 
 export interface SetupResult {
   success: boolean;
@@ -42,7 +42,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Perform complete setup validation for the current environment
-   */
+    */
   async performSetup(): Promise<SetupResult> {
     
     const environment = process.env.NODE_ENV || 'development';
@@ -94,7 +94,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Generate environment-specific performance profile
-   */
+    */
   private generatePerformanceProfile(environment: string): SetupResult['performanceProfile'] {
     const profiles = {
       development: {
@@ -131,7 +131,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Generate migration steps for existing deployments
-   */
+    */
   private generateMigrationSteps(): string[] {
     const steps = [
       'Update environment variables with required API keys',
@@ -147,7 +147,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Collect warnings based on current configuration
-   */
+    */
   private collectWarnings(services: SetupResult['services'], healthCheck: SetupResult['healthStatus']): string[] {
     const warnings: string[] = [];
     
@@ -174,7 +174,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Print comprehensive setup summary
-   */
+    */
   private printSetupSummary(result: SetupResult): void {
     
     
@@ -204,7 +204,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Setup Firebase Function configuration for verification
-   */
+    */
   async setupFirebaseFunctions(): Promise<void> {
     
     // This would update the Firebase Functions configuration
@@ -228,7 +228,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Create deployment checklist
-   */
+    */
   generateDeploymentChecklist(): string[] {
     return [
       '[ ] Environment variables configured (ANTHROPIC_API_KEY, OPENAI_API_KEY)',
@@ -248,7 +248,7 @@ export class LLMVerificationSetupManager {
 
   /**
    * Validate deployment readiness
-   */
+    */
   async validateDeploymentReadiness(): Promise<{
     ready: boolean;
     blockers: string[];

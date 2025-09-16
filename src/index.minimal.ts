@@ -1,7 +1,7 @@
 /**
  * CVPlus Core Package - Minimal Exports
  * Essential exports only for basic submodule functionality
- */
+  */
 
 // ============================================================================
 // TYPES

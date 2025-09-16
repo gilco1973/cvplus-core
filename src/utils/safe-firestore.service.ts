@@ -2,7 +2,7 @@
  * Safe Firestore Service
  * Wrapper for Firestore operations with comprehensive pre-write validation
  * Phase 1.3 Implementation: Safety layer to prevent undefined value errors
- */
+  */
 
 import * as admin from 'firebase-admin';
 import { DocumentReference, Transaction } from 'firebase-admin/firestore';
@@ -52,7 +52,7 @@ export class SafeFirestoreService {
   
   /**
    * Safe Firestore update with comprehensive validation
-   */
+    */
   static async safeUpdate(
     docRef: DocumentReference,
     data: Record<string, any>,
@@ -129,7 +129,7 @@ export class SafeFirestoreService {
   
   /**
    * Safe Firestore set operation with validation
-   */
+    */
   static async safeSet(
     docRef: DocumentReference,
     data: Record<string, any>,
@@ -206,7 +206,7 @@ export class SafeFirestoreService {
   
   /**
    * Safe timeline-specific update with enhanced validation
-   */
+    */
   static async safeTimelineUpdate(
     docRef: DocumentReference,
     timelineUpdates: Record<string, any>,
@@ -237,7 +237,7 @@ export class SafeFirestoreService {
   
   /**
    * Execute operation with retry logic
-   */
+    */
   private static async executeWithRetry<T>(
     operation: () => Promise<T>,
     maxAttempts: number,
@@ -270,7 +270,7 @@ export class SafeFirestoreService {
   
   /**
    * Batch safe operations with validation
-   */
+    */
   static async safeBatch(
     operations: Array<{
       type: 'set' | 'update' | 'delete';
@@ -352,7 +352,7 @@ export class SafeFirestoreService {
   
   /**
    * Transaction-safe operations with validation
-   */
+    */
   static async safeTransaction<T>(
     updateFunction: (transaction: Transaction, safeHelpers: {
       safeUpdate: (ref: DocumentReference, data: any) => void;
@@ -422,7 +422,7 @@ export class SafeFirestoreService {
   
   /**
    * Create a pre-validated update object for timeline operations
-   */
+    */
   static createSafeTimelineUpdate(updates: Record<string, any>): {
     data: Record<string, any>;
     validation: ValidationResult;
@@ -448,7 +448,7 @@ export class SafeFirestoreService {
   
   /**
    * Monitor and log Firestore operation performance
-   */
+    */
   static async monitoredOperation<T>(
     _operationName: string,
     operation: () => Promise<T>

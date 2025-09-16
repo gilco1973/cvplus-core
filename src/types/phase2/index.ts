@@ -3,7 +3,7 @@
  * Centralized exports for all Phase 2 type definitions
  * 
  * This replaces the monolithic phase2-models.ts with modular type definitions
- */
+  */
 
 // Success Prediction Types
 export type { 

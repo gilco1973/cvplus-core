@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 export class WebSearchService {
   private apiKey: string | undefined;
@@ -17,14 +17,14 @@ export class WebSearchService {
 
   /**
    * Check if web search service is available
-   */
+    */
   isAvailable(): boolean {
     return !!this.apiKey;
   }
 
   /**
    * Test search functionality
-   */
+    */
   async testSearch(_query: string = 'test'): Promise<{
     success: boolean;
     responseTime?: number;
@@ -59,7 +59,7 @@ export class WebSearchService {
 
   /**
    * Get service status information
-   */
+    */
   getServiceStatus(): {
     name: string;
     available: boolean;

@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { logger } from 'firebase-functions';
 
@@ -31,27 +31,27 @@ export type FirebaseErrorCode =
 
 /**
  * Firebase Functions Error Details
- */
+  */
 export interface FirebaseErrorDetails {
-  /** Error code for categorization */
+  /** Error code for categorization  */
   code: FirebaseErrorCode;
-  /** Human-readable error message */
+  /** Human-readable error message  */
   message: string;
-  /** Additional error context */
+  /** Additional error context  */
   details?: Record<string, any>;
 }
 
 /**
  * Firebase Error Handler Context for logging
- */
+  */
 export interface FirebaseErrorContext {
-  /** Function name where error occurred */
+  /** Function name where error occurred  */
   functionName?: string;
-  /** User ID if available */
+  /** User ID if available  */
   userId?: string;
-  /** Request data for debugging */
+  /** Request data for debugging  */
   requestData?: Record<string, any>;
-  /** Additional context properties */
+  /** Additional context properties  */
   [key: string]: any;
 }
 
@@ -63,7 +63,7 @@ export interface FirebaseErrorContext {
  * @param context - Additional context for logging
  * @param originalError - Original error for debugging
  * @returns Never returns, always throws
- */
+  */
 export function throwFirebaseError(
   errorDetails: FirebaseErrorDetails,
   context: FirebaseErrorContext = {},
@@ -100,7 +100,7 @@ export function throwFirebaseError(
  * @param error - Caught error object
  * @param context - Error context for logging
  * @param fallbackMessage - Fallback message if error is unknown
- */
+  */
 export function handleFirebaseError(
   error: any,
   context: FirebaseErrorContext = {},
@@ -187,7 +187,7 @@ export function handleFirebaseError(
  * @param context - Error context for debugging
  * @param fallbackMessage - Custom fallback error message
  * @returns Promise result or throws standardized error
- */
+  */
 export async function withErrorHandling<T>(
   operation: () => Promise<T>,
   context: FirebaseErrorContext = {},
@@ -206,7 +206,7 @@ export async function withErrorHandling<T>(
  * 
  * @param auth - Firebase auth context
  * @param context - Additional context for error logging
- */
+  */
 export function requireAuthentication(
   auth: any,
   context: FirebaseErrorContext = {}
@@ -256,7 +256,7 @@ export function requireAuthentication(
  * @param authUid - Authenticated user ID
  * @param requestedUserId - User ID from request data
  * @param context - Additional context for error logging
- */
+  */
 export function validateUserAccess(
   authUid: string,
   requestedUserId: string,
@@ -287,7 +287,7 @@ export function validateUserAccess(
  * 
  * @param error - Original error object
  * @returns Sanitized error object safe for client consumption
- */
+  */
 export function createSafeErrorResponse(error: any): Record<string, any> {
   return {
     success: false,

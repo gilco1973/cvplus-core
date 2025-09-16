@@ -6,13 +6,13 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import type { CallableRequest } from 'firebase-functions/v2/https';
 
 /**
  * Standard Firebase Function response structure
- */
+  */
 export interface FirebaseFunctionResponse<T = any> {
   success: boolean;
   data?: T;
@@ -27,7 +27,7 @@ export interface FirebaseFunctionResponse<T = any> {
 
 /**
  * Firebase Authentication Context
- */
+  */
 export interface FirebaseAuthContext {
   uid: string;
   token?: {
@@ -47,14 +47,14 @@ export interface FirebaseAuthContext {
 
 /**
  * Enhanced Callable Request with typed auth
- */
+  */
 export interface TypedCallableRequest<T = any> extends Omit<CallableRequest<T>, 'auth'> {
   auth: FirebaseAuthContext;
 }
 
 /**
  * User profile data structure
- */
+  */
 export interface UserProfile {
   userId: string;
   googleId?: string;
@@ -80,7 +80,7 @@ export interface UserProfile {
 
 /**
  * Premium feature definitions
- */
+  */
 export type PremiumFeature = 
   | 'advanced-analytics'
   | 'white-label-reports'
@@ -95,7 +95,7 @@ export type PremiumFeature =
 
 /**
  * Premium feature access check data
- */
+  */
 export interface FeatureAccessData {
   userId: string;
   googleId?: string;
@@ -104,7 +104,7 @@ export interface FeatureAccessData {
 
 /**
  * Premium feature access response
- */
+  */
 export interface FeatureAccessResponse {
   hasAccess: boolean;
   subscriptionStatus: string;
@@ -117,7 +117,7 @@ export interface FeatureAccessResponse {
 
 /**
  * CV data structure for processing
- */
+  */
 export interface CVData {
   userId: string;
   personalInfo: {
@@ -181,7 +181,7 @@ export interface CVData {
 
 /**
  * CV processing status
- */
+  */
 export type CVProcessingStatus = 
   | 'pending'
   | 'processing'
@@ -193,7 +193,7 @@ export type CVProcessingStatus =
 
 /**
  * CV processing result
- */
+  */
 export interface CVProcessingResult {
   id: string;
   userId: string;
@@ -229,7 +229,7 @@ export interface CVProcessingResult {
 
 /**
  * File upload data
- */
+  */
 export interface FileUploadData {
   userId: string;
   fileName: string;
@@ -241,7 +241,7 @@ export interface FileUploadData {
 
 /**
  * File processing result
- */
+  */
 export interface FileProcessingResult {
   fileId: string;
   fileName: string;
@@ -256,7 +256,7 @@ export interface FileProcessingResult {
 
 /**
  * Analytics data structure
- */
+  */
 export interface AnalyticsData {
   event: string;
   userId?: string;
@@ -270,7 +270,7 @@ export interface AnalyticsData {
 
 /**
  * Revenue metrics structure
- */
+  */
 export interface RevenueMetrics {
   totalRevenue: number;
   monthlyRevenue: number;
@@ -291,7 +291,7 @@ export interface RevenueMetrics {
 
 /**
  * Usage statistics structure
- */
+  */
 export interface UsageStats {
   userId: string;
   period: {
@@ -315,7 +315,7 @@ export interface UsageStats {
 
 /**
  * Health check result
- */
+  */
 export interface HealthCheckResult {
   status: 'healthy' | 'unhealthy' | 'degraded';
   timestamp: string;
@@ -331,7 +331,7 @@ export interface HealthCheckResult {
 
 /**
  * Pagination parameters
- */
+  */
 export interface PaginationParams {
   page?: number;
   limit?: number;
@@ -342,7 +342,7 @@ export interface PaginationParams {
 
 /**
  * Paginated response structure
- */
+  */
 export interface PaginatedResponse<T> {
   items: T[];
   pagination: {
@@ -358,7 +358,7 @@ export interface PaginatedResponse<T> {
 
 /**
  * Firebase validation error structure
- */
+  */
 export interface FirebaseValidationError {
   field: string;
   message: string;
@@ -368,7 +368,7 @@ export interface FirebaseValidationError {
 
 /**
  * Firebase validation result structure
- */
+  */
 export interface FirebaseValidationResult<T = any> {
   isValid: boolean;
   errors: FirebaseValidationError[];
@@ -377,7 +377,7 @@ export interface FirebaseValidationResult<T = any> {
 
 /**
  * External API integration result
- */
+  */
 export interface ExternalApiResult<T = any> {
   success: boolean;
   data?: T;
@@ -394,7 +394,7 @@ export interface ExternalApiResult<T = any> {
 
 /**
  * Firebase async operation status
- */
+  */
 export interface FirebaseAsyncOperationStatus {
   operationId: string;
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
@@ -412,7 +412,7 @@ export interface FirebaseAsyncOperationStatus {
 
 /**
  * Common function configuration
- */
+  */
 export interface FunctionConfig {
   timeout?: number;
   memory?: '128MB' | '256MB' | '512MB' | '1GB' | '2GB' | '4GB' | '8GB';
@@ -424,7 +424,7 @@ export interface FunctionConfig {
 
 /**
  * CORS options for functions
- */
+  */
 export interface CorsOptions {
   origin?: boolean | string | string[] | RegExp | RegExp[];
   methods?: string | string[];
@@ -438,7 +438,7 @@ export interface CorsOptions {
 
 /**
  * Rate limiting configuration
- */
+  */
 export interface RateLimitConfig {
   windowMs: number;
   max: number;
@@ -452,7 +452,7 @@ export interface RateLimitConfig {
 
 /**
  * Caching configuration
- */
+  */
 export interface CacheConfig {
   ttl: number;
   maxSize?: number;

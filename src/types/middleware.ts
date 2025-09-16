@@ -3,7 +3,7 @@
  * Interface-based architecture for loose coupling
  * Author: Gil Klainert
  * Date: 2025-08-29
- */
+  */
 
 import { Request, Response, NextFunction } from 'express';
 

@@ -6,11 +6,11 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 /**
  * Standard success response format
- */
+  */
 export interface SuccessResponse<T = any> {
   success: true;
   data: T;
@@ -20,7 +20,7 @@ export interface SuccessResponse<T = any> {
 
 /**
  * Standard error response format
- */
+  */
 export interface ErrorResponse {
   success: false;
   error: {
@@ -33,15 +33,15 @@ export interface ErrorResponse {
 
 /**
  * Response metadata for additional context
- */
+  */
 export interface ResponseMetadata {
-  /** Request processing duration in milliseconds */
+  /** Request processing duration in milliseconds  */
   duration?: number;
-  /** Function version or build identifier */
+  /** Function version or build identifier  */
   version?: string;
-  /** Request ID for tracing */
+  /** Request ID for tracing  */
   requestId?: string;
-  /** Additional metadata fields */
+  /** Additional metadata fields  */
   [key: string]: any;
 }
 
@@ -52,7 +52,7 @@ export interface ResponseMetadata {
  * @param data - Response data
  * @param metadata - Optional metadata
  * @returns Standardized success response
- */
+  */
 export function createSuccessResponse<T>(
   data: T,
   metadata?: ResponseMetadata
@@ -73,7 +73,7 @@ export function createSuccessResponse<T>(
  * @param message - Error message
  * @param details - Additional error details
  * @returns Standardized error response
- */
+  */
 export function createErrorResponse(
   code: string,
   message: string,
@@ -96,7 +96,7 @@ export function createErrorResponse(
  * 
  * @param data - Data to wrap
  * @returns Success response with data
- */
+  */
 export function wrapSuccess<T>(data: T): SuccessResponse<T> {
   return createSuccessResponse(data);
 }
@@ -108,7 +108,7 @@ export function wrapSuccess<T>(data: T): SuccessResponse<T> {
  * @param message - Error message
  * @param code - Error code (defaults to 'internal')
  * @returns Error response
- */
+  */
 export function wrapError(
   message: string,
   code: string = 'internal'
@@ -125,7 +125,7 @@ export function wrapError(
  * @param limit - Items per page
  * @param total - Total number of items
  * @param metadata - Optional additional metadata
- */
+  */
 export function createPaginatedResponse<T>(
   items: T[],
   page: number,
@@ -167,7 +167,7 @@ export function createPaginatedResponse<T>(
  * @param data - Response data
  * @param startTime - Function start time (from performance.now() or Date.now())
  * @param additionalMetadata - Additional metadata
- */
+  */
 export function createTimedResponse<T>(
   data: T,
   startTime: number,
@@ -188,7 +188,7 @@ export function createTimedResponse<T>(
  * @param operationId - Unique operation identifier
  * @param estimatedDuration - Estimated completion time in milliseconds
  * @param statusCheckUrl - Optional URL for status checking
- */
+  */
 export function createAsyncResponse(
   operationId: string,
   estimatedDuration?: number,
@@ -215,7 +215,7 @@ export function createAsyncResponse(
  * @param feature - Feature being checked
  * @param subscriptionStatus - User's subscription status
  * @param additionalInfo - Additional access information
- */
+  */
 export function createFeatureAccessResponse(
   hasAccess: boolean,
   feature: string,
@@ -245,7 +245,7 @@ export function createFeatureAccessResponse(
  * @param isValid - Whether validation passed
  * @param errors - Array of validation errors
  * @param validatedData - The validated data (if successful)
- */
+  */
 export function createValidationResponse<T = any>(
   isValid: boolean,
   errors: string[] = [],
@@ -269,7 +269,7 @@ export function createValidationResponse<T = any>(
  * @param status - Health status ('healthy' | 'unhealthy' | 'degraded')
  * @param checks - Individual check results
  * @param uptime - System uptime in milliseconds
- */
+  */
 export function createHealthResponse(
   status: 'healthy' | 'unhealthy' | 'degraded',
   checks: Record<string, { status: string; message?: string; duration?: number }>,
@@ -293,7 +293,7 @@ export function createHealthResponse(
  * Use with createTimedResponse for performance tracking
  * 
  * @returns Object with startTime and getElapsed function
- */
+  */
 export function createTimer() {
   const startTime = Date.now();
   
@@ -314,7 +314,7 @@ export function createTimer() {
  * @param fileSize - File size in bytes
  * @param processingStatus - Current processing status
  * @param downloadUrl - Optional download URL
- */
+  */
 export function createFileResponse(
   fileId: string,
   fileName: string,

@@ -6,7 +6,7 @@
  *
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -14,56 +14,56 @@
 
 /**
  * Supported subscription tiers (base definition)
- */
+  */
 export type SubscriptionTier = 'FREE' | 'PREMIUM';
 
 /**
  * Supported currencies
- */
+  */
 export type Currency = 'USD' | 'EUR' | 'GBP';
 
 /**
  * Environment types for different configurations
- */
+  */
 export type Environment = 'development' | 'staging' | 'production';
 
 /**
  * Basic price configuration structure
- */
+  */
 export interface PriceConfig {
-  /** Price in cents (to avoid floating point issues) */
+  /** Price in cents (to avoid floating point issues)  */
   cents: number;
-  /** Price in dollars (for display) */
+  /** Price in dollars (for display)  */
   dollars: number;
-  /** Currency code */
+  /** Currency code  */
   currency: Currency;
 }
 
 /**
  * Basic tier configuration structure
- */
+  */
 export interface TierConfig {
-  /** Tier identifier */
+  /** Tier identifier  */
   tier: SubscriptionTier;
-  /** Display name */
+  /** Display name  */
   name: string;
-  /** Description */
+  /** Description  */
   description: string;
-  /** Price configuration */
+  /** Price configuration  */
   price: PriceConfig;
-  /** Whether this tier is currently available */
+  /** Whether this tier is currently available  */
   isActive: boolean;
 }
 
 /**
  * Core pricing configuration interface
- */
+  */
 export interface PricingConfig {
-  /** All available tiers */
+  /** All available tiers  */
   tiers: Record<SubscriptionTier, TierConfig>;
-  /** Default currency */
+  /** Default currency  */
   defaultCurrency: Currency;
-  /** Current environment */
+  /** Current environment  */
   environment: Environment;
 }
 
@@ -73,7 +73,7 @@ export interface PricingConfig {
 
 /**
  * Get current environment from environment variables
- */
+  */
 const getCurrentEnvironment = (): Environment => {
   const nodeEnv = process.env.NODE_ENV;
   const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
@@ -103,7 +103,7 @@ const getCurrentEnvironment = (): Environment => {
 /**
  * Base pricing configuration for core module
  * Note: This is extended by @cvplus/premium for full functionality
- */
+  */
 export const BACKEND_PRICING_CONFIG: PricingConfig = {
   defaultCurrency: 'USD',
   environment: getCurrentEnvironment(),
@@ -141,28 +141,28 @@ export const BACKEND_PRICING_CONFIG: PricingConfig = {
 
 /**
  * Get tier configuration by tier type
- */
+  */
 export const getTierConfig = (tier: SubscriptionTier): TierConfig => {
   return BACKEND_PRICING_CONFIG.tiers[tier];
 };
 
 /**
  * Get price in cents for a specific tier
- */
+  */
 export const getPriceInCents = (tier: SubscriptionTier): number => {
   return getTierConfig(tier).price.cents;
 };
 
 /**
  * Get price in dollars for a specific tier
- */
+  */
 export const getPriceInDollars = (tier: SubscriptionTier): number => {
   return getTierConfig(tier).price.dollars;
 };
 
 /**
  * Format price for display
- */
+  */
 export const formatPrice = (tier: SubscriptionTier, showCurrency = true): string => {
   const config = getTierConfig(tier);
 
@@ -179,7 +179,7 @@ export const formatPrice = (tier: SubscriptionTier, showCurrency = true): string
 
 /**
  * Basic validation of pricing configuration
- */
+  */
 export const validatePricingConfig = (): { isValid: boolean; errors: string[]; warnings: string[] } => {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -209,14 +209,14 @@ export const validatePricingConfig = (): { isValid: boolean; errors: string[]; w
 
 /**
  * Type guard to check if a tier is premium
- */
+  */
 export const isPremiumTier = (tier: SubscriptionTier): boolean => {
   return tier === 'PREMIUM';
 };
 
 /**
  * Check if pricing is properly configured
- */
+  */
 export const isPricingConfigured = (): boolean => {
   const validation = validatePricingConfig();
   return validation.isValid;

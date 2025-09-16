@@ -5,7 +5,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') return obj;

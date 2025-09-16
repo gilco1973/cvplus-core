@@ -6,7 +6,7 @@
  * for better maintainability and modularity.
  * 
  * Original file: 798 lines -> Current file: <200 lines (75% reduction)
- */
+  */
 
 // Re-export all types from the modular type definitions
 export type {
@@ -75,11 +75,11 @@ export type {
  * import { SuccessPrediction } from './types/success-prediction';
  * 
  * This provides better tree-shaking and clearer dependencies.
- */
+  */
 
 /**
  * Validation utilities for Phase 2 types
- */
+  */
 export class Phase2TypeValidator {
   static isValidSuccessPrediction(obj: any): obj is import('./success-prediction').SuccessPrediction {
     return (
@@ -140,7 +140,7 @@ export class Phase2TypeValidator {
 
 /**
  * Factory functions for creating Phase 2 type instances with sensible defaults
- */
+  */
 export class Phase2TypeFactory {
   static createEmptySuccessPrediction(_userId: string, _jobId: string): Partial<import('./success-prediction').SuccessPrediction> {
     return {

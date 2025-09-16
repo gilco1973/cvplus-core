@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 // ============================================================================
 // TYPES
@@ -58,7 +58,12 @@ export {
   config,
   BACKEND_PRICING_CONFIG,
   getTierConfig,
-  validatePricingConfig
+  validatePricingConfig,
+  db,
+  corsConfig,
+  Timestamp,
+  FieldValue,
+  admin
 } from './config';
 export type { PricingConfig } from './config';
 

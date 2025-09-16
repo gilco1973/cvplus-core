@@ -6,7 +6,7 @@
  * 
  * Author: Gil Klainert
  * Date: 2025-08-29
- */
+  */
 
 // Authentication service interfaces
 export * from './auth.interface';

@@ -7,7 +7,7 @@
  * @author Gil Klainert
  * @version 1.0.0
  * @created 2025-08-28
- */
+  */
 
 import Redis, { RedisOptions } from 'ioredis';
 import { logger } from 'firebase-functions';
@@ -54,7 +54,7 @@ class RedisClientService {
 
   /**
    * Initialize Redis connection with configuration
-   */
+    */
   async initialize(): Promise<void> {
     if (this.client && this.isConnected) {
       return;
@@ -84,7 +84,7 @@ class RedisClientService {
 
   /**
    * Get Redis configuration based on environment
-   */
+    */
   private getRedisConfig(): RedisOptions {
     const environment = process.env.NODE_ENV || 'development';
     
@@ -130,7 +130,7 @@ class RedisClientService {
 
   /**
    * Setup Redis event handlers for monitoring and error handling
-   */
+    */
   private setupEventHandlers(): void {
     if (!this.client) return;
 
@@ -172,7 +172,7 @@ class RedisClientService {
 
   /**
    * Test Redis connection health
-   */
+    */
   private async testConnection(): Promise<void> {
     if (!this.client) {
       throw new Error('Redis client not initialized');
@@ -193,7 +193,7 @@ class RedisClientService {
 
   /**
    * Get value from Redis with metrics tracking
-   */
+    */
   async get(key: string): Promise<string | null> {
     const startTime = Date.now();
     this.metrics.totalRequests++;
@@ -223,7 +223,7 @@ class RedisClientService {
 
   /**
    * Set value in Redis with TTL
-   */
+    */
   async set(key: string, value: string, ttlSeconds?: number): Promise<boolean> {
     const startTime = Date.now();
     this.metrics.totalRequests++;
@@ -252,7 +252,7 @@ class RedisClientService {
 
   /**
    * Delete key from Redis
-   */
+    */
   async del(key: string): Promise<boolean> {
     try {
       await this.ensureConnection();
@@ -271,7 +271,7 @@ class RedisClientService {
 
   /**
    * Delete keys matching pattern
-   */
+    */
   async delPattern(pattern: string): Promise<number> {
     try {
       await this.ensureConnection();
@@ -293,7 +293,7 @@ class RedisClientService {
 
   /**
    * Check if key exists
-   */
+    */
   async exists(key: string): Promise<boolean> {
     try {
       await this.ensureConnection();
@@ -310,7 +310,7 @@ class RedisClientService {
 
   /**
    * Set TTL for existing key
-   */
+    */
   async expire(key: string, ttlSeconds: number): Promise<boolean> {
     try {
       await this.ensureConnection();
@@ -327,7 +327,7 @@ class RedisClientService {
 
   /**
    * Get multiple keys at once
-   */
+    */
   async mget(keys: string[]): Promise<(string | null)[]> {
     if (keys.length === 0) return [];
 
@@ -353,7 +353,7 @@ class RedisClientService {
 
   /**
    * Set multiple key-value pairs
-   */
+    */
   async mset(keyValuePairs: Record<string, string>): Promise<boolean> {
     const pairs = Object.entries(keyValuePairs);
     if (pairs.length === 0) return true;
@@ -375,7 +375,7 @@ class RedisClientService {
 
   /**
    * Ensure Redis connection is available
-   */
+    */
   private async ensureConnection(): Promise<void> {
     if (!this.client) {
       await this.initialize();
@@ -388,7 +388,7 @@ class RedisClientService {
 
   /**
    * Update response time metrics
-   */
+    */
   private updateResponseTime(responseTime: number): void {
     this.metrics.responseTime = 
       (this.metrics.responseTime * 0.9) + (responseTime * 0.1); // Exponential moving average
@@ -397,14 +397,14 @@ class RedisClientService {
 
   /**
    * Get cache performance metrics
-   */
+    */
   getMetrics(): CacheMetrics {
     return { ...this.metrics };
   }
 
   /**
    * Get cache hit rate
-   */
+    */
   getHitRate(): number {
     if (this.metrics.totalRequests === 0) return 0;
     return this.metrics.hits / this.metrics.totalRequests;
@@ -412,7 +412,7 @@ class RedisClientService {
 
   /**
    * Get cache error rate
-   */
+    */
   getErrorRate(): number {
     if (this.metrics.totalRequests === 0) return 0;
     return this.metrics.errors / this.metrics.totalRequests;
@@ -420,14 +420,14 @@ class RedisClientService {
 
   /**
    * Check if Redis is healthy
-   */
+    */
   isHealthy(): boolean {
     return this.isConnected && this.getErrorRate() < 0.1; // Less than 10% error rate
   }
 
   /**
    * Reset metrics (for testing)
-   */
+    */
   resetMetrics(): void {
     this.metrics = {
       hits: 0,
@@ -441,7 +441,7 @@ class RedisClientService {
 
   /**
    * Gracefully disconnect from Redis
-   */
+    */
   async disconnect(): Promise<void> {
     if (this.client) {
       await this.client.disconnect();

@@ -2,7 +2,7 @@
  * Base Service - Stub implementation for Core module
  * Note: These CV services should be moved to cv-processing module
  * Core module should not contain domain-specific services
- */
+  */
 
 import { logger } from 'firebase-functions';
 

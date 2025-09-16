@@ -7,7 +7,7 @@
  * - Error categorization and recovery suggestions
  * - Rate limiting for error notifications
  * - Performance impact monitoring
- */
+  */
 
 import * as admin from 'firebase-admin';
 import { sanitizeErrorContext } from './firestore-sanitizer';
@@ -73,7 +73,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Process and categorize an error with full context
-   */
+    */
   static processError(
     error: Error | any,
     context: ErrorContext
@@ -95,7 +95,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Handle error with comprehensive logging and recovery
-   */
+    */
   static async handleError(
     error: Error | any,
     context: ErrorContext
@@ -123,7 +123,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Categorize error and determine metadata
-   */
+    */
   private static categorizeError(error: any): ErrorMetadata {
     let category = ErrorCategory.UNKNOWN;
     let severity = ErrorSeverity.MEDIUM;
@@ -221,7 +221,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Generate unique error ID for tracking
-   */
+    */
   private static generateErrorId(error: any, context: ErrorContext): string {
     const errorHash = this.hashString(error.message + context.functionName);
     const timestamp = Date.now();
@@ -230,7 +230,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Simple string hash function
-   */
+    */
   private static hashString(str: string): string {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -243,7 +243,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Determine if we should notify for this error
-   */
+    */
   private static shouldNotifyForError(errorId: string, severity: ErrorSeverity): boolean {
     const now = Date.now();
     const errorKey = errorId.split('_')[1]; // Use hash part for grouping
@@ -270,7 +270,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Determine if error should be retried
-   */
+    */
   private static shouldRetryError(errorId: string): boolean {
     const errorKey = errorId.split('_')[1];
     const count = this.errorCounts.get(errorKey || '') || 0;
@@ -279,7 +279,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Sanitize error for safe Firestore storage
-   */
+    */
   private static sanitizeErrorForStorage(
     error: any, 
     context: ErrorContext, 
@@ -305,7 +305,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Log error with structured format
-   */
+    */
   private static async logError(processedError: ProcessedError): Promise<void> {
     const logLevel = this.getLogLevel(processedError.metadata.severity);
     const logData = {
@@ -337,7 +337,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Store error in Firestore for analysis
-   */
+    */
   private static async storeError(processedError: ProcessedError): Promise<void> {
     try {
       await admin.firestore()
@@ -351,14 +351,14 @@ export class EnhancedErrorHandler {
 
   /**
    * Update error metrics
-   */
+    */
   private static updateErrorMetrics(_processedError: ProcessedError): void {
     // This could be expanded to update monitoring dashboards
   }
 
   /**
    * Send error notifications
-   */
+    */
   private static async notifyOnError(_processedError: ProcessedError): Promise<void> {
     // This could be expanded to integrate with alerting systems
     if (_processedError.metadata.severity === ErrorSeverity.CRITICAL) {
@@ -367,7 +367,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Get appropriate log level for severity
-   */
+    */
   private static getLogLevel(severity: ErrorSeverity): string {
     switch (severity) {
       case ErrorSeverity.CRITICAL:
@@ -385,7 +385,7 @@ export class EnhancedErrorHandler {
 
   /**
    * Create user-friendly error response
-   */
+    */
   static createErrorResponse(processedError: ProcessedError): any {
     return {
       success: false,
@@ -408,7 +408,7 @@ export class EnhancedErrorHandler {
 
 /**
  * Convenience function for consistent error handling in Firebase Functions
- */
+  */
 export async function handleFunctionError(
   error: Error | any,
   functionName: string,
@@ -429,7 +429,7 @@ export async function handleFunctionError(
 
 /**
  * Wrap Firebase Function with enhanced error handling
- */
+  */
 export function withErrorHandling<T extends any[], R>(
   fn: (...args: T) => Promise<R>,
   functionName: string

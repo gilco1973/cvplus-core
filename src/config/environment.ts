@@ -1,7 +1,7 @@
 /**
  * Environment Configuration
  * Provides environment-specific settings and variables
- */
+  */
 
 export interface EnvironmentConfig {
   NODE_ENV: 'development' | 'production' | 'test';

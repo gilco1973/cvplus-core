@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { BaseService, ServiceConfig, ServiceHealth } from './base-service';
 import { CacheableMixin, CacheOptions, CacheResult } from './cache-mixin';
@@ -26,7 +26,7 @@ export interface EnhancedServiceConfig extends ServiceConfig {
 
 /**
  * Enhanced Base Service with integrated mixins
- */
+  */
 export abstract class EnhancedBaseService extends BaseService {
   protected cacheService?: CacheableMixin;
   protected databaseService?: DatabaseMixin;
@@ -43,7 +43,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Initialize mixins based on configuration
-   */
+    */
   private initializeMixins(): void {
     const enableMixins = this.enhancedConfig.enableMixins || {
       cache: true,
@@ -80,7 +80,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get cached value with automatic JSON parsing
-   */
+    */
   protected async getCached<T>(key: string, defaultValue?: T): Promise<CacheResult<T>> {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -90,7 +90,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Set cached value with automatic JSON serialization
-   */
+    */
   protected async setCached<T>(key: string, value: T, ttlSeconds?: number): Promise<boolean> {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -100,7 +100,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get or set cached value with factory function
-   */
+    */
   protected async getCachedOrFetch<T>(
     key: string,
     factory: () => Promise<T>,
@@ -114,7 +114,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Delete cached value
-   */
+    */
   protected async deleteCached(key: string): Promise<boolean> {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -124,7 +124,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Invalidate cache by pattern
-   */
+    */
   protected async invalidateCachePattern(pattern: string): Promise<number> {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -134,7 +134,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get cache performance metrics
-   */
+    */
   protected getCacheMetrics() {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -144,7 +144,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get cache hit rate
-   */
+    */
   protected getCacheHitRate(): number {
     if (!this.cacheService) {
       throw new Error('Cache service not enabled. Set enableMixins.cache = true in config.');
@@ -156,7 +156,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get document by ID with optional caching
-   */
+    */
   protected async getDocument<T>(
     collection: string,
     documentId: string,
@@ -170,7 +170,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Create document with auto-generated or custom ID
-   */
+    */
   protected async createDocument<T>(
     collection: string,
     data: Partial<T>,
@@ -184,7 +184,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Update document with optimistic locking
-   */
+    */
   protected async updateDocument<T>(
     collection: string,
     documentId: string,
@@ -199,7 +199,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Delete document
-   */
+    */
   protected async deleteDocument(
     collection: string,
     documentId: string,
@@ -213,7 +213,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Query documents with pagination
-   */
+    */
   protected async queryDocuments<T>(
     collection: string,
     filters?: QueryFilter[],
@@ -229,7 +229,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Count documents matching query
-   */
+    */
   protected async countDocuments(
     collection: string,
     filters?: QueryFilter[]
@@ -244,7 +244,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * GET request with retry and rate limiting
-   */
+    */
   protected async apiGet<T = any>(url: string, options?: any): Promise<ApiResponse<T>> {
     if (!this.apiClientService) {
       throw new Error('API client service not enabled. Set enableMixins.apiClient = true in config.');
@@ -254,7 +254,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * POST request with retry and rate limiting
-   */
+    */
   protected async apiPost<T = any>(url: string, data?: any, options?: any): Promise<ApiResponse<T>> {
     if (!this.apiClientService) {
       throw new Error('API client service not enabled. Set enableMixins.apiClient = true in config.');
@@ -264,7 +264,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * PUT request with retry and rate limiting
-   */
+    */
   protected async apiPut<T = any>(url: string, data?: any, options?: any): Promise<ApiResponse<T>> {
     if (!this.apiClientService) {
       throw new Error('API client service not enabled. Set enableMixins.apiClient = true in config.');
@@ -274,7 +274,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * DELETE request with retry and rate limiting
-   */
+    */
   protected async apiDelete<T = any>(url: string, options?: any): Promise<ApiResponse<T>> {
     if (!this.apiClientService) {
       throw new Error('API client service not enabled. Set enableMixins.apiClient = true in config.');
@@ -284,7 +284,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Enhanced health check including mixin health
-   */
+    */
   async healthCheck(): Promise<ServiceHealth> {
     const baseHealth = await super.healthCheck();
     
@@ -318,7 +318,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Warm cache with common data patterns
-   */
+    */
   protected async warmCache(patterns: string[]): Promise<void> {
     if (!this.cacheService) {
       this.logger.warn('Cache service not enabled, skipping cache warm-up');
@@ -338,7 +338,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Abstract method for cache warming - implement in concrete services
-   */
+    */
   protected async warmCachePattern(pattern: string): Promise<void> {
     // Default implementation does nothing
     // Override in concrete services to implement specific warm-up logic
@@ -347,7 +347,7 @@ export abstract class EnhancedBaseService extends BaseService {
 
   /**
    * Get service status summary
-   */
+    */
   getServiceStatus(): {
     name: string;
     version: string;

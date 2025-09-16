@@ -6,7 +6,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 // TODO: Import Logger type from @cvplus/logging\ntype Logger = { info: (msg: string, data?: any) => void; error: (msg: string, data?: any) => void; warn: (msg: string, data?: any) => void; debug: (msg: string, data?: any) => void; };
@@ -53,7 +53,7 @@ export interface RateLimitState {
 
 /**
  * API Client Mixin - Provides standardized external API integration
- */
+  */
 export class ApiClientMixin {
   protected readonly client: AxiosInstance;
   protected readonly apiOptions: Required<ApiClientOptions>;
@@ -90,7 +90,7 @@ export class ApiClientMixin {
 
   /**
    * GET request with retry and rate limiting
-   */
+    */
   protected async apiGet<T = any>(
     url: string,
     options: ApiRequestOptions = {}
@@ -100,7 +100,7 @@ export class ApiClientMixin {
 
   /**
    * POST request with retry and rate limiting
-   */
+    */
   protected async apiPost<T = any>(
     url: string,
     data?: any,
@@ -111,7 +111,7 @@ export class ApiClientMixin {
 
   /**
    * PUT request with retry and rate limiting
-   */
+    */
   protected async apiPut<T = any>(
     url: string,
     data?: any,
@@ -122,7 +122,7 @@ export class ApiClientMixin {
 
   /**
    * DELETE request with retry and rate limiting
-   */
+    */
   protected async apiDelete<T = any>(
     url: string,
     options: ApiRequestOptions = {}
@@ -132,7 +132,7 @@ export class ApiClientMixin {
 
   /**
    * PATCH request with retry and rate limiting
-   */
+    */
   protected async apiPatch<T = any>(
     url: string,
     data?: any,
@@ -143,7 +143,7 @@ export class ApiClientMixin {
 
   /**
    * Execute HTTP request with all enhancements
-   */
+    */
   private async executeRequest<T>(
     method: string,
     url: string,
@@ -199,7 +199,7 @@ export class ApiClientMixin {
 
   /**
    * Execute request with retry logic
-   */
+    */
   private async executeWithRetry<T>(
     operation: () => Promise<T>
   ): Promise<T> {
@@ -241,7 +241,7 @@ export class ApiClientMixin {
 
   /**
    * Rate limiting implementation
-   */
+    */
   private async checkRateLimit(): Promise<void> {
     const now = Date.now();
     const windowElapsed = now - this.rateLimitState.windowStart;
@@ -273,7 +273,7 @@ export class ApiClientMixin {
 
   /**
    * Create configured Axios instance
-   */
+    */
   private createAxiosInstance(): AxiosInstance {
     const instance = axios.create({
       baseURL: this.apiOptions.baseURL,
@@ -430,7 +430,7 @@ export class ApiClientMixin {
 
   /**
    * Get current rate limit status
-   */
+    */
   protected getRateLimitStatus(): {
     requests: number;
     limit: number;
@@ -447,7 +447,7 @@ export class ApiClientMixin {
 
   /**
    * Reset rate limit (for testing)
-   */
+    */
   protected resetRateLimit(): void {
     this.rateLimitState = {
       requests: 0,
@@ -458,7 +458,7 @@ export class ApiClientMixin {
 
 /**
  * Factory function to create API client mixin
- */
+  */
 export function createApiClientMixin(
   logger: Logger,
   options?: ApiClientOptions

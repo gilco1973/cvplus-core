@@ -1,6 +1,6 @@
 /**
  * Enhanced data models for CV enhancement features
- */
+  */
 
 import { Job } from './job';
 import type { ParsedCV } from './job';
@@ -8,7 +8,7 @@ export type { ParsedCV } from './job';
 
 /**
  * Enhanced Job interface with all new features
- */
+  */
 export interface EnhancedJob extends Job {
   // Industry information for ATS optimization
   industry?: string;
@@ -84,7 +84,7 @@ export interface EnhancedJob extends Job {
 
 /**
  * Personality profile from AI analysis
- */
+  */
 export interface PersonalityProfile {
   traits: {
     leadership: number;
@@ -111,7 +111,7 @@ export interface PersonalityProfile {
 
 /**
  * Testimonial/Recommendation
- */
+  */
 export interface Testimonial {
   id: string;
   name: string;
@@ -127,7 +127,7 @@ export interface Testimonial {
 
 /**
  * Portfolio image/project
- */
+  */
 export interface PortfolioImage {
   id: string;
   title: string;
@@ -142,7 +142,7 @@ export interface PortfolioImage {
 
 /**
  * Calendar availability settings
- */
+  */
 export interface CalendarSettings {
   calendarId?: string; // Google Calendar ID
   provider: 'google' | 'calendly' | 'custom';
@@ -157,7 +157,7 @@ export interface CalendarSettings {
 
 /**
  * Public CV Profile
- */
+  */
 export interface PublicCVProfile {
   jobId: string;
   userId: string;
@@ -183,7 +183,7 @@ export interface PublicCVProfile {
 
 /**
  * Feature analytics tracking
- */
+  */
 export interface FeatureAnalytics {
   jobId: string;
   featureId: string;
@@ -208,7 +208,7 @@ export interface FeatureInteraction {
 
 /**
  * RAG Chat Models
- */
+  */
 export interface UserRAGProfile {
   userId: string;
   jobId: string;
@@ -282,7 +282,7 @@ export interface ChatMessage {
 
 /**
  * Advanced Multi-Factor ATS Scoring System - Phase 1
- */
+  */
 export interface AdvancedATSScore {
   overall: number; // 0-100 overall score
   confidence: number; // 0-1 confidence level
@@ -394,7 +394,7 @@ export interface ATSSystemSimulation {
 
 /**
  * Enhanced ATS Optimization Results (Backward Compatible)
- */
+  */
 export interface ATSOptimizationResult {
   score: number; // 0-100 (maps to AdvancedATSScore.overall)
   overall: number; // Alias for score
@@ -446,7 +446,7 @@ export interface ATSSuggestion {
 
 /**
  * Privacy Mode Settings
- */
+  */
 export interface PrivacySettings {
   enabled: boolean;
   level: 'basic' | 'moderate' | 'strict';
@@ -468,7 +468,7 @@ export interface PrivacySettings {
 
 /**
  * Skills visualization data
- */
+  */
 export interface SkillsVisualization {
   technical: SkillCategory[];
   soft: SkillCategory[];
@@ -505,7 +505,7 @@ export interface Certification {
 
 /**
  * Contact form submission
- */
+  */
 export interface ContactFormSubmission {
   id: string;
   jobId: string;
@@ -525,7 +525,7 @@ export interface ContactFormSubmission {
 
 /**
  * QR Code tracking
- */
+  */
 export interface QRCodeScan {
   jobId: string;
   scanId: string;

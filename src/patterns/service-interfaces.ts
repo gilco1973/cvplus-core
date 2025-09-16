@@ -1,7 +1,7 @@
 /**
  * CVPlus Service Interfaces
  * Define contracts for cross-layer service communication
- */
+  */
 
 // Subscription Service Interface
 export interface ISubscriptionService {

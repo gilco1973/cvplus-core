@@ -6,7 +6,7 @@ import { logger } from 'firebase-functions';
  * 
  * Implements comprehensive security headers to protect against common
  * web vulnerabilities and enhance overall security posture.
- */
+  */
 
 export interface SecurityHeadersOptions {
   contentSecurityPolicy?: string;
@@ -22,7 +22,7 @@ export interface SecurityHeadersOptions {
 
 /**
  * Default security headers configuration
- */
+  */
 const defaultSecurityConfig: Required<SecurityHeadersOptions> = {
   contentSecurityPolicy: [
     "default-src 'self'",
@@ -30,7 +30,7 @@ const defaultSecurityConfig: Required<SecurityHeadersOptions> = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' https://api.openai.com https://api.anthropic.com https://*.googleapis.com https://*.firebase.googleapis.com wss://*.firebase.googleapis.com",
+    "connect-src 'self' https://api.openai.com https://api.anthropic.com https://*.googleapis.com https://*.firebase.googleapis.com wss://* .firebase.googleapis.com",
     "media-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
@@ -58,7 +58,7 @@ const defaultSecurityConfig: Required<SecurityHeadersOptions> = {
 
 /**
  * Security headers middleware with customizable configuration
- */
+  */
 export function securityHeaders(options: SecurityHeadersOptions = {}): (req: Request, res: Response, next: NextFunction) => void {
   const config = { ...defaultSecurityConfig, ...options };
 
@@ -127,7 +127,7 @@ export function securityHeaders(options: SecurityHeadersOptions = {}): (req: Req
 
 /**
  * Detect suspicious request patterns
- */
+  */
 function isSuspiciousRequest(req: Request): boolean {
   const url = req.url.toLowerCase();
   const userAgent = (req.headers['user-agent'] || '').toLowerCase();
@@ -202,7 +202,7 @@ function isSuspiciousRequest(req: Request): boolean {
 
 /**
  * Log suspicious request details
- */
+  */
 function logSuspiciousRequest(req: Request): void {
   const suspiciousRequestDetails = {
     timestamp: new Date().toISOString(),
@@ -236,7 +236,7 @@ function logSuspiciousRequest(req: Request): void {
 
 /**
  * High-security headers for admin endpoints
- */
+  */
 export const adminSecurityHeaders = securityHeaders({
   contentSecurityPolicy: [
     "default-src 'self'",
@@ -260,7 +260,7 @@ export const adminSecurityHeaders = securityHeaders({
 
 /**
  * API-specific security headers
- */
+  */
 export const apiSecurityHeaders = securityHeaders({
   contentSecurityPolicy: "default-src 'none'",
   frameOptions: 'DENY',
@@ -269,7 +269,7 @@ export const apiSecurityHeaders = securityHeaders({
 
 /**
  * Public content security headers (more permissive)
- */
+  */
 export const publicContentSecurityHeaders = securityHeaders({
   contentSecurityPolicy: [
     "default-src 'self'",

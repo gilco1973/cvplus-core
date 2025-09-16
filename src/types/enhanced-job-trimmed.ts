@@ -3,7 +3,7 @@
  * Core enhanced job interface and related models for CV enhancement features.
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 import { Job } from './index';
 import { UserRAGProfile } from './enhanced-rag';
@@ -22,12 +22,12 @@ import type { ATSOptimization } from './enhanced-ats';
 
 /**
  * Enhanced Job interface with all new features
- */
+  */
 export interface EnhancedJob extends Job {
-  /** Industry information for ATS optimization */
+  /** Industry information for ATS optimization  */
   industry?: string;
   
-  /** Enhancement features status and data */
+  /** Enhancement features status and data  */
   enhancedFeatures?: {
     [featureId: string]: {
       enabled: boolean;
@@ -38,7 +38,7 @@ export interface EnhancedJob extends Job {
     };
   };
   
-  /** Analytics data */
+  /** Analytics data  */
   analytics?: {
     qrCodeScans: number;
     profileViews: number;
@@ -49,7 +49,7 @@ export interface EnhancedJob extends Job {
     lastViewedAt?: Date;
   };
   
-  /** Media assets */
+  /** Media assets  */
   mediaAssets?: {
     videoIntroUrl?: string;
     videoThumbnailUrl?: string;
@@ -58,7 +58,7 @@ export interface EnhancedJob extends Job {
     portfolioImages?: PortfolioImage[];
   };
   
-  /** Interactive data */
+  /** Interactive data  */
   interactiveData?: {
     availabilityCalendar?: CalendarSettings;
     testimonials?: Testimonial[];
@@ -67,10 +67,10 @@ export interface EnhancedJob extends Job {
     certifications?: JobCertification[];
   };
   
-  /** Privacy and sharing settings */
+  /** Privacy and sharing settings  */
   privacySettings?: PrivacySettings;
   
-  /** AI-generated content */
+  /** AI-generated content  */
   aiGeneratedContent?: {
     personalityInsights?: string;
     careerGuidance?: string;
@@ -79,13 +79,13 @@ export interface EnhancedJob extends Job {
     skillGapAnalysis?: string;
   };
   
-  /** RAG system data for AI chat */
+  /** RAG system data for AI chat  */
   ragProfile?: UserRAGProfile;
   
-  /** ATS optimization data */
+  /** ATS optimization data  */
   atsOptimization?: ATSOptimization;
   
-  /** Feature interaction tracking */
+  /** Feature interaction tracking  */
   featureInteractions?: FeatureInteraction[];
 }
 

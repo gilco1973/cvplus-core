@@ -5,7 +5,7 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 export function formatDate(date: Date | string, locale = 'en-US'): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;

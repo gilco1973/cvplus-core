@@ -6,11 +6,11 @@
  * 
  * @author Gil Klainert
  * @version 1.0.0
- */
+  */
 
 /**
  * User RAG profile for AI chat
- */
+  */
 export interface UserRAGProfile {
   userId: string;
   jobId: string;
@@ -39,7 +39,7 @@ export interface UserRAGProfile {
 
 /**
  * CV content chunk for RAG
- */
+  */
 export interface CVChunk {
   id: string;
   jobId: string;
@@ -57,7 +57,7 @@ export interface CVChunk {
 
 /**
  * Chat session data
- */
+  */
 export interface ChatSession {
   id: string;
   jobId: string;
@@ -86,7 +86,7 @@ export interface ChatSession {
 
 /**
  * Individual chat message
- */
+  */
 export interface ChatMessage {
   id: string;
   sessionId: string;

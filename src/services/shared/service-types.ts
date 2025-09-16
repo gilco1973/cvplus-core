@@ -1,7 +1,7 @@
 /**
  * Service Types - Stub implementation for Core module
  * Note: These types should be moved to appropriate domain modules
- */
+  */
 
 export interface ServiceResult<T = any> {
   success: boolean;

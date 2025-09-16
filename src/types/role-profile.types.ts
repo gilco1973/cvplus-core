@@ -1,7 +1,7 @@
 /**
  * Role Profile Types
  * Type definitions for role-based profile analysis and matching
- */
+  */
 
 export interface RoleProfile {
   id: string;

@@ -1,7 +1,7 @@
 /**
  * Job Types
  * Core job processing and management type definitions
- */
+  */
 
 export interface Job {
   id: string;
