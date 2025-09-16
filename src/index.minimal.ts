@@ -21,9 +21,9 @@ export {
   logger,
   LogLevel,
   LogDomain
-} from '../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';
 
 // Re-export types separately for isolatedModules compatibility
 export type {
   LogEntry
-} from '../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';

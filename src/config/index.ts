@@ -12,9 +12,10 @@
 // ENVIRONMENT CONFIGURATION
 // ============================================================================
 
-export { 
-  config as environmentConfig,
-  environmentUtils
+export {
+  environment as environmentConfig,
+  environment as config,
+  default as environment
 } from './environment';
 
 // ============================================================================

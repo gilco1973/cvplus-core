@@ -52,9 +52,10 @@ export * from './constants';
 // CONFIGURATION
 // ============================================================================
 
-export { 
+export {
   environmentConfig,
-  environmentUtils,
+  environment,
+  config,
   BACKEND_PRICING_CONFIG,
   getTierConfig,
   validatePricingConfig
@@ -230,12 +231,12 @@ export {
   AlertRule,
   AuditTrail,
   LogArchive
-} from '../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';
 
 // Re-export types separately for isolatedModules compatibility
 export type {
   LogEntry
-} from '../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';
 
 // ============================================================================
 // VERSION INFO

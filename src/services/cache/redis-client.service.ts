@@ -11,7 +11,7 @@
 
 import Redis, { RedisOptions } from 'ioredis';
 import { logger } from 'firebase-functions';
-import { config } from '../../config/environment';
+import { environment as config } from '../../config/environment';
 
 export interface RedisConfig {
   host: string;

@@ -4,7 +4,7 @@
  */
 
 import axios from 'axios';
-import { config } from '../config/environment';
+import { environment as config } from '../config/environment';
 
 interface SerperSearchResult {
   title: string;

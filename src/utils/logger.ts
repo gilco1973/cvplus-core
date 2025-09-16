@@ -558,7 +558,7 @@ export async function exportLogs(
       // Convert to CSV
       if (logs.length === 0) return '';
 
-      const headers = Object.keys(logs[0]);
+      const headers = Object.keys(logs[0] || {});
       const csvRows = [
         headers.join(','),
         ...logs.map(log =>

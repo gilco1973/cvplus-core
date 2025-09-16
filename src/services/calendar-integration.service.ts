@@ -14,7 +14,7 @@ export interface CalendarEvent {
 }
 
 export class CalendarIntegrationService {
-  static async createEvent(event: CalendarEvent): Promise<{ success: boolean; eventId?: string }> {
+  static async createEvent(_event: CalendarEvent): Promise<{ success: boolean; eventId?: string }> {
     console.warn('⚠️ Using stub calendar service');
     return {
       success: true,
@@ -22,7 +22,7 @@ export class CalendarIntegrationService {
     };
   }
 
-  static async getAvailability(date: Date): Promise<{ available: boolean; slots: Date[] }> {
+  static async getAvailability(_date: Date): Promise<{ available: boolean; slots: Date[] }> {
     console.warn('⚠️ Using stub calendar availability');
     return {
       available: true,

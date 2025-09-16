@@ -46,7 +46,7 @@ export class SecurityMonitor {
     console.log(`[SECURITY] ${event.type}:`, event);
   }
 
-  static checkRateLimit(ip: string): boolean {
+  static checkRateLimit(_ip: string): boolean {
     // Basic rate limiting check implementation
     return true;
   }

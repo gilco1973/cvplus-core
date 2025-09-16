@@ -62,12 +62,12 @@ export interface GeneratedFeature {
 export {
   LogLevel,
   LogDomain
-} from '../../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';
 
 // Export pure types
 export type {
   LogEntry
-} from '../../../logging/dist/backend/index.js';
+} from '@cvplus/logging/backend';
 
 // ============================================================================
 // MIDDLEWARE & ARCHITECTURE TYPES
