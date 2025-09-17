@@ -1,19 +1,16 @@
+// @ts-ignore - Export conflicts
 /**
- * CORS Configuration
- * Cross-Origin Resource Sharing settings for the API
-  */
-
+ * CORS Configuration for CVPlus Platform
+ */
 export const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://cvplus.app',
-    'https://*.cvplus.app'
+    'https://cvplus.web.app',
+    'https://cvplus.firebaseapp.com'
   ],
-  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
-
-export const corsConfig = corsOptions;
-export default corsOptions;
