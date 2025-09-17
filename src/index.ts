@@ -282,7 +282,7 @@ export { CVStep } from './types/enhanced-models';
 // ============================================================================
 
 // Re-export CV processing services for backward compatibility
-// TODO: Re-enable when cv-processing module is properly built
+// TODO: Re-enable when processing module is properly built
 // export {
 //   RoleProfileService,
 //   IndustrySpecializationService,
@@ -296,10 +296,10 @@ export { CVStep } from './types/enhanced-models';
 //   CVValidationService,
 //   EnhancementProcessingService,
 //   PiiDetector
-// } from '@cvplus/cv-processing';
+// } from '@cvplus/processing';
 
 // ARCHITECTURAL VIOLATION REMOVED: Layer 1 cannot import from Layer 2
-// These types should be imported directly from @cvplus/cv-processing by consumers
+// These types should be imported directly from @cvplus/processing by consumers
 // Re-export CV processing types for backward compatibility
 // export type {
 //   RoleProfile,
@@ -354,7 +354,7 @@ export { CVStep } from './types/enhanced-models';
 //   SkillCategory,
 //   SkillAnalysis,
 //   SkillRecommendations
-// } from '@cvplus/cv-processing';
+// } from '@cvplus/processing';
 
 // ============================================================================
 // AI/RAG/CHAT SERVICES RE-EXPORTS (Backward Compatibility)

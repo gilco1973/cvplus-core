@@ -109,3 +109,5 @@ export * from './regional-localization';
 
 // export * from './booking.types'; // File does not exist
 // export * from './payment.types'; // File does not exist
+export * from './api';
+// Booking and payment types moved to respective modules
