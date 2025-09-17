@@ -80,11 +80,11 @@ export * from './middleware';
 // ============================================================================
 
 export * from './api';
+export * from './cache';
 export type {
   PersonalInfo,
   Language
 } from './cv';
-// export * from "./cv-template"; // TODO: Restore after cv-template migration
 export * from './error';
 export type {
   ParsedCV
@@ -98,7 +98,6 @@ export * from './utility';
 // PORTAL TYPES
 // ============================================================================
 
-// export * from "./portal"; // TODO: Restore after portal migration
 export * from './regional-localization';
 
 // Template category alias for backward compatibility - disabled due to missing portal.ts

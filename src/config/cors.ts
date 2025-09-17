@@ -1,32 +1,19 @@
 /**
  * CORS Configuration
- * Provides Cross-Origin Resource Sharing settings
+ * Cross-Origin Resource Sharing settings for the API
   */
 
-export interface CorsConfig {
-  origin: string[] | string;
-  methods: string[];
-  allowedHeaders: string[];
-  credentials: boolean;
-}
-
-export const corsConfig: CorsConfig = {
+export const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://cvplus.app',
-    'https://getmycv-ai.web.app',
-    'https://getmycv-ai.firebaseapp.com'
+    'https://*.cvplus.app'
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'X-Requested-With',
-    'Accept',
-    'Origin'
-  ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
 };
 
-export default corsConfig;
+export const corsConfig = corsOptions;
+export default corsOptions;

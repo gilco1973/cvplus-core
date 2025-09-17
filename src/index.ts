@@ -65,6 +65,9 @@ export {
   FieldValue,
   admin
 } from './config';
+
+// Additional migrated config
+export { default as corsOptions } from './config/cors';
 export type { PricingConfig } from './config';
 
 // ============================================================================
@@ -97,6 +100,18 @@ export * from './utils/array';
 export * from './utils/type-guards';
 export * from './utils/async';
 export * from './utils/crypto';
+
+// Migrated utilities from recommendations module
+export * from './utils/core';
+export * from './utils/retry';
+export * from './utils/resilience/CircuitBreakerCore';
+export * from './utils/resilience/RetryManager';
+export * from './utils/resilience/TimeoutManager';
+
+// Migrated cache services from recommendations module
+export * from './services/cache/CacheManager';
+export * from './services/cache/CacheKeyManager';
+export * from './services/cache/memory-manager';
 export * from './utils/error-helpers';
 export * from './utils/error-handling';
 export * from './utils/classnames';

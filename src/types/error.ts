@@ -226,6 +226,48 @@ export interface ErrorDetails {
 }
 
 // ============================================================================
+// RETRY AND RESILIENCE TYPES
+// ============================================================================
+
+export enum RecommendationErrorType {
+  TIMEOUT = 'TIMEOUT',
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  AI_API_ERROR = 'AI_API_ERROR',
+  VALIDATION_ERROR = 'VALIDATION_ERROR',
+  RATE_LIMIT = 'RATE_LIMIT',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export interface RecommendationError extends Error {
+  type: RecommendationErrorType;
+  retryable: boolean;
+  context: Record<string, unknown>;
+  timestamp: Date;
+}
+
+export interface RetryConfiguration {
+  maxAttempts: number;
+  baseDelay: number;
+  maxDelay: number;
+  backoffFactor: number;
+  retryableErrors: RecommendationErrorType[];
+  circuitBreaker?: {
+    threshold: number;
+    timeout: number;
+    resetTimeout: number;
+  };
+}
+
+export interface PerformanceMetrics {
+  errorRate: number;
+  timeoutRate: number;
+  averageResponseTime?: number;
+  cacheHitRate?: number;
+  throughput?: number;
+  timestamp: Date;
+}
+
+// ============================================================================
 // ERROR STATUS AND MONITORING
 // ============================================================================
 
