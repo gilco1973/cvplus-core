@@ -93,7 +93,7 @@ export class Phase2TypeValidator {
     );
   }
 
-  static isValidAnalyticsEvent(obj: any): obj is import('@cvplus/analytics').AnalyticsEvent {
+  static isValidAnalyticsEvent(obj: any): obj is { id: string; type: string; timestamp: Date; data: Record<string, any>; } {
     return (
       obj &&
       typeof obj.eventId === 'string' &&
@@ -159,7 +159,7 @@ export class Phase2TypeFactory {
     };
   }
 
-  static createEmptyAnalyticsEvent(_userId: string, eventType: string): Partial<import('@cvplus/analytics').AnalyticsEvent> {
+  static createEmptyAnalyticsEvent(_userId: string, eventType: string): Partial<{ id: string; type: string; timestamp: Date; data: Record<string, any>; }> {
     return {
       id: `evt_${Date.now()}`,
       type: eventType,
